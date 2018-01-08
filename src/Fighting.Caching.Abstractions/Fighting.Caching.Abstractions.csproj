@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../pack.props" />
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Fighting.Extensions.Caching</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Abstractions\ICacheManager.cs~RF19fdaf.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fighting.Extensions.Threading" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fighting\Fighting.csproj" />
+  </ItemGroup>
+
+</Project>

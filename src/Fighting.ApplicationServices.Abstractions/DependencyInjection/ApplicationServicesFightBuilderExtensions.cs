@@ -1,0 +1,17 @@
+﻿using Fighting.ApplicationServices.DependencyInjection.Builder;
+using Fighting.DependencyInjection.Builder;
+using System;
+
+namespace Baibaocp.ApplicationServices.Abstractions
+{
+    public static class ApplicationServicesFightBuilderExtensions
+    {
+        public static FightBuilder ConfigureApplicationServices(this FightBuilder fightBuilder, Action<ApplicationServiceBuilder> setupAction)
+        {
+            ApplicationServiceBuilder builder = new ApplicationServiceBuilder(fightBuilder.Services);
+            setupAction?.Invoke(builder);
+
+            return fightBuilder;
+        }
+    }
+}

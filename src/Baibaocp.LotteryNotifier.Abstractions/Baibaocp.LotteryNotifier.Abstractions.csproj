@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Internal\Service\5oi0j2yq.2dg~" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Polly" Version="5.6.1" />
+    <PackageReference Include="RawRabbit" Version="2.0.0-rc2" />
+    <PackageReference Include="RawRabbit.DependencyInjection.ServiceCollection" Version="2.0.0-rc2" />
+    <PackageReference Include="RawRabbit.Enrichers.MessageContext" Version="2.0.0-rc2" />
+    <PackageReference Include="RawRabbit.Enrichers.MessageContext.Subscribe" Version="2.0.0-rc2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.Core\Baibaocp.LotteryOrdering.Core.csproj" />
+    <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
+  </ItemGroup>
+
+</Project>

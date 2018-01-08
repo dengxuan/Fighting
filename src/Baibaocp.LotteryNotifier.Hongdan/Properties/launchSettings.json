@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Baibaocp.LotteryNotifier.Hongdan": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

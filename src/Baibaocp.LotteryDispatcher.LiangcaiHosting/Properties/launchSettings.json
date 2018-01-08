@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Baibaocp.LotteryDispatcher.LiangcaiHosting": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

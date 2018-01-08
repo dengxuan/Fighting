@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Baibaocp.LotteryOrdering.ApplicationServices</RootNamespace>
+    <AssemblyName>Baibaocp.LotteryOrdering.ApplicationServices</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.4" />
+    <PackageReference Include="Pomelo.Data.MySql" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Baibaocp.Core\Baibaocp.Core.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.Applications.Abstractions\Baibaocp.LotteryOrdering.Applications.Abstractions.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.Core\Baibaocp.LotteryOrdering.Core.csproj" />
+  </ItemGroup>
+</Project>
