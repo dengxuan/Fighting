@@ -1,13 +1,13 @@
-﻿using Fighting.DependencyInjection;
+﻿using Baibaocp.LotteryOrdering.EntityFrameworkCore;
+using Fighting.DependencyInjection;
 using Fighting.Hosting;
+using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using RawRabbit;
 using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
-using RawRabbit.Enrichers.GlobalExecutionId;
 using RawRabbit.Enrichers.MessageContext;
 using RawRabbit.Enrichers.MessageContext.Context;
 using RawRabbit.Instantiation;
@@ -62,7 +62,11 @@ namespace Baibaocp.LotteryOrdering.Hosting
 
                         fightBuilder.ConfigureStorage(storageBuilder =>
                         {
-                            storageBuilder.UseDapper(options =>
+                            //storageBuilder.UseDapper(options =>
+                            //{
+                            //    options.DefaultNameOrConnectionString = hostContext.Configuration.GetConnectionString("Fighting.Storage");
+                            //});
+                            storageBuilder.UseEntityFrameworkCore<LotteryOrderingDbContext>(options =>
                             {
                                 options.DefaultNameOrConnectionString = hostContext.Configuration.GetConnectionString("Fighting.Storage");
                             });

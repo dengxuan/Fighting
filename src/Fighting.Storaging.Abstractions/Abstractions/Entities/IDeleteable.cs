@@ -1,4 +1,4 @@
-﻿namespace Fighting.Storage.Abstractions
+﻿namespace Fighting.Storaging.Entities.Abstractions
 {
     /// <summary>
     /// Used to standardize soft deleting entities.

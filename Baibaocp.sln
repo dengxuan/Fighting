@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LotteryDispatcher", "LotteryDispatcher", "{6F364ECB-76BE-42E0-96D8-36DD069F95ED}"
 EndProject
@@ -59,7 +59,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryAwardCalcul
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryAwardCalculator.Hosting", "src\Baibaocp.LotteryAwardCalculator.Hosting\Baibaocp.LotteryAwardCalculator.Hosting.csproj", "{310DF826-C010-4FFC-80C2-872323262CFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fighting.Flowing.Abstractions", "src\Fighting.Flowing.Abstractions\Fighting.Flowing.Abstractions.csproj", "{9451EF8A-999F-4160-A58C-73A0DE649468}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fighting.Storaging.EntityFrameworkCore.Abstractions", "src\Fighting.Storaging.EntityFrameworkCore.Abstractions\Fighting.Storaging.EntityFrameworkCore.Abstractions.csproj", "{7B6BECF2-4AE1-4D6B-8497-E99494E81024}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryOrdering.EntityFrameworkCore", "src\Baibaocp.LotteryOrdering.EntityFrameworkCore\Baibaocp.LotteryOrdering.EntityFrameworkCore.csproj", "{763347D7-9D5F-4656-9FBA-036E50ADA04F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryOrdering.ApplicationServices.Hosting", "src\Baibaocp.LotteryOrdering.ApplicationServices.Hosting\Baibaocp.LotteryOrdering.ApplicationServices.Hosting.csproj", "{9043C1C7-EBE4-4217-AD55-711EFEEDE890}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -163,10 +167,18 @@ Global
 		{310DF826-C010-4FFC-80C2-872323262CFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{310DF826-C010-4FFC-80C2-872323262CFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{310DF826-C010-4FFC-80C2-872323262CFF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9451EF8A-999F-4160-A58C-73A0DE649468}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9451EF8A-999F-4160-A58C-73A0DE649468}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9451EF8A-999F-4160-A58C-73A0DE649468}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9451EF8A-999F-4160-A58C-73A0DE649468}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B6BECF2-4AE1-4D6B-8497-E99494E81024}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B6BECF2-4AE1-4D6B-8497-E99494E81024}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B6BECF2-4AE1-4D6B-8497-E99494E81024}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B6BECF2-4AE1-4D6B-8497-E99494E81024}.Release|Any CPU.Build.0 = Release|Any CPU
+		{763347D7-9D5F-4656-9FBA-036E50ADA04F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{763347D7-9D5F-4656-9FBA-036E50ADA04F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{763347D7-9D5F-4656-9FBA-036E50ADA04F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{763347D7-9D5F-4656-9FBA-036E50ADA04F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9043C1C7-EBE4-4217-AD55-711EFEEDE890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9043C1C7-EBE4-4217-AD55-711EFEEDE890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9043C1C7-EBE4-4217-AD55-711EFEEDE890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9043C1C7-EBE4-4217-AD55-711EFEEDE890}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -185,6 +197,8 @@ Global
 		{7539F8E2-D04A-426B-8F4D-8A7DFEEBF5BB} = {AE3C234A-ADA3-4990-B661-C50F493028A3}
 		{2AA1F01A-6AFB-4A65-8467-E469DF5E39EA} = {72F33E4E-B236-4880-86E4-4E809C09A892}
 		{310DF826-C010-4FFC-80C2-872323262CFF} = {72F33E4E-B236-4880-86E4-4E809C09A892}
+		{763347D7-9D5F-4656-9FBA-036E50ADA04F} = {AE3C234A-ADA3-4990-B661-C50F493028A3}
+		{9043C1C7-EBE4-4217-AD55-711EFEEDE890} = {AE3C234A-ADA3-4990-B661-C50F493028A3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B9F693E7-6A4E-4EEC-8474-82209B8E4094}

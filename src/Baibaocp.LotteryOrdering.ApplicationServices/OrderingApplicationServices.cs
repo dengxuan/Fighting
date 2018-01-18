@@ -1,10 +1,12 @@
 ﻿using Baibaocp.ApplicationServices;
 using Baibaocp.Core;
+using Baibaocp.LotteryOrdering.Core.Entities;
 using Baibaocp.LotteryOrdering.Messages;
 using Dapper;
 using Fighting.Abstractions;
 using Fighting.Caching.Abstractions;
-using Fighting.Storage;
+using Fighting.Storaging;
+using Fighting.Storaging.Repositories.Abstractions;
 using Microsoft.Extensions.Logging;
 using Pomelo.Data.MySql;
 using System;
@@ -22,12 +24,20 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
 
         private readonly IIdentityGenerater _identityGenerater;
 
+        private readonly IRepository<LotteryVenderOrderEntity, string> _orderingReoository;
 
-        public OrderingApplicationServices(StorageOptions options, ILogger<OrderingApplicationServices> logger, IIdentityGenerater identityGenerater, ICacheManager cacheManager) : base(cacheManager)
+
+        public OrderingApplicationServices(StorageOptions options, IRepository<LotteryVenderOrderEntity, string> orderingReoository, ILogger<OrderingApplicationServices> logger, IIdentityGenerater identityGenerater, ICacheManager cacheManager) : base(cacheManager)
         {
             _options = options;
             _logger = logger;
             _identityGenerater = identityGenerater;
+            _orderingReoository = orderingReoository;
+        }
+
+        public async Task<LotteryVenderOrderEntity> FindOrderAsync(string id)
+        {
+            return await _orderingReoository.FirstOrDefaultAsync(id);
         }
 
         public async Task CreateAsync(LvpOrderMessage message)

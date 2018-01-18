@@ -1,5 +1,5 @@
 ﻿using Fighting.DependencyInjection.Builder;
-using Fighting.Storage;
+using Fighting.Storaging;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 

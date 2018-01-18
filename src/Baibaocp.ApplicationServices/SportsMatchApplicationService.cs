@@ -1,11 +1,11 @@
 ﻿using Baibaocp.ApplicationServices.Abstractions;
-using System;
-using Fighting.Caching.Abstractions;
 using Baibaocp.Core.Entities;
-using System.Threading.Tasks;
-using Pomelo.Data.MySql;
-using Fighting.Storage;
 using Dapper;
+using Fighting.Caching.Abstractions;
+using Fighting.Storaging;
+using Pomelo.Data.MySql;
+using System;
+using System.Threading.Tasks;
 
 namespace Baibaocp.ApplicationServices
 {

@@ -1,4 +1,4 @@
-﻿using Fighting.Storage.Abstractions;
+﻿using Fighting.Storaging.Entities.Abstractions;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

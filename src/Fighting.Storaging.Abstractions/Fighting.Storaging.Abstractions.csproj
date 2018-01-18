@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Fighting.Extensions.Storage.Abstractions</AssemblyName>
-    <RootNamespace>Fighting.Extensions.Storage</RootNamespace>
+    <AssemblyName>Fighting.Storaging.Abstractions</AssemblyName>
+    <RootNamespace>Fighting.Storaging</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

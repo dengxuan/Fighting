@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.4" />
+    <PackageReference Include="Microsoft.Orleans.OrleansCodeGenerator.Build" Version="2.0.0-beta3" />
     <PackageReference Include="Pomelo.Data.MySql" Version="1.0.0" />
   </ItemGroup>
 

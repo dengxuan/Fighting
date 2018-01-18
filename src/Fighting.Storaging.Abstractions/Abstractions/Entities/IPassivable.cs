@@ -1,4 +1,4 @@
-﻿namespace Fighting.Storage.Abstractions
+﻿namespace Fighting.Storaging.Entities.Abstractions
 {
     /// <summary>
     /// This interface is used to make an entity active/passive.

@@ -4,12 +4,10 @@ using Baibaocp.LotteryAwardCalculator.Internal;
 using Baibaocp.LotteryOrdering.Messages;
 using Dapper;
 using Fighting.Caching.Abstractions;
-using Fighting.Storage;
+using Fighting.Storaging;
 using Microsoft.Extensions.Logging;
 using Pomelo.Data.MySql;
 using System;
-using System.Collections.Specialized;
-using System.Data;
 using System.Linq;
 
 namespace Baibaocp.LotteryAwardCalculator.Abstractions

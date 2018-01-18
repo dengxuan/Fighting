@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Fighting.Storaging.Entities.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Fighting.Storage.Abstractions
+namespace Fighting.Storaging.Repositories.Abstractions
 {
     public interface IRepository
     {

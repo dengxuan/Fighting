@@ -1,7 +1,6 @@
 ﻿using Baibaocp.LotteryDispatcher.Abstractions;
 using Baibaocp.LotteryDispatcher.Core;
-using Fighting;
-using Fighting.Extensions;
+using Fighting.Security.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;

@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Polly" Version="5.6.1" />
+    <PackageReference Include="Polly" Version="5.7.0" />
     <PackageReference Include="RawRabbit" Version="2.0.0-rc2" />
     <PackageReference Include="RawRabbit.DependencyInjection.ServiceCollection" Version="2.0.0-rc2" />
     <PackageReference Include="RawRabbit.Enrichers.MessageContext" Version="2.0.0-rc2" />

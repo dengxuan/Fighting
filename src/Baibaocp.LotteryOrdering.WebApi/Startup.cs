@@ -1,21 +1,35 @@
-﻿using Fighting.DependencyInjection;
-using Hangfire;
+﻿using Baibaocp.LotteryOrdering.EntityFrameworkCore;
+using Fighting.ApplicationServices.Abstractions;
+using Fighting.DependencyInjection;
+using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Orleans;
+using Orleans.Runtime.Configuration;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
+using Fighting.ApplicationServices.DependencyInjection;
+using System.Threading.Tasks;
+using Baibaocp.LotteryOrdering.ApplicationServices;
 
 namespace Baibaocp.LotteryOrdering.WebApi
 {
 
+    /// <inheritdoc/>
     public class Startup
     {
+
+        /// <inheritdoc/>
         public IConfiguration Configuration { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="env"></param>
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -27,7 +41,10 @@ namespace Baibaocp.LotteryOrdering.WebApi
             Configuration = builder.Build();
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        ///  This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
 
@@ -43,20 +60,30 @@ namespace Baibaocp.LotteryOrdering.WebApi
 
                 fightBuilder.ConfigureStorage(storageBuilder =>
                 {
-                    storageBuilder.UseDapper(options =>
+                    storageBuilder.UseEntityFrameworkCore<LotteryOrderingDbContext>(options =>
                     {
-                        options.DefaultNameOrConnectionString = Configuration.GetConnectionString("Hangfire.Storage");
+                        options.DefaultNameOrConnectionString = Configuration.GetConnectionString("Fighting.Storage");
+                    });
+                });
+                fightBuilder.ConfigureApplicationServices(applicationServiceBuilder =>
+                {
+                    applicationServiceBuilder.Services.AddSingleton<IGrainFactory>(sp =>
+                    {
+                        var config = ClientConfiguration.LocalhostSilo();
+                        var client = new ClientBuilder()
+                             .UseConfiguration(config)
+                             .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IOrderingApplicationService).Assembly).WithReferences())
+                             .ConfigureLogging(logging => logging.AddConsole())
+                             .Build();
+
+                        client.Connect().GetAwaiter().GetResult();
+                        return client;
                     });
                 });
             });
 
-            services.AddHangfire(configure =>
-            {
-                configure.UseRedisStorage(Configuration.GetConnectionString("Hangfire.Redis"));
-            });
-
             services.AddMvc();
-            
+
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new Info
@@ -85,7 +112,12 @@ namespace Baibaocp.LotteryOrdering.WebApi
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
+        /// <summary>
+        ///  This method gets called by the runtime. Use this method to configure the HTTP request pipeline
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
+        /// <param name="loggerFactory"></param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
@@ -110,9 +142,6 @@ namespace Baibaocp.LotteryOrdering.WebApi
                 c.SwaggerEndpoint("/api-docs/v1/swagger.json", "Lottery ordering api V1");
             });
 
-            //app.UseHangfireServer();
-
-            app.UseHangfireDashboard();
         }
     }
 }

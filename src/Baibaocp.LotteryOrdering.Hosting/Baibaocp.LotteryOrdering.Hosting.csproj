@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Baibaocp.LotteryDispatcher.Core\Baibaocp.LotteryDispatcher.Core.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.ApplicationServices\Baibaocp.LotteryOrdering.ApplicationServices.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.EntityFrameworkCore\Baibaocp.LotteryOrdering.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Fighting.Caching.Redis\Fighting.Caching.Redis.csproj" />
     <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
     <ProjectReference Include="..\Fighting.Storaging.Dapper\Fighting.Storaging.Dapper.csproj" />

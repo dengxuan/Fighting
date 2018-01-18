@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Fighting.Storage.Abstractions
+namespace Fighting.Storaging.Entities.Abstractions
 {
     public interface IEntity : IEntity<Guid>
     {

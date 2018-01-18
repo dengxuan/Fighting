@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Fighting.ApplicationServices.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using Orleans;
 using System;
 
 namespace Fighting.ApplicationServices.DependencyInjection.Builder
@@ -18,6 +20,7 @@ namespace Fighting.ApplicationServices.DependencyInjection.Builder
         {
             Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<ApplicationServiceOptions>, ApplicationServiceOptionsSetup>());
             Services.AddSingleton(c => c.GetRequiredService<IOptions<ApplicationServiceOptions>>().Value);
+            Services.AddSingleton<IApplicationServiceCluster, ApplicationServiceCluster>();
         }
     }
 }

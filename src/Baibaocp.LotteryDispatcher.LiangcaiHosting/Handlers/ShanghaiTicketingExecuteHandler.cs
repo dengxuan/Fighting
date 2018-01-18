@@ -1,8 +1,7 @@
-﻿using Baibaocp.LotteryDispatcher.Abstractions;
+﻿using Baibaocp.Core.Extensions;
 using Baibaocp.LotteryDispatcher.Core.Executers;
 using Dapper;
-using Fighting.Storage;
-using Hangfire;
+using Fighting.Storaging;
 using Microsoft.Extensions.Logging;
 using Pomelo.Data.MySql;
 using System;
@@ -12,7 +11,6 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Baibaocp.Core.Extensions;
 
 namespace Baibaocp.LotteryDispatcher.Shanghai.Handlers
 {

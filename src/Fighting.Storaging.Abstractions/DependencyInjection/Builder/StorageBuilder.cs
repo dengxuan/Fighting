@@ -1,4 +1,4 @@
-﻿using Fighting.Storage;
+﻿using Fighting.Storaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
