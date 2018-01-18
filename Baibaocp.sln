@@ -63,7 +63,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fighting.Storaging.EntityFr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryOrdering.EntityFrameworkCore", "src\Baibaocp.LotteryOrdering.EntityFrameworkCore\Baibaocp.LotteryOrdering.EntityFrameworkCore.csproj", "{763347D7-9D5F-4656-9FBA-036E50ADA04F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryOrdering.ApplicationServices.Hosting", "src\Baibaocp.LotteryOrdering.ApplicationServices.Hosting\Baibaocp.LotteryOrdering.ApplicationServices.Hosting.csproj", "{9043C1C7-EBE4-4217-AD55-711EFEEDE890}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryOrdering.ApplicationServices.Hosting", "src\Baibaocp.LotteryOrdering.ApplicationServices.Hosting\Baibaocp.LotteryOrdering.ApplicationServices.Hosting.csproj", "{9043C1C7-EBE4-4217-AD55-711EFEEDE890}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
