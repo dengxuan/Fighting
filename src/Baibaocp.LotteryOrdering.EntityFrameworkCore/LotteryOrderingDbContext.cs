@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Baibaocp.LotteryOrdering.EntityFrameworkCore
 {
-    public class LotteryOrderingDbContext : FightDbContext
+    public class LotteryOrderingDbContext : StorageContext
     {
         private readonly StorageOptions _storageOptions;
 

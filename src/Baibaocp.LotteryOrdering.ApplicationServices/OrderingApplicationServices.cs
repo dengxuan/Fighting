@@ -1,9 +1,9 @@
-﻿using Baibaocp.ApplicationServices;
-using Baibaocp.Core;
+﻿using Baibaocp.Core;
 using Baibaocp.LotteryOrdering.Core.Entities;
 using Baibaocp.LotteryOrdering.Messages;
 using Dapper;
 using Fighting.Abstractions;
+using Fighting.ApplicationServices.Abstractions;
 using Fighting.Caching.Abstractions;
 using Fighting.Storaging;
 using Fighting.Storaging.Repositories.Abstractions;
@@ -15,7 +15,7 @@ using System.Transactions;
 
 namespace Baibaocp.LotteryOrdering.ApplicationServices
 {
-    public class OrderingApplicationServices : BaibaoApplicationService, IOrderingApplicationService
+    public class OrderingApplicationServices : ApplicationService, IOrderingApplicationService
     {
 
         private readonly StorageOptions _options;
@@ -42,26 +42,43 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
 
         public async Task CreateAsync(LvpOrderMessage message)
         {
-            using (MySqlConnection connection = new MySqlConnection(_options.DefaultNameOrConnectionString))
+           await _orderingReoository.InsertAsync(new LotteryVenderOrderEntity
             {
-                int count = await connection.ExecuteAsync(@"INSERT INTO `BbcpOrders`(`Id`,`LotteryBuyerId`,`LvpUserId`,`LvpVenderId`,`LotteryId`,`LotteryPlayId`,`IssueNumber`,`InvestCode`,`InvestType`,`InvestCount`,`InvestTimes`,`InvestAmount`,`Status`,`CreationTime`)VALUES(@Id,@LotteryBuyerId,@LvpUserId,@LvpVenderId,@LotteryId,@LotteryPlayId,@IssueNumber,@InvestCode,@InvestType,@InvestCount,@InvestTimes,@InvestAmount,@Status,@CreationTime);", new
-                {
-                    Id = message.LvpOrderId,
-                    LotteryBuyerId = 619,
-                    LvpUserId = message.LvpUserId,
-                    LvpVenderId = message.LvpVenderId,
-                    LotteryId = message.LotteryId,
-                    LotteryPlayId = message.LotteryPlayId,
-                    IssueNumber = message.IssueNumber,
-                    InvestCode = message.InvestCode,
-                    InvestType = message.InvestType,
-                    InvestCount = message.InvestCount,
-                    InvestTimes = message.InvestTimes,
-                    InvestAmount = message.InvestAmount,
-                    Status = OrderStatus.Succeed,
-                    CreationTime = DateTime.Now
-                });
-            }
+                Id = message.LvpOrderId,
+                LotteryBuyerId = 619,
+                LvpUserId = message.LvpUserId,
+                LvpVenderId = message.LvpVenderId,
+                LotteryId = message.LotteryId,
+                LotteryPlayId = message.LotteryPlayId,
+                IssueNumber = message.IssueNumber,
+                InvestCode = message.InvestCode,
+                InvestType = message.InvestType,
+                InvestCount = message.InvestCount,
+                InvestTimes = message.InvestTimes,
+                InvestAmount = message.InvestAmount,
+                Status = (int)OrderStatus.Succeed,
+                CreationTime = DateTime.Now
+            });
+            //using (MySqlConnection connection = new MySqlConnection(_options.DefaultNameOrConnectionString))
+            //{
+            //    int count = await connection.ExecuteAsync(@"INSERT INTO `BbcpOrders`(`Id`,`LotteryBuyerId`,`LvpUserId`,`LvpVenderId`,`LotteryId`,`LotteryPlayId`,`IssueNumber`,`InvestCode`,`InvestType`,`InvestCount`,`InvestTimes`,`InvestAmount`,`Status`,`CreationTime`)VALUES(@Id,@LotteryBuyerId,@LvpUserId,@LvpVenderId,@LotteryId,@LotteryPlayId,@IssueNumber,@InvestCode,@InvestType,@InvestCount,@InvestTimes,@InvestAmount,@Status,@CreationTime);", new
+            //    {
+            //        Id = message.LvpOrderId,
+            //        LotteryBuyerId = 619,
+            //        LvpUserId = message.LvpUserId,
+            //        LvpVenderId = message.LvpVenderId,
+            //        LotteryId = message.LotteryId,
+            //        LotteryPlayId = message.LotteryPlayId,
+            //        IssueNumber = message.IssueNumber,
+            //        InvestCode = message.InvestCode,
+            //        InvestType = message.InvestType,
+            //        InvestCount = message.InvestCount,
+            //        InvestTimes = message.InvestTimes,
+            //        InvestAmount = message.InvestAmount,
+            //        Status = OrderStatus.Succeed,
+            //        CreationTime = DateTime.Now
+            //    });
+            //}
         }
 
 

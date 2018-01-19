@@ -2,10 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Baibaocp.Core.Entities
+namespace Baibaocp.Core.Lotteries
 {
     [Table("BbcpLotteryPlayMappings")]
-    public class LotteryPlayMappingEntity :Entity<int>
+    public class BbcpLotteryPlayMapping : Entity<int>
     {
         /// <summary>
         /// <see cref="Text" /> 最大长度
@@ -22,7 +22,7 @@ namespace Baibaocp.Core.Entities
         /// 彩种 <see cref="BbcpLottery"/>
         /// </summary>
         [ForeignKey("LotteryId")]
-        public virtual LotteryEntity Lottery { get; set; }
+        public virtual BbcpLottery Lottery { get; set; }
 
         /// <summary>
         /// 彩种玩法编号
@@ -31,10 +31,10 @@ namespace Baibaocp.Core.Entities
         public int PlayId { get; set; }
 
         /// <summary>
-        /// 彩种玩法 <see cref="Lotteries.LotteryPlay"/>
+        /// 彩种玩法 <see cref="BbcpLotteryPlay"/>
         /// </summary>
         [ForeignKey("PlayId")]
-        public virtual LotteryPlayEntity LotteryPlay { get; set; }
+        public virtual BbcpLotteryPlay LotteryPlay { get; set; }
 
         public string Text { get; set; }
     }

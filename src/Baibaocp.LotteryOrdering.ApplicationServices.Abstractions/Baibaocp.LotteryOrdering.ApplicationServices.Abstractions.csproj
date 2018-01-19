@@ -9,8 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Baibaocp.ApplicationServices.Abstractions\Baibaocp.ApplicationServices.Abstractions.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.Core\Baibaocp.LotteryOrdering.Core.csproj" />
+    <ProjectReference Include="..\Fighting.ApplicationServices.Abstractions\Fighting.ApplicationServices.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

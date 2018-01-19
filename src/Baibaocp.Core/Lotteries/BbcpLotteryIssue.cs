@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Baibaocp.Core.Entities
+namespace Baibaocp.Core.Lotteries
 {
-    public class LotteryIssueEntity : Entity<int>
+    [Table("BbcpIssues")]
+    public class BbcpLotteryIssue : Entity<long>
     {
         /// <summary>
         /// 彩种
@@ -18,7 +19,13 @@ namespace Baibaocp.Core.Entities
         /// 彩种
         /// </summary>
         [ForeignKey("LotteryId")]
-        public virtual LotteryEntity Lottery { get; set; }
+        public virtual BbcpLottery Lottery { get; set; }
+
+        /// <summary>
+        /// 期号
+        /// </summary>
+        [Required]
+        public int IssueNumber { get; set; }
 
         /// <summary>
         /// 期扩展数据
@@ -76,9 +83,8 @@ namespace Baibaocp.Core.Entities
         [Required]
         public int Status { get; set; }
 
-        [ForeignKey("LotteryIssueId")]
-        public virtual ICollection<LotteryIssueBonusEntity> LotteryIssueBonuses { get; set; }
-
+        [ForeignKey("IssueId")]
+        public virtual ICollection<BbcpLotteryIssueBonus> LotteryIssueBonuses { get; set; }
 
         /// <summary>
         /// 总销售额
@@ -99,6 +105,5 @@ namespace Baibaocp.Core.Entities
         /// 停止下单时间
         /// </summary>
         public DateTime? EndOrderTime { get; set; }
-
     }
 }

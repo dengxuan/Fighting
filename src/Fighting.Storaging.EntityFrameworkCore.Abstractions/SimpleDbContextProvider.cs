@@ -2,7 +2,7 @@
 
 namespace Fighting.Storaging.EntityFrameworkCore
 {
-    public sealed class SimpleDbContextProvider<TDbContext> : IDbContextProvider<TDbContext> where TDbContext : FightDbContext
+    public sealed class SimpleDbContextProvider<TDbContext> : IDbContextProvider<TDbContext> where TDbContext : StorageContext
     {
         public TDbContext DbContext { get; }
 

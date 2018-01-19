@@ -2,18 +2,19 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Baibaocp.Core.Entities
+namespace Baibaocp.Core.Lotteries
 {
-    public class LotteryIssueBonusEntity : Entity<int>
+    [Table("BbcpIssueBonus")]
+    public class BbcpLotteryIssueBonus : Entity<int>
     {
         /// <summary>
         /// 期号
         /// </summary>
         [Required]
-        public int LotteryIssueId { get; set; }
+        public int IssueId { get; set; }
 
-        [ForeignKey("LotteryIssueId")]
-        public virtual LotteryIssueEntity LotteryIssue { get; set; }
+        [ForeignKey("IssueId")]
+        public virtual BbcpLotteryIssue Issue { get; set; }
 
         /// <summary>
         /// 奖级

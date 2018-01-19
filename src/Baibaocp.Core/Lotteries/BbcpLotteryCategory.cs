@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Baibaocp.Core.Entities
+namespace Baibaocp.Core.Lotteries
 {
-    public class LotteryCategoryEntity : Entity<int>
+    /// <summary>
+    /// 彩种类别 <see cref="Entity"/> <seealso cref="Entity{TPrimaryKey}"/>
+    /// </summary>
+    [Table("BbcpLotteryCategories")]
+    public class BbcpLotteryCategory : Entity<int>
     {
         /// <summary>
         /// 彩种类别名称 <see cref="Text"/> 的最大长度
@@ -19,16 +23,16 @@ namespace Baibaocp.Core.Entities
         public int LotteryTypeId { get; set; }
 
         /// <summary>
-        /// 彩种类型 <see cref="LotteryType"/>
+        /// 彩种类型 <see cref="BbcpLotteryType"/>
         /// </summary>
         [ForeignKey("LotteryTypeId")]
-        public LotteryTypeEntity LotteryType { get; set; }
+        public BbcpLotteryType LotteryType { get; set; }
 
         /// <summary>
-        /// 彩种<see cref="LotteryEntity"/> 的集合 <see cref="ICollection{T}"/>
+        /// 彩种<see cref="BbcpLottery"/> 的集合 <see cref="ICollection{T}"/>
         /// </summary>
-        [ForeignKey("LotteryId")]
-        public ICollection<LotteryEntity> Lotteries { get; set; }
+        [ForeignKey("BbcpLotteryId")]
+        public ICollection<BbcpLottery> Lotteries { get; set; }
 
         /// <summary>
         /// 彩种类别名称 <see cref="string"/>, 最大长度为 <see cref="MaxTextLength"/>

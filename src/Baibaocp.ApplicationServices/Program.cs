@@ -1,16 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Fighting.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Orleans;
 using Orleans.Hosting;
 using Orleans.Runtime.Configuration;
 using System;
-using System.Threading.Tasks;
-using Fighting.DependencyInjection;
-using Baibaocp.LotteryOrdering.EntityFrameworkCore;
-using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using System.Reflection;
+using System.Threading.Tasks;
 
-namespace Baibaocp.LotteryOrdering.ApplicationServices.Hosting
+namespace Baibaocp.ApplicationServices
 {
     class Program
     {

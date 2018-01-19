@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Baibaocp.Core.Entities
+namespace Baibaocp.Core.Lotteries
 {
     /// <summary>
     /// 彩种玩法
     /// </summary>
     [Table("BbcpLotteryPlays")]
-    public class LotteryPlayEntity : Entity<int>
+    public class BbcpLotteryPlay : Entity<int>
     {
         /// <summary>
         /// <see cref="Text"/> 最大长度
@@ -16,10 +16,10 @@ namespace Baibaocp.Core.Entities
         public const int MaxTextLength = 10;
 
         /// <summary>
-        /// 玩法<see cref="LotteryPlayMappingEntity" />映射彩种集合 <see cref="ICollection{T}" />
+        /// 玩法<see cref="BbcpLotteryPlayMapping" />映射彩种集合 <see cref="ICollection{T}" />
         /// </summary>
         [ForeignKey("LotteryPlayId")]
-        public ICollection<LotteryPlayMappingEntity> LotteryPlayMappings { get; set; }
+        public ICollection<BbcpLotteryPlayMapping> LotteryPlayMappings { get; set; }
 
         /// <summary>
         /// 玩法名称
