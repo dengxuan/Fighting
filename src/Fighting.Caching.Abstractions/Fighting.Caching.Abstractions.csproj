@@ -7,7 +7,6 @@
   <ItemGroup>
     <None Remove="Abstractions\ICacheManager.cs~RF19fdaf.TMP" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Fighting\Fighting.csproj" />
   </ItemGroup>
