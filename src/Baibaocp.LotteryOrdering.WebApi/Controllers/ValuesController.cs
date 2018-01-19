@@ -11,16 +11,13 @@ namespace Baibaocp.LotteryOrdering.WebApi.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        private readonly IOrderingApplicationService _orderingApplicationService;
         private readonly IApplicationServiceCluster _serviceCluster;
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="orderingApplicationService"></param>
         /// <param name="serviceCluster"></param>
-        public ValuesController(IOrderingApplicationService orderingApplicationService, IApplicationServiceCluster serviceCluster)
+        public ValuesController(IApplicationServiceCluster serviceCluster)
         {
-            _orderingApplicationService = orderingApplicationService;
             _serviceCluster = serviceCluster;
         }
 
