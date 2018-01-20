@@ -1,6 +1,8 @@
 ﻿using Baibaocp.ApplicationServices.Abstractions;
-using Baibaocp.Core.Entities;
+using Baibaocp.Storaging.Entities.Entities;
+using Baibaocp.Storaging.Entities.Lotteries;
 using Dapper;
+using Fighting.ApplicationServices.Abstractions;
 using Fighting.Caching.Abstractions;
 using Fighting.Storaging;
 using Pomelo.Data.MySql;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.ApplicationServices
 {
-    public class SportsMatchApplicationService : BaibaoApplicationService, ISportsMatchApplicationService
+    public class SportsMatchApplicationService : ApplicationService, ISportsMatchApplicationService
     {
         private readonly StorageOptions _storageOptions;
         public SportsMatchApplicationService(ICacheManager cacheManager, StorageOptions storageOptions) : base(cacheManager)
@@ -17,7 +19,7 @@ namespace Baibaocp.ApplicationServices
             _storageOptions = storageOptions;
         }
 
-        public async Task CreateMatchAsync(LotterySportsMatchEntity match)
+        public async Task CreateMatchAsync(LotterySportsMatch match)
         {
             using (MySqlConnection connection = new MySqlConnection(_storageOptions.DefaultNameOrConnectionString))
             {
@@ -39,17 +41,17 @@ namespace Baibaocp.ApplicationServices
             }
         }
 
-        public async Task<LotterySportsMatchEntity> FindMatchAsync(int matchId)
+        public async Task<LotterySportsMatch> FindMatchAsync(int matchId)
         {
             using (MySqlConnection connection = new MySqlConnection(_storageOptions.DefaultNameOrConnectionString))
             {
                 string sql = "SELECT * FROM `bbcpzcevents` WHERE `Id` = @Id;";
-                LotterySportsMatchEntity matchEntity = await connection.QuerySingleAsync<LotterySportsMatchEntity>(sql, new { Id = matchId });
+                LotterySportsMatch matchEntity = await connection.QuerySingleAsync<LotterySportsMatch>(sql, new { Id = matchId });
                 return matchEntity;
             }
         }
 
-        public Task UpdateMatchAsync(LotterySportsMatchEntity match)
+        public Task UpdateMatchAsync(LotterySportsMatch match)
         {
             throw new NotImplementedException();
         }

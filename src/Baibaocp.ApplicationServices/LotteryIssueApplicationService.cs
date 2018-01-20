@@ -1,51 +1,51 @@
 ﻿using Baibaocp.ApplicationServices.Abstractions;
-using Baibaocp.Core.Entities;
+using Baibaocp.Storaging.Entities.Lotteries;
 using Fighting.ApplicationServices.Abstractions;
 using Fighting.Caching.Abstractions;
 using Fighting.Storaging.Repositories.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Baibaocp.ApplicationServices
 {
     public class LotteryIssueApplicationService : ApplicationService, ILotteryIssueApplicationServices
     {
-        private readonly IRepository<LotteryIssue, int> _lotteryIssueRepository;
+        private readonly IRepository<LotteryPhase> _lotteryIssueRepository;
 
-        public LotteryIssueApplicationService(IRepository<LotteryIssue, int> lotteryIssueRepository, ICacheManager cacheManager) : base(cacheManager)
+        public LotteryIssueApplicationService(IRepository<LotteryPhase> lotteryIssueRepository, ICacheManager cacheManager) : base(cacheManager)
         {
             _lotteryIssueRepository = lotteryIssueRepository;
         }
 
-        public Task<LotteryIssue> FindLotteryIssue(int issueNumber)
+        public Task<LotteryPhase> FindLotteryPhase(int issueNumber)
         {
             return _lotteryIssueRepository.FirstOrDefaultAsync(predicate => predicate.IssueNumber == issueNumber);
         }
 
-        public Task<List<LotteryIssue>> FindLotteryIssues(int lotteryId, int skip = 0, int limit = 10)
+        public Task<List<LotteryPhase>> FindLotteryPhases(int lotteryId, int skip = 0, int limit = 10)
         {
             return Task.FromResult(_lotteryIssueRepository.GetAll().Where(predicate => predicate.LotteryId == lotteryId).Skip(skip).Take(limit).ToList());
         }
 
-        public Task<LotteryIssue> NextLotteryIssueInformation(int lotteryId, int issueNumber)
+        public Task<List<LotteryPhase>> NextLotteryPhases(int lotteryId, int issueNumber, int limit = 10)
         {
-            var lotteryIssue = _lotteryIssueRepository.GetAll()
+            var lotteryPhases = _lotteryIssueRepository.GetAll()
                .Where(predicate => predicate.LotteryId == lotteryId)
                .Where(predicate => predicate.IssueNumber > issueNumber)
                .OrderBy(predicate => predicate.IssueNumber)
-               .FirstOrDefault();
-            return Task.FromResult(lotteryIssue);
+               .Take(limit)
+               .ToList();
+            return Task.FromResult(lotteryPhases);
         }
 
-        public Task UpdateDrawNumber(int lotteryIssueId, string drawNumber)
+        public Task UpdateDrawNumber(int id, string drawNumber)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateLotteryIssue(LotteryIssue issueInformation)
+        public Task UpdateLotteryPhase(LotteryPhase lotteryPhase)
         {
             throw new NotImplementedException();
         }

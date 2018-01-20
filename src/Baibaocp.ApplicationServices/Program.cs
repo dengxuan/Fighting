@@ -1,4 +1,5 @@
-﻿using Fighting.DependencyInjection;
+﻿using Baibaocp.Storaging.EntityFrameworkCore;
+using Fighting.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Orleans;
@@ -7,6 +8,7 @@ using Orleans.Runtime.Configuration;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
 
 namespace Baibaocp.ApplicationServices
 {
@@ -40,7 +42,7 @@ namespace Baibaocp.ApplicationServices
 
                         fightBuilder.ConfigureStorage(storageBuilder =>
                         {
-                            storageBuilder.UseEntityFrameworkCore<LotteryOrderingDbContext>(options =>
+                            storageBuilder.UseEntityFrameworkCore<BaibaocpStorageContext>(options =>
                             {
                                 options.DefaultNameOrConnectionString = hostContext.Configuration.GetConnectionString("Fighting.Storage");
                             });

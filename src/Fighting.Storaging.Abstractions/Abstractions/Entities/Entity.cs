@@ -2,7 +2,7 @@
 
 namespace Fighting.Storaging.Entities.Abstractions
 {
-    public abstract class Entity : Entity<Guid>
+    public abstract class Entity : Entity<int>
     {
     }
 

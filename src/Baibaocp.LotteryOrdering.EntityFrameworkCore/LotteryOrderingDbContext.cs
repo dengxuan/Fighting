@@ -7,17 +7,15 @@ namespace Baibaocp.LotteryOrdering.EntityFrameworkCore
 {
     public class LotteryOrderingDbContext : StorageContext
     {
-        private readonly StorageOptions _storageOptions;
 
-        public LotteryOrderingDbContext(DbContextOptions options, StorageOptions storageOptions) : base(options)
+        public LotteryOrderingDbContext(StorageOptions storageOptions, DbContextOptions options) : base(storageOptions, options)
         {
-            _storageOptions = storageOptions;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseMySql(_storageOptions.DefaultNameOrConnectionString);
+            optionsBuilder.UseMySql(StorageOptions.DefaultNameOrConnectionString);
         }
 
         public DbSet<LotteryVenderEntity> LotteryVenders { get; set; }

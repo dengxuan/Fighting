@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fighting.Storaging.Repositories.Abstractions
 {
-    public abstract class Repository<TEntity> : Repository<TEntity, Guid>, IRepository<TEntity> where TEntity : class, IEntity<Guid> { }
+    public abstract class Repository<TEntity> : Repository<TEntity, int>, IRepository<TEntity> where TEntity : class, IEntity<int> { }
 
     public abstract class Repository<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey> where TEntity : class, IEntity<TPrimaryKey>
     {

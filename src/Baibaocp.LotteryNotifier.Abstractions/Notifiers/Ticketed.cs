@@ -1,4 +1,4 @@
-﻿using Baibaocp.Core;
+﻿using Baibaocp.Storaging.Entities;
 using Baibaocp.LotteryNotifier.Abstractions;
 
 namespace Baibaocp.LotteryNotifier.Notifiers

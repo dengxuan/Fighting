@@ -7,8 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LotteryDispatcher", "Lotter
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatcher.Abstractions", "src\Baibaocp.LotteryDispatcher.Abstractions\Baibaocp.LotteryDispatcher.Abstractions.csproj", "{BD81984A-8D04-43CC-B29F-4D13622A0950}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.Core", "src\Baibaocp.Core\Baibaocp.Core.csproj", "{BA9AB5A4-F20F-429B-A573-BC907392384D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryOrdering.WebApi", "src\Baibaocp.LotteryOrdering.WebApi\Baibaocp.LotteryOrdering.WebApi.csproj", "{D88E91B4-9F33-4442-9951-3B58B7EAF8C0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryOrdering.Hosting", "src\Baibaocp.LotteryOrdering.Hosting\Baibaocp.LotteryOrdering.Hosting.csproj", "{5EB9AAEA-767D-4C9A-B81F-EF8F17FDA5F5}"
@@ -63,7 +61,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryOrdering.En
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryOrdering.ApplicationServices.Abstractions", "src\Baibaocp.LotteryOrdering.ApplicationServices.Abstractions\Baibaocp.LotteryOrdering.ApplicationServices.Abstractions.csproj", "{11BBB184-98A9-4E16-BE77-45632972DB21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.EntityFrameworkCore", "src\Baibaocp.EntityFrameworkCore\Baibaocp.EntityFrameworkCore.csproj", "{ADDCD530-71E8-47BB-A72A-AA53872C9D2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.Storaging", "src\Baibaocp.Storaging\Baibaocp.Storaging.csproj", "{5A05B96B-DEB1-4A06-9EAA-6550F251C248}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.Storaging.EntityFrameworkCore", "src\Baibaocp.Storaging.EntityFrameworkCore\Baibaocp.Storaging.EntityFrameworkCore.csproj", "{5EAA0BBD-976C-4952-803C-2EE2B4090BBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,10 +75,6 @@ Global
 		{BD81984A-8D04-43CC-B29F-4D13622A0950}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD81984A-8D04-43CC-B29F-4D13622A0950}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD81984A-8D04-43CC-B29F-4D13622A0950}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BA9AB5A4-F20F-429B-A573-BC907392384D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BA9AB5A4-F20F-429B-A573-BC907392384D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BA9AB5A4-F20F-429B-A573-BC907392384D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BA9AB5A4-F20F-429B-A573-BC907392384D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D88E91B4-9F33-4442-9951-3B58B7EAF8C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D88E91B4-9F33-4442-9951-3B58B7EAF8C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D88E91B4-9F33-4442-9951-3B58B7EAF8C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -175,10 +171,14 @@ Global
 		{11BBB184-98A9-4E16-BE77-45632972DB21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11BBB184-98A9-4E16-BE77-45632972DB21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11BBB184-98A9-4E16-BE77-45632972DB21}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ADDCD530-71E8-47BB-A72A-AA53872C9D2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ADDCD530-71E8-47BB-A72A-AA53872C9D2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ADDCD530-71E8-47BB-A72A-AA53872C9D2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ADDCD530-71E8-47BB-A72A-AA53872C9D2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A05B96B-DEB1-4A06-9EAA-6550F251C248}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A05B96B-DEB1-4A06-9EAA-6550F251C248}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A05B96B-DEB1-4A06-9EAA-6550F251C248}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A05B96B-DEB1-4A06-9EAA-6550F251C248}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EAA0BBD-976C-4952-803C-2EE2B4090BBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EAA0BBD-976C-4952-803C-2EE2B4090BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EAA0BBD-976C-4952-803C-2EE2B4090BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EAA0BBD-976C-4952-803C-2EE2B4090BBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

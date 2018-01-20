@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Baibaocp.Core\Baibaocp.Core.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryDispatcher.Abstractions\Baibaocp.LotteryDispatcher.Abstractions.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.Core\Baibaocp.LotteryOrdering.Core.csproj" />
     <ProjectReference Include="..\Fighting.Caching.Abstractions\Fighting.Caching.Abstractions.csproj" />

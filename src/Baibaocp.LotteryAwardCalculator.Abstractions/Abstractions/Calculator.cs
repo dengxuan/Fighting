@@ -1,5 +1,5 @@
-﻿using Baibaocp.Core.Entities;
-using Baibaocp.Core.Extensions;
+﻿using Baibaocp.Storaging.Entities.Entities;
+using Baibaocp.Storaging.Entities.Extensions;
 using Baibaocp.LotteryAwardCalculator.Internal;
 using Baibaocp.LotteryOrdering.Messages;
 using Dapper;
@@ -27,13 +27,13 @@ namespace Baibaocp.LotteryAwardCalculator.Abstractions
             _logger = logger;
         }
 
-        public LotterySportsMatchResultEntity SelectZcResult(string eventId)
+        public LotterySportsMatchResult SelectZcResult(string eventId)
         {
             string sql = "select `Id`,`Date`,`Week`,`PlayId`,`RqspfRateCount`,`Score`,`HalfScore` from `BbcpZcEvents` where `Id` = @EventId;";
             using (MySqlConnection connection = new MySqlConnection(_options.DefaultNameOrConnectionString))
             {
                 string id = string.Empty;
-                LotterySportsMatchResultEntity result = connection.QueryFirst<LotterySportsMatchResultEntity>(sql, new { @EventId = eventId });
+                LotterySportsMatchResult result = connection.QueryFirst<LotterySportsMatchResult>(sql, new { @EventId = eventId });
                 if (result != null)
                 {
                     if (result.Score == "")
@@ -49,12 +49,12 @@ namespace Baibaocp.LotteryAwardCalculator.Abstractions
             }
         }
 
-        protected LotterySportsMatchResultEntity GetEventResult(long eventId)
+        protected LotterySportsMatchResult GetEventResult(long eventId)
         {
             ICache cacher = _cacheManager.GetCache("Events");
-            LotterySportsMatchResultEntity result = cacher.Get(eventId.ToString(), (k) =>
+            LotterySportsMatchResult result = cacher.Get(eventId.ToString(), (k) =>
             {
-                LotterySportsMatchResultEntity eventresult = this.SelectZcResult(k);
+                LotterySportsMatchResult eventresult = this.SelectZcResult(k);
                 return eventresult;
             });
             return result;
@@ -103,7 +103,7 @@ namespace Baibaocp.LotteryAwardCalculator.Abstractions
             string vsresult = string.Empty;
             String score = string.Empty;
             String haltscore = string.Empty;
-            LotterySportsMatchResultEntity result = GetEventResult(eventid);
+            LotterySportsMatchResult result = GetEventResult(eventid);
             if (result != null)
             {
                 score = result.Score;

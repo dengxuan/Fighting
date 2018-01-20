@@ -1,4 +1,4 @@
-﻿using Baibaocp.Core;
+﻿using Baibaocp.Storaging.Entities;
 using Baibaocp.LotteryOrdering.Core.Entities;
 using Baibaocp.LotteryOrdering.Messages;
 using Dapper;

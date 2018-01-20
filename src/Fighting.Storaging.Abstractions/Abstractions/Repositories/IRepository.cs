@@ -11,7 +11,7 @@ namespace Fighting.Storaging.Repositories.Abstractions
     {
     }
 
-    public interface IRepository<TEntity> : IRepository<TEntity, Guid> where TEntity : class, IEntity<Guid>
+    public interface IRepository<TEntity> : IRepository<TEntity, int> where TEntity : class, IEntity<int>
     {
 
     }

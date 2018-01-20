@@ -40,7 +40,7 @@ namespace Fighting.Storaging.EntityFrameworkCore.DependencyInjection
             foreach (var entityTypeInfo in GetEntityTypeInfos(typeof(TDbContext)))
             {
                 var primaryKeyType = EntityHelper.GetPrimaryKeyType(entityTypeInfo.Type);
-                if (primaryKeyType == typeof(Guid))
+                if (primaryKeyType == typeof(int))
                 {
                     var genericRepositoryType = typeof(IRepository<>).MakeGenericType(entityTypeInfo.Type);
                     var implType = typeof(EntityFrameworkCoreRepository<,>).MakeGenericType(entityTypeInfo.DeclaringType, entityTypeInfo.Type);

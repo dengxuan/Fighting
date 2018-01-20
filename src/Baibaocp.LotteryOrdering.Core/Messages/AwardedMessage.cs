@@ -1,4 +1,4 @@
-﻿using Baibaocp.Core;
+﻿using Baibaocp.Storaging.Entities;
 using RawRabbit.Configuration.Exchange;
 using RawRabbit.Enrichers.Attributes;
 using System.Collections.Generic;

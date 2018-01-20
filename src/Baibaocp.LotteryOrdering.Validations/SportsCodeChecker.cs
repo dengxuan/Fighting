@@ -2,7 +2,7 @@
 //using System.Collections;
 //using System.Collections.Generic;
 //using System.Linq;
-//using Baibaocp.Core.Extensions;
+//using Baibaocp.Storaging.Entities.Extensions;
 
 //namespace Baibaocp.LotteryOrdering.Validations
 //{

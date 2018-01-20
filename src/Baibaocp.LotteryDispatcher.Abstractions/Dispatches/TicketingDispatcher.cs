@@ -1,4 +1,4 @@
-﻿using Baibaocp.Core;
+﻿using Baibaocp.Storaging.Entities;
 using Baibaocp.LotteryDispatcher.Abstractions;
 using Baibaocp.LotteryDispatcher.Core.Executers;
 using Baibaocp.LotteryOrdering.Messages;

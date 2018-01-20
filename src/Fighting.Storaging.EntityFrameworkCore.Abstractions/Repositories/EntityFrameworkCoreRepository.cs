@@ -7,7 +7,7 @@ using System.Linq;
 namespace Fighting.Storaging.EntityFrameworkCore.Repositories
 {
 
-    public class EntityFrameworkCoreRepository<TDbContext, TEntity> : EntityFrameworkCoreRepository<TDbContext, TEntity, Guid> where TEntity : class, IEntity where TDbContext : StorageContext
+    public class EntityFrameworkCoreRepository<TDbContext, TEntity> : EntityFrameworkCoreRepository<TDbContext, TEntity, int> where TEntity : class, IEntity where TDbContext : StorageContext
     {
         public EntityFrameworkCoreRepository(IDbContextProvider<TDbContext> dbContextProvider) : base(dbContextProvider)
         {

@@ -1,4 +1,4 @@
-﻿using Baibaocp.Core.Entities;
+﻿using Baibaocp.Storaging.Entities.Lotteries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,14 +6,14 @@ namespace Baibaocp.ApplicationServices.Abstractions
 {
     public interface ILotteryIssueApplicationServices
     {
-        Task<List<LotteryIssue>> FindLotteryIssues(int lotteryId, int skip = 0, int limit = 10);
+        Task<List<LotteryPhase>> FindLotteryPhases(int lotteryId, int skip = 0, int limit = 10);
 
-        Task<LotteryIssue> FindLotteryIssue(int issueNumber);
+        Task<LotteryPhase> FindLotteryPhase(int issueNumber);
 
-        Task UpdateLotteryIssue(LotteryIssue issueInformation);
+        Task UpdateLotteryPhase(LotteryPhase lotteryPhase);
 
-        Task UpdateDrawNumber(int lotteryIssueId, string drawNumber);
+        Task UpdateDrawNumber(int id, string drawNumber);
 
-        Task<LotteryIssue> NextLotteryIssueInformation(int lotteryId, int issueNumber);
+        Task<List<LotteryPhase>> NextLotteryPhases(int lotteryId, int issueNumber, int limit = 10);
     }
 }

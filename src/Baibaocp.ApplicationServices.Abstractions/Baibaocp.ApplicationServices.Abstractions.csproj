@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Baibaocp.Core\Baibaocp.Core.csproj" />
+    <ProjectReference Include="..\Baibaocp.Storaging\Baibaocp.Storaging.csproj" />
     <ProjectReference Include="..\Fighting.ApplicationServices.Abstractions\Fighting.ApplicationServices.Abstractions.csproj" />
   </ItemGroup>
 

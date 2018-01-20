@@ -1,4 +1,4 @@
-﻿using Baibaocp.Core;
+﻿using Baibaocp.Storaging.Entities;
 using Baibaocp.LotteryNotifier.Abstractions;
 using Baibaocp.LotteryNotifier.Notifiers;
 using Baibaocp.LotteryOrdering.Messages;
@@ -37,7 +37,7 @@ namespace Baibaocp.LotteryNotifier.Internal.Services
                     {
                         OrderId = message.LvpOrder.LvpOrderId,
                         TicketOdds = message.TicketOdds,
-                        Status = message.Status == Core.OrderStatus.TicketDrawing ? 10300 : 10301
+                        Status = message.Status == OrderStatus.TicketDrawing ? 10300 : 10301
                     }
                 });
                 return Task.CompletedTask;

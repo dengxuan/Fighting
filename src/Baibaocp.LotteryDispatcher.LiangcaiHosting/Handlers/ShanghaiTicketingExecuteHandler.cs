@@ -1,4 +1,4 @@
-﻿using Baibaocp.Core.Extensions;
+﻿using Baibaocp.Storaging.Entities.Extensions;
 using Baibaocp.LotteryDispatcher.Core.Executers;
 using Dapper;
 using Fighting.Storaging;
