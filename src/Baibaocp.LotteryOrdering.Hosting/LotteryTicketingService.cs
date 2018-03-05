@@ -1,5 +1,6 @@
-﻿using Baibaocp.LotteryOrdering.ApplicationServices;
-using Baibaocp.LotteryOrdering.Messages;
+﻿using Baibaocp.ApplicationServices.Abstractions;
+using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
+using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Fighting.Abstractions;
 using Fighting.Hosting;
 using Microsoft.Extensions.Logging;
@@ -15,26 +16,37 @@ namespace Baibaocp.LotteryOrdering.Hosting
     public class LotteryTicketingService : BackgroundService
     {
         private readonly IBusClient _client;
-        private readonly ILogger<LotteryTicketingService> _logger;
         private readonly IIdentityGenerater _identityGenerater;
-        private readonly IOrderingApplicationService _ticketingService;
+        private readonly ILogger<LotteryTicketingService> _logger;
+        private readonly IOrderingApplicationService _orderingApplicationService;
 
-        public LotteryTicketingService(IBusClient client, IIdentityGenerater identityGenerater, ILogger<LotteryTicketingService> logger, IOrderingApplicationService ticketingService)
+        public LotteryTicketingService(IBusClient client, IIdentityGenerater identityGenerater, ILogger<LotteryTicketingService> logger, IOrderingApplicationService orderingApplicationService, ILotteryMerchanterApplicationService lotteryMerchanterApplicationService)
         {
             _client = client;
             _logger = logger;
             _identityGenerater = identityGenerater;
-            _ticketingService = ticketingService;
+            _orderingApplicationService = orderingApplicationService;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            return _client.SubscribeAsync<TicketedMessage>(async (message) =>
+            return _client.SubscribeAsync<LdpTicketedMessage>(async (message) =>
             {
                 try
                 {
                     _logger.LogTrace("Ticketing received message:{0} VenderId:{1}", message.LdpOrderId, message.LdpVenderId);
-                    await _ticketingService.UpdateAsync(message);
+                    var order = await _orderingApplicationService.FindOrderAsync(message.LdpOrderId);
+                    if (message.Status == Storaging.Entities.OrderStatus.TicketDrawing)
+                    {
+                        order.LdpVenderId = message.LdpVenderId;
+                        order.Status = (int)message.Status;
+                        order.TicketOdds = message.TicketOdds;
+                    }
+                    else if (message.Status == Storaging.Entities.OrderStatus.TicketFailed)
+                    {
+
+                    }
+                    await _orderingApplicationService.TicketedAsync(Convert.ToInt64(message.LvpOrder.LvpOrderId), message.LdpOrderId, message.TicketOdds, (int)message.Status);
                     return new Ack();
                 }
                 catch (Exception ex)
@@ -64,7 +76,7 @@ namespace Baibaocp.LotteryOrdering.Hosting
                         consume.WithRoutingKey("Tickets.Completed.#");
                     });
                 });
-            } , stoppingToken);
+            }, stoppingToken);
         }
     }
 }

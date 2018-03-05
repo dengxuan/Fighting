@@ -14,17 +14,15 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.0" />
-    <PackageReference Include="RawRabbit" Version="2.0.0-rc2" />
-    <PackageReference Include="RawRabbit.DependencyInjection.ServiceCollection" Version="2.0.0-rc2" />
-    <PackageReference Include="RawRabbit.Enrichers.GlobalExecutionId" Version="2.0.0-rc2" />
-    <PackageReference Include="RawRabbit.Enrichers.MessageContext" Version="2.0.0-rc2" />
-    <PackageReference Include="RawRabbit.Enrichers.MessageContext.Subscribe" Version="2.0.0-rc2" />
-    <PackageReference Include="RawRabbit.Operations.Publish" Version="2.0.0-rc2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Baibaocp.LotteryDispatcher.Core\Baibaocp.LotteryDispatcher.Core.csproj" />
+    <ProjectReference Include="..\Baibaocp.ApplicationServices.Abstractions\Baibaocp.ApplicationServices.Abstractions.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryDispatcher.MessageServices.Abstractions\Baibaocp.LotteryDispatcher.MessageServices.Abstractions.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.ApplicationServices.Abstractions\Baibaocp.LotteryOrdering.ApplicationServices.Abstractions.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.ApplicationServices\Baibaocp.LotteryOrdering.ApplicationServices.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.EntityFrameworkCore\Baibaocp.LotteryOrdering.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.MessageServices.Abstractions\Baibaocp.LotteryOrdering.MessageServices.Abstractions.csproj" />
     <ProjectReference Include="..\Fighting.Caching.Redis\Fighting.Caching.Redis.csproj" />
     <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
     <ProjectReference Include="..\Fighting.Storaging.Dapper\Fighting.Storaging.Dapper.csproj" />

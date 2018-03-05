@@ -10,9 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RawRabbit.Configuration;
-using RawRabbit.DependencyInjection.ServiceCollection;
-using RawRabbit.Enrichers.MessageContext;
-using RawRabbit.Enrichers.MessageContext.Context;
 using RawRabbit.Instantiation;
 using System.Threading.Tasks;
 
@@ -42,17 +39,17 @@ namespace Baibaocp.LotteryNotifier.Hongdan
                     services.AddFighting(fightBuilder =>
                     {
                     });
-                    services.AddRawRabbit(new RawRabbitOptions
-                    {
-                        ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>(),
-                        Plugins = p =>
-                        {
-                            p.UseMessageContext<MessageContext>();
-                        },
-                        DependencyInjection = ioc =>
-                        {
-                        }
-                    });
+                    //services.AddRawRabbit(new RawRabbitOptions
+                    //{
+                    //    ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>(),
+                    //    Plugins = p =>
+                    //    {
+                    //        p.UseMessageContext<MessageContext>();
+                    //    },
+                    //    DependencyInjection = ioc =>
+                    //    {
+                    //    }
+                    //});
                     services.AddLotteryNotifier(builderAction =>
                     {
                         builderAction.ConfigureOptions(options =>

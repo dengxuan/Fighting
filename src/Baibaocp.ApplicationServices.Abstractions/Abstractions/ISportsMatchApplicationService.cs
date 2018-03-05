@@ -1,14 +1,15 @@
-﻿using Baibaocp.Core.Entities;
+﻿using Baibaocp.Storaging.Entities.Entities;
+using Baibaocp.Storaging.Entities.Lotteries;
 using System.Threading.Tasks;
 
 namespace Baibaocp.ApplicationServices.Abstractions
 {
     public interface ISportsMatchApplicationService
     {
-        Task CreateMatchAsync(LotterySportsMatchEntity match);
+        Task CreateMatchAsync(LotterySportsMatch match);
 
-        Task<LotterySportsMatchEntity> FindMatchAsync(int matchId);
+        Task<LotterySportsMatch> FindMatchAsync(int matchId);
 
-        Task UpdateMatchAsync(LotterySportsMatchEntity match);
+        Task UpdateMatchAsync(LotterySportsMatch match);
     }
 }

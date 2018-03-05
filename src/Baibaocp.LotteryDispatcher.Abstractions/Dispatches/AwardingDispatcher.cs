@@ -1,5 +1,6 @@
 ﻿using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.Core.Executers;
+using Baibaocp.LotteryDispatcher.MessageServices;
+using Baibaocp.LotteryDispatcher.MessageServices.Messages.ExecuteMessages;
 using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatcher.Dispatches
 {
-    public class AwardingDispatcher : IExecuterDispatcher<AwardingExecuter>
+    public class AwardingDispatcher : IExecuterDispatcher<AwardingExecuteMessage>
     {
         private readonly ILogger _logger;
 
@@ -24,15 +25,16 @@ namespace Baibaocp.LotteryDispatcher.Dispatches
         }
 
         [Queue("Awarding")]
-        public async Task DispatchAsync(AwardingExecuter executer)
+        public async Task<MessageHandle> DispatchAsync(AwardingExecuteMessage executer)
         {
-            var handlerType = _options.GetHandler<AwardingExecuter>(executer.LdpVenderId);
-            var handler = (IExecuteHandler<AwardingExecuter>)_resolver.GetRequiredService(handlerType);
+            var handlerType = _options.GetHandler<AwardingExecuteMessage>(executer.LdpVenderId);
+            var handler = (IExecuteHandler<AwardingExecuteMessage>)_resolver.GetRequiredService(handlerType);
             var handle = await handler.HandleAsync(executer);
-            if(handle == Handle.Waiting)
-            {
-                BackgroundJob.Schedule<IExecuterDispatcher<AwardingExecuter>>(dispatcher => dispatcher.DispatchAsync(executer), TimeSpan.FromSeconds(30));
-            }
+            return handle;
+            //if(handle == MessageHandle.Waiting)
+            //{
+            //    BackgroundJob.Schedule<IExecuterDispatcher<AwardingExecuteMessage>>(dispatcher => dispatcher.DispatchAsync(executer), TimeSpan.FromSeconds(30));
+            //}
         }
     }
 }

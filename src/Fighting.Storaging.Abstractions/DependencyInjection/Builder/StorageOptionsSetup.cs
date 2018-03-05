@@ -1,4 +1,4 @@
-﻿using Fighting.Storage;
+﻿using Fighting.Storaging;
 using Microsoft.Extensions.Options;
 
 namespace Fighting.DependencyInjection.Builder

@@ -1,17 +1,10 @@
-﻿using Baibaocp.Core;
-using Baibaocp.LotteryAwardCalculator.Abstractions;
-using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.Core.Executers;
-using Baibaocp.LotteryOrdering.Messages;
+﻿using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Fighting.Hosting;
-using Hangfire;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
 using RawRabbit.Common;
 using RawRabbit.Configuration.Exchange;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -34,7 +27,7 @@ namespace Baibaocp.LotteryAwardCalculator.Internal
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _busClient.SubscribeAsync<TicketedMessage>(async (message) =>
+            await _busClient.SubscribeAsync<LdpTicketedMessage>(async (message) =>
             {
                 try
                 {

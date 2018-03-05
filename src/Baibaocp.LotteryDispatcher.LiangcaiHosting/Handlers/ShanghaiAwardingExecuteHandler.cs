@@ -1,6 +1,7 @@
-﻿using Baibaocp.Core;
-using Baibaocp.LotteryDispatcher.Core.Executers;
-using Baibaocp.LotteryOrdering.Messages;
+﻿using Baibaocp.LotteryDispatcher.MessageServices;
+using Baibaocp.LotteryDispatcher.MessageServices.Messages.ExecuteMessages;
+using Baibaocp.LotteryOrdering.MessageServices.Messages;
+using Baibaocp.Storaging.Entities;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
 using RawRabbit.Configuration.Exchange;
@@ -10,7 +11,7 @@ using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatcher.Shanghai.Handlers
 {
-    public class ShanghaiAwardingExecuteHandler : ShanghaiExecuteHandler<AwardingExecuter>
+    public class ShanghaiAwardingExecuteHandler : ShanghaiExecuteHandler<AwardingExecuteMessage>
     {
         private readonly IBusClient _client;
 
@@ -22,7 +23,7 @@ namespace Baibaocp.LotteryDispatcher.Shanghai.Handlers
             _client = client;
         }
 
-        protected override string BuildRequest(AwardingExecuter executer)
+        protected override string BuildRequest(AwardingExecuteMessage executer)
         {
             string[] values = new string[]
             {
@@ -32,7 +33,7 @@ namespace Baibaocp.LotteryDispatcher.Shanghai.Handlers
             return string.Join("_", values);
         }
 
-        public override async Task<Handle> HandleAsync(AwardingExecuter executer)
+        public override async Task<MessageHandle> HandleAsync(AwardingExecuteMessage executer)
         {
             string xml = await Send(executer);
             XDocument document = XDocument.Parse(xml);
@@ -42,7 +43,7 @@ namespace Baibaocp.LotteryDispatcher.Shanghai.Handlers
             if (Status.Equals("0"))
             {
                 string[] values = value.Split('_');
-                AwardedMessage awardedMessage = new AwardedMessage
+                LdpAwardedMessage awardedMessage = new LdpAwardedMessage
                 {
                     LvpOrder = executer.LvpOrder,
                     LdpOrderId = executer.LdpOrderId,
@@ -64,10 +65,10 @@ namespace Baibaocp.LotteryDispatcher.Shanghai.Handlers
                         configuration.WithRoutingKey(RoutingkeyConsts.Awards.Completed.Winning);
                     });
                 });
-                return Handle.Winning;
+                return MessageHandle.Winning;
             }
             // TODO: Log here and notice to admin
-            return Handle.Waiting;
+            return MessageHandle.Waiting;
         }
     }
 }

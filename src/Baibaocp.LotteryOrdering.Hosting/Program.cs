@@ -1,13 +1,14 @@
-﻿using Fighting.DependencyInjection;
+﻿using Baibaocp.LotteryOrdering.EntityFrameworkCore;
+using Fighting.DependencyInjection;
 using Fighting.Hosting;
+using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using RawRabbit;
 using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
-using RawRabbit.Enrichers.GlobalExecutionId;
 using RawRabbit.Enrichers.MessageContext;
 using RawRabbit.Enrichers.MessageContext.Context;
 using RawRabbit.Instantiation;
@@ -45,9 +46,9 @@ namespace Baibaocp.LotteryOrdering.Hosting
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddSingleton(sp => 
+                    services.AddSingleton(sp =>
                     {
-                       return hostContext.Configuration.GetSection("HostingConfugiration").Get<HostingConfugiration>();
+                        return hostContext.Configuration.GetSection("HostingConfugiration").Get<HostingConfugiration>();
                     });
 
                     services.AddFighting(fightBuilder =>
@@ -62,9 +63,9 @@ namespace Baibaocp.LotteryOrdering.Hosting
 
                         fightBuilder.ConfigureStorage(storageBuilder =>
                         {
-                            storageBuilder.UseDapper(options =>
+                            storageBuilder.UseEntityFrameworkCore<LotteryOrderingDbContext>(optionsBuilder =>
                             {
-                                options.DefaultNameOrConnectionString = hostContext.Configuration.GetConnectionString("Fighting.Storage");
+                                optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Fighting.Storage"));
                             });
                         });
                     });

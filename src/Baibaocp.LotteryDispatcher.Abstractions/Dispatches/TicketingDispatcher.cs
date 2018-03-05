@@ -1,7 +1,8 @@
-﻿using Baibaocp.Core;
-using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.Core.Executers;
-using Baibaocp.LotteryOrdering.Messages;
+﻿using Baibaocp.LotteryDispatcher.Abstractions;
+using Baibaocp.LotteryDispatcher.MessageServices;
+using Baibaocp.LotteryDispatcher.MessageServices.Messages.ExecuteMessages;
+using Baibaocp.LotteryOrdering.MessageServices.Messages;
+using Baibaocp.Storaging.Entities;
 using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -10,11 +11,10 @@ using RawRabbit.Configuration.Exchange;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Transactions;
 
 namespace Baibaocp.LotteryDispatcher.Dispatches
 {
-    public class TicketingDispatcher : IExecuterDispatcher<TicketingExecuter>
+    public class TicketingDispatcher : IExecuterDispatcher<TicketingExecuteMessage>
     {
 
         private readonly IServiceProvider _resolver;
@@ -33,10 +33,10 @@ namespace Baibaocp.LotteryDispatcher.Dispatches
             _resolver = resolver;
         }
 
-        protected async Task TicketSuccess(string ldpOrderId, string ldpVenderId, LvpOrderMessage lvpOrder, IDictionary<string, object> ticketContext)
+        protected async Task TicketSuccess(string ldpOrderId, string ldpVenderId, LvpOrderedMessage lvpOrder, IDictionary<string, object> ticketContext)
         {
             /* 出票成功 */
-            var message = new TicketedMessage
+            var message = new LdpTicketedMessage
             {
                 LdpOrderId = ldpOrderId,
                 LdpVenderId = ldpVenderId,
@@ -60,9 +60,9 @@ namespace Baibaocp.LotteryDispatcher.Dispatches
             });
         }
 
-        protected async Task TicketFailure(string ldpOrderId, string ldpVenderId, LvpOrderMessage lvpOrder)
+        protected async Task TicketFailure(string ldpOrderId, string ldpVenderId, LvpOrderedMessage lvpOrder)
         {
-            TicketedMessage message = new TicketedMessage
+            LdpTicketedMessage message = new LdpTicketedMessage
             {
                 LdpOrderId = ldpOrderId,
                 LdpVenderId = ldpVenderId,
@@ -86,31 +86,30 @@ namespace Baibaocp.LotteryDispatcher.Dispatches
             });
         }
 
-
-        [Queue("Ticketing")]
-        public async Task DispatchAsync(TicketingExecuter executer)
+        public async Task<MessageHandle> DispatchAsync(TicketingExecuteMessage executer)
         {
-            var handlerType = _options.GetHandler<TicketingExecuter>(executer.LdpVenderId);
-            var handler = (IExecuteHandler<TicketingExecuter>)_resolver.GetRequiredService(handlerType);
+            var handlerType = _options.GetHandler<TicketingExecuteMessage>(executer.LdpVenderId);
+            var handler = (IExecuteHandler<TicketingExecuteMessage>)_resolver.GetRequiredService(handlerType);
             var handle = await handler.HandleAsync(executer);
-            using (TransactionScope transaction = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromSeconds(30), TransactionScopeAsyncFlowOption.Enabled))
-            {
-                if (handle == Handle.Success)
-                {
-                    /* 出票成功 */
-                    await TicketSuccess(executer.LdpOrderId, executer.LdpVenderId, executer.LvpOrder, executer.TicketContext);
-                }
-                else if (handle == Handle.Failure)
-                {
-                    /* 出票失败 */
-                    await TicketFailure(executer.LdpOrderId, executer.LdpVenderId, executer.LvpOrder);
-                }
-                else if (handle == Handle.Waiting)
-                {
-                    BackgroundJob.Schedule<IExecuterDispatcher<TicketingExecuter>>(dispatcher => dispatcher.DispatchAsync(executer), TimeSpan.FromSeconds(10));
-                }
-                transaction.Complete();
-            }
+            return handle;
+            //using (TransactionScope transaction = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromSeconds(30), TransactionScopeAsyncFlowOption.Enabled))
+            //{
+            //    if (handle == MessageHandle.Success)
+            //    {
+            //        /* 出票成功 */
+            //        await TicketSuccess(executer.LdpOrderId, executer.LdpVenderId, executer.LvpOrder, executer.TicketContext);
+            //    }
+            //    else if (handle == MessageHandle.Failure)
+            //    {
+            //        /* 出票失败 */
+            //        await TicketFailure(executer.LdpOrderId, executer.LdpVenderId, executer.LvpOrder);
+            //    }
+            //    else if (handle == MessageHandle.Waiting)
+            //    {
+            //        BackgroundJob.Schedule<IExecuterDispatcher<TicketingExecuteMessage>>(dispatcher => dispatcher.DispatchAsync(executer), TimeSpan.FromSeconds(10));
+            //    }
+            //    transaction.Complete();
+            //}
         }
     }
 }

@@ -2,7 +2,7 @@
 using Fighting.DependencyInjection.Builder;
 using System;
 
-namespace Baibaocp.ApplicationServices.Abstractions
+namespace Fighting.ApplicationServices.Abstractions
 {
     public static class ApplicationServicesFightBuilderExtensions
     {
@@ -10,7 +10,7 @@ namespace Baibaocp.ApplicationServices.Abstractions
         {
             ApplicationServiceBuilder builder = new ApplicationServiceBuilder(fightBuilder.Services);
             setupAction?.Invoke(builder);
-
+            builder.Build();
             return fightBuilder;
         }
     }

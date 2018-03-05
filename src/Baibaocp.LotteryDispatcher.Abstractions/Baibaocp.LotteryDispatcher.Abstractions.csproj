@@ -12,16 +12,14 @@
 
   <ItemGroup>
     <PackageReference Include="HangFire.Core" Version="1.6.17" />
-    <PackageReference Include="RawRabbit.DependencyInjection.ServiceCollection" Version="2.0.0-rc2" />
-    <PackageReference Include="RawRabbit.Enrichers.MessageContext" Version="2.0.0-rc2" />
-    <PackageReference Include="RawRabbit.Enrichers.MessageContext.Subscribe" Version="2.0.0-rc2" />
-    <PackageReference Include="RawRabbit.Operations.Publish" Version="2.0.0-rc2" />
+    <PackageReference Include="RawRabbit.DependencyInjection.ServiceCollection" Version="2.0.0-rc4" />
+    <PackageReference Include="RawRabbit.Enrichers.MessageContext" Version="2.0.0-rc4" />
+    <PackageReference Include="RawRabbit.Enrichers.MessageContext.Subscribe" Version="2.0.0-rc4" />
+    <PackageReference Include="RawRabbit.Operations.Publish" Version="2.0.0-rc4" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Baibaocp.Core\Baibaocp.Core.csproj" />
-    <ProjectReference Include="..\Baibaocp.LotteryDispatcher.Core\Baibaocp.LotteryDispatcher.Core.csproj" />
-    <ProjectReference Include="..\Baibaocp.LotteryOrdering.Core\Baibaocp.LotteryOrdering.Core.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.MessageServices.Abstractions\Baibaocp.LotteryOrdering.MessageServices.Abstractions.csproj" />
     <ProjectReference Include="..\Fighting.Caching.Abstractions\Fighting.Caching.Abstractions.csproj" />
     <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
     <ProjectReference Include="..\Fighting.Storaging.Abstractions\Fighting.Storaging.Abstractions.csproj" />

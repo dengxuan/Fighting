@@ -1,4 +1,4 @@
-﻿namespace Fighting.Storage
+﻿namespace Fighting.Storaging
 {
     public class StorageOptions
     {

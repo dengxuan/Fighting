@@ -1,9 +1,7 @@
 ﻿using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.Core;
+using Baibaocp.LotteryDispatcher.MessageServices.Messages;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Baibaocp.LotteryDispatcher
 {
@@ -11,7 +9,7 @@ namespace Baibaocp.LotteryDispatcher
     {
         private readonly ConcurrentDictionary<(string ldpVenderId, Type executerType), Type> _ldpHandlerTypesMapping = new ConcurrentDictionary<(string ldpVenderId, Type executerType), Type>();
 
-        public void AddHandler<THandler, TExecuter>(string ldpVenderId) where THandler : IExecuteHandler<TExecuter> where TExecuter : IExecuter
+        public void AddHandler<THandler, TExecuter>(string ldpVenderId) where THandler : IExecuteHandler<TExecuter> where TExecuter : ExecuteMessage
         {
             Console.WriteLine("Add Handler: {0} {1} {2}", ldpVenderId, typeof(THandler), typeof(TExecuter));
             _ldpHandlerTypesMapping.TryAdd((ldpVenderId, typeof(TExecuter)), typeof(THandler));

@@ -7,11 +7,6 @@
   <ItemGroup>
     <None Remove="Abstractions\ICacheManager.cs~RF19fdaf.TMP" />
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Fighting.Extensions.Threading" Version="1.0.0" />
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Fighting\Fighting.csproj" />
   </ItemGroup>

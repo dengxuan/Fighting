@@ -1,13 +1,14 @@
-﻿using Baibaocp.LotteryDispatcher.Core;
+﻿using Baibaocp.LotteryDispatcher.MessageServices;
+using Baibaocp.LotteryDispatcher.MessageServices.Messages;
 using Fighting.DependencyInjection.Builder;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatcher.Abstractions
 {
 
-    public interface IExecuteHandler<in TExecuter> : ITransientDependency where TExecuter : IExecuter
+    public interface IExecuteHandler<in TExecuter> : ITransientDependency where TExecuter : ExecuteMessage
     {
 
-        Task<Handle> HandleAsync(TExecuter executer);
+        Task<MessageHandle> HandleAsync(TExecuter executer);
     }
 }

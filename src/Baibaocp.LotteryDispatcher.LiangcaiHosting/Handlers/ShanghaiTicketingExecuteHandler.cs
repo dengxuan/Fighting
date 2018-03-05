@@ -1,8 +1,8 @@
-﻿using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.Core.Executers;
+﻿using Baibaocp.LotteryDispatcher.MessageServices;
+using Baibaocp.LotteryDispatcher.MessageServices.Messages.ExecuteMessages;
+using Baibaocp.Storaging.Entities.Extensions;
 using Dapper;
-using Fighting.Storage;
-using Hangfire;
+using Fighting.Storaging;
 using Microsoft.Extensions.Logging;
 using Pomelo.Data.MySql;
 using System;
@@ -12,11 +12,10 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Baibaocp.Core.Extensions;
 
 namespace Baibaocp.LotteryDispatcher.Shanghai.Handlers
 {
-    public class ShanghaiTicketingExecuteHandler : ShanghaiExecuteHandler<TicketingExecuter>
+    public class ShanghaiTicketingExecuteHandler : ShanghaiExecuteHandler<TicketingExecuteMessage>
     {
 
         private readonly StorageOptions _storageOptions;
@@ -55,7 +54,7 @@ namespace Baibaocp.LotteryDispatcher.Shanghai.Handlers
                 }
             }
         }
-        protected override string BuildRequest(TicketingExecuter executer)
+        protected override string BuildRequest(TicketingExecuteMessage executer)
         {
             string[] values = new string[]
             {
@@ -100,7 +99,7 @@ namespace Baibaocp.LotteryDispatcher.Shanghai.Handlers
             }
         }
 
-        public override async Task<Handle> HandleAsync(TicketingExecuter executer)
+        public override async Task<MessageHandle> HandleAsync(TicketingExecuteMessage executer)
         {
             string xml = await Send(executer);
             XDocument document = XDocument.Parse(xml);
@@ -112,13 +111,13 @@ namespace Baibaocp.LotteryDispatcher.Shanghai.Handlers
                 string oddsXml = DeflateDecompress(odds);
                 Dictionary<string, string> oddsValues = new Dictionary<string, string>();
                 executer.TicketContext.Add("TicketOdds", GetOdds(oddsXml, executer.LvpOrder.LotteryId));
-                return Handle.Success;
+                return MessageHandle.Success;
             }
             else if (Status.Equals("2003"))
             {
-                return Handle.Failure;
+                return MessageHandle.Failure;
             }
-            return Handle.Waiting;
+            return MessageHandle.Waiting;
         }
     }
 }

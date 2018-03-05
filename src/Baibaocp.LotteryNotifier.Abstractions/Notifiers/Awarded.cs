@@ -1,6 +1,4 @@
-﻿using Baibaocp.Core;
-
-namespace Baibaocp.LotteryNotifier.Notifiers
+﻿namespace Baibaocp.LotteryNotifier.Notifiers
 {
     public class Awarded
     {

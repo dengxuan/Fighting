@@ -13,15 +13,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Messages\TicketedMessage.cs~RFef1fa3.TMP" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Baibaocp.Core\Baibaocp.Core.csproj" />
+    <ProjectReference Include="..\Baibaocp.Storaging\Baibaocp.Storaging.csproj" />
+    <ProjectReference Include="..\Fighting.Storaging.Abstractions\Fighting.Storaging.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

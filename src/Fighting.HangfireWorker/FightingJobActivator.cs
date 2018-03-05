@@ -27,8 +27,7 @@ namespace Fighting.HangfireWorker
 
         public FightingJobActivator([NotNull] IServiceScopeFactory serviceScopeFactory)
         {
-            if (serviceScopeFactory == null) throw new ArgumentNullException(nameof(serviceScopeFactory));
-            _serviceScopeFactory = serviceScopeFactory;
+            _serviceScopeFactory = serviceScopeFactory ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
         }
 
         public override JobActivatorScope BeginScope(JobActivatorContext context)

@@ -1,7 +1,7 @@
 ﻿using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.Core;
-using Fighting;
-using Fighting.Extensions;
+using Baibaocp.LotteryDispatcher.MessageServices;
+using Baibaocp.LotteryDispatcher.MessageServices.Messages;
+using Fighting.Security.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatcher.Shanghai
 {
-    public abstract class ShanghaiExecuteHandler<TExecuter> : IExecuteHandler<TExecuter> where TExecuter : IExecuter
+    public abstract class ShanghaiExecuteHandler<TExecuter> : IExecuteHandler<TExecuter> where TExecuter : ExecuteMessage
     {
         private readonly string _command;
 
@@ -63,6 +63,6 @@ namespace Baibaocp.LotteryDispatcher.Shanghai
 
         protected abstract string BuildRequest(TExecuter executer);
 
-        public abstract Task<Handle> HandleAsync(TExecuter executer);
+        public abstract Task<MessageHandle> HandleAsync(TExecuter executer);
     }
 }

@@ -2,9 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Fighting.Extensions.Storage.Abstractions</AssemblyName>
-    <RootNamespace>Fighting.Extensions.Storage</RootNamespace>
+    <AssemblyName>Fighting.Storaging.Abstractions</AssemblyName>
+    <RootNamespace>Fighting.Storaging</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Fighting\Fighting.csproj" />

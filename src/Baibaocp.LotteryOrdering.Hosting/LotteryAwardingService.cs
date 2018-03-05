@@ -1,5 +1,5 @@
-﻿using Baibaocp.LotteryOrdering.ApplicationServices;
-using Baibaocp.LotteryOrdering.Messages;
+﻿using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
+using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Fighting.Abstractions;
 using Fighting.Hosting;
 using Microsoft.Extensions.Logging;
@@ -29,12 +29,12 @@ namespace Baibaocp.LotteryOrdering.Hosting
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            return _client.SubscribeAsync<AwardedMessage>(async (message) =>
+            return _client.SubscribeAsync<LdpAwardedMessage>(async (message) =>
             {
                 try
                 {
                     _logger.LogTrace("Awarding received message:{0} VenderId:{1}", message.LdpOrderId, message.LdpVenderId);
-                    await _awardingApplicationService.UpdateAsync(message);
+                    //await _awardingApplicationService.UpdateAsync(message);
                     return new Ack();
                 }
                 catch (Exception ex)
