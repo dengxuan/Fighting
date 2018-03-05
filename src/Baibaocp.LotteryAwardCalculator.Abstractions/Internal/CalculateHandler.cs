@@ -1,15 +1,13 @@
-﻿using Baibaocp.Storaging.Entities;
-using Baibaocp.LotteryAwardCalculator.Abstractions;
+﻿using Baibaocp.LotteryAwardCalculator.Abstractions;
 using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.Core.Executers;
-using Baibaocp.LotteryOrdering.Messages;
-using Fighting.DependencyInjection.Builder;
+using Baibaocp.LotteryDispatcher.MessageServices.Messages.ExecuteMessages;
+using Baibaocp.LotteryOrdering.MessageServices.Messages;
+using Baibaocp.Storaging.Entities;
 using Hangfire;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
 using RawRabbit.Configuration.Exchange;
 using System;
-using System.Linq;
 
 namespace Baibaocp.LotteryAwardCalculator.Internal
 {
@@ -31,16 +29,16 @@ namespace Baibaocp.LotteryAwardCalculator.Internal
             _logger = logger;
         }
 
-        public void Handle(TicketedMessage message)
+        public void Handle(LdpTicketedMessage message)
         {
             Handle handle = _caculator.Calculate(message);
             if (handle == Internal.Handle.Winner)
             {
-                _jobClient.Enqueue<IExecuterDispatcher<AwardingExecuter>>(executer => executer.DispatchAsync(new AwardingExecuter(message.LdpOrderId, message.LdpVenderId, message.LvpOrder)));
+                _jobClient.Enqueue<IExecuterDispatcher<AwardingExecuteMessage>>(executer => executer.DispatchAsync(new AwardingExecuteMessage(message.LdpOrderId, message.LdpVenderId, message.LvpOrder)));
             }
             else if (handle == Internal.Handle.Losing)
             {
-                _busClient.PublishAsync(new AwardedMessage
+                _busClient.PublishAsync(new LdpAwardedMessage
                 {
                     AftertaxAmount = 0,
                     BonusAmount = 0,

@@ -15,15 +15,13 @@ namespace Fighting.Storaging.EntityFrameworkCore.DependencyInjection
 {
     public static class EntityFrameworkCoreStoragingBuilderExtensions
     {
-        public static StorageBuilder UseEntityFrameworkCore<TDbContext>(this StorageBuilder storageBuilder, Action<StorageOptions> options) where TDbContext : StorageContext
+        public static StorageBuilder UseEntityFrameworkCore<TDbContext>(this StorageBuilder storageBuilder, Action<DbContextOptionsBuilder> optionAction) where TDbContext : StorageContext
         {
-            storageBuilder.Services.Configure(options);
             storageBuilder.Services.AddTransient<IDbContextProvider<TDbContext>, SimpleDbContextProvider<TDbContext>>();
-            storageBuilder.Services.AddDbContext<TDbContext>();
+            storageBuilder.Services.AddDbContext<TDbContext>(optionAction);
             RegisterRepository<TDbContext>(storageBuilder.Services);
             return storageBuilder;
         }
-
 
         internal static IEnumerable<EntityType> GetEntityTypeInfos(Type dbContextType)
         {

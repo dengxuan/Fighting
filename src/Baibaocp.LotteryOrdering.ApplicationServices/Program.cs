@@ -9,6 +9,7 @@ using Baibaocp.LotteryOrdering.EntityFrameworkCore;
 using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
 namespace Baibaocp.LotteryOrdering.ApplicationServices.Hosting
 {
@@ -21,7 +22,7 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices.Hosting
 
             var builder = new SiloHostBuilder()
                 .UseConfiguration(config)
-                .ConfigureHostConfiguration(configurationBuilder => 
+                .ConfigureHostConfiguration(configurationBuilder =>
                 {
                     configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                     configurationBuilder.AddEnvironmentVariables();
@@ -42,9 +43,9 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices.Hosting
 
                         fightBuilder.ConfigureStorage(storageBuilder =>
                         {
-                            storageBuilder.UseEntityFrameworkCore<LotteryOrderingDbContext>(options =>
+                            storageBuilder.UseEntityFrameworkCore<LotteryOrderingDbContext>(optionsBuilder =>
                             {
-                                options.DefaultNameOrConnectionString = hostContext.Configuration.GetConnectionString("Fighting.Storage");
+                                optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Fighting.Storage"));
                             });
                         });
 

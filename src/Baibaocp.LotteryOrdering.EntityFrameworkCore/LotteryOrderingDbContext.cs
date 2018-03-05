@@ -1,4 +1,4 @@
-﻿using Baibaocp.LotteryOrdering.Core.Entities;
+﻿using Baibaocp.LotteryOrdering.Core.Entities.Merchantes;
 using Fighting.Storaging;
 using Fighting.Storaging.EntityFrameworkCore.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -18,10 +18,6 @@ namespace Baibaocp.LotteryOrdering.EntityFrameworkCore
             optionsBuilder.UseMySql(StorageOptions.DefaultNameOrConnectionString);
         }
 
-        public DbSet<LotteryVenderEntity> LotteryVenders { get; set; }
-
-        public DbSet<LotteryVenderAccountDetailEntity> LotteryVenderAccountDetails { get; set; }
-
-        public DbSet<LotteryVenderOrderEntity> LotteryVenderOrders { get; set; }
+        public DbSet<LotteryMerchanteOrder> LotteryVenderOrders { get; set; }
     }
 }

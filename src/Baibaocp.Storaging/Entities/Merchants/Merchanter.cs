@@ -51,17 +51,20 @@ namespace Baibaocp.Storaging.Entities.Merchants
         /// <summary>
         /// 预存款余额
         /// </summary>
-        public decimal RestPreMoney { get; set; }
+        [Column("RestPreMoney")]
+        public int Balance { get; set; }
 
         /// <summary>
-        /// 出票金额
+        /// 总出票金额
         /// </summary>
-        public decimal OutTicketMoney { get; set; }
+        [Column("OutTicketMoney")]
+        public int TotalTicketedAmount { get; set; }
 
         /// <summary>
-        /// 返奖金额
+        /// 总返奖金额
         /// </summary>
-        public decimal RewardMoney { get; set; }
+        [Column("RewardMoney")]
+        public int TotalAwardedAmount { get; set; }
 
         //public string TenantId { get; set; }
     }

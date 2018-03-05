@@ -1,5 +1,5 @@
-﻿using Baibaocp.LotteryOrdering.ApplicationServices;
-using Baibaocp.LotteryOrdering.Core.Entities;
+﻿using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
+using Baibaocp.LotteryOrdering.Core.Entities.Merchantes;
 using Fighting.ApplicationServices.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -37,7 +37,7 @@ namespace Baibaocp.LotteryOrdering.WebApi.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<LotteryVenderOrderEntity> Get(string id)
+        public async Task<LotteryMerchanteOrder> Get(string id)
         {
             var applicationService = _serviceCluster.GetApplicationService<IOrderingApplicationService>();
             var order = await applicationService.FindOrderAsync(id);

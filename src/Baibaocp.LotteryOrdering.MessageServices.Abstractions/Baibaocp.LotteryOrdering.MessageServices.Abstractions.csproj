@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Baibaocp.LotteryOrdering.MessageServices</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RawRabbit" Version="2.0.0-rc4" />
+    <PackageReference Include="RawRabbit.Operations.Publish" Version="2.0.0-rc4" />
+    <PackageReference Include="RawRabbit.Operations.Subscribe" Version="2.0.0-rc4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.Scheduling.Abstractions\Baibaocp.LotteryOrdering.Scheduling.Abstractions.csproj" />
+    <ProjectReference Include="..\Baibaocp.Storaging\Baibaocp.Storaging.csproj" />
+  </ItemGroup>
+
+</Project>

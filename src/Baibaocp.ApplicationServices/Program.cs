@@ -9,6 +9,7 @@ using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 namespace Baibaocp.ApplicationServices
 {
@@ -21,7 +22,7 @@ namespace Baibaocp.ApplicationServices
 
             var builder = new SiloHostBuilder()
                 .UseConfiguration(config)
-                .ConfigureHostConfiguration(configurationBuilder => 
+                .ConfigureHostConfiguration(configurationBuilder =>
                 {
                     configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                     configurationBuilder.AddEnvironmentVariables();
@@ -42,9 +43,9 @@ namespace Baibaocp.ApplicationServices
 
                         fightBuilder.ConfigureStorage(storageBuilder =>
                         {
-                            storageBuilder.UseEntityFrameworkCore<BaibaocpStorageContext>(options =>
+                            storageBuilder.UseEntityFrameworkCore<BaibaocpStorageContext>(optionsBuilder =>
                             {
-                                options.DefaultNameOrConnectionString = hostContext.Configuration.GetConnectionString("Fighting.Storage");
+                                optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Fighting.Storage"));
                             });
                         });
 

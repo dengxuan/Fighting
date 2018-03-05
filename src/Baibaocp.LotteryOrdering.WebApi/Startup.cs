@@ -1,9 +1,11 @@
-﻿using Baibaocp.LotteryOrdering.EntityFrameworkCore;
+﻿using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
+using Baibaocp.LotteryOrdering.EntityFrameworkCore;
 using Fighting.ApplicationServices.Abstractions;
 using Fighting.DependencyInjection;
 using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -12,9 +14,6 @@ using Orleans.Runtime.Configuration;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
-using Fighting.ApplicationServices.DependencyInjection;
-using System.Threading.Tasks;
-using Baibaocp.LotteryOrdering.ApplicationServices;
 
 namespace Baibaocp.LotteryOrdering.WebApi
 {
@@ -60,9 +59,9 @@ namespace Baibaocp.LotteryOrdering.WebApi
 
                 fightBuilder.ConfigureStorage(storageBuilder =>
                 {
-                    storageBuilder.UseEntityFrameworkCore<LotteryOrderingDbContext>(options =>
+                    storageBuilder.UseEntityFrameworkCore<LotteryOrderingDbContext>(optionsBuilder =>
                     {
-                        options.DefaultNameOrConnectionString = Configuration.GetConnectionString("Fighting.Storage");
+                        optionsBuilder.UseMySql(Configuration.GetConnectionString("Fighting.Storage"));
                     });
                 });
                 fightBuilder.ConfigureApplicationServices(applicationServiceBuilder =>

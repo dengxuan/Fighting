@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Fighting.Scheduling</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
+    <ProjectReference Include="..\Fighting.Storaging.Abstractions\Fighting.Storaging.Abstractions.csproj" />
+    <ProjectReference Include="..\Fighting\Fighting.csproj" />
+  </ItemGroup>
+
+</Project>

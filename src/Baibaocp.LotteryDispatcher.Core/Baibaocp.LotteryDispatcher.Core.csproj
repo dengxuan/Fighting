@@ -4,8 +4,4 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Baibaocp.LotteryOrdering.Core\Baibaocp.LotteryOrdering.Core.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -1,7 +1,7 @@
-﻿using Baibaocp.Storaging.Entities.Entities;
+﻿using Baibaocp.LotteryAwardCalculator.Internal;
+using Baibaocp.LotteryOrdering.MessageServices.Messages;
+using Baibaocp.Storaging.Entities.Entities;
 using Baibaocp.Storaging.Entities.Extensions;
-using Baibaocp.LotteryAwardCalculator.Internal;
-using Baibaocp.LotteryOrdering.Messages;
 using Dapper;
 using Fighting.Caching.Abstractions;
 using Fighting.Storaging;
@@ -207,7 +207,7 @@ namespace Baibaocp.LotteryAwardCalculator.Abstractions
             return bifen;
         }
 
-        public Handle Calculate(TicketedMessage ticketedMessage)
+        public Handle Calculate(LdpTicketedMessage ticketedMessage)
         {
             string ticketOdds = ticketedMessage.TicketOdds;
             string[] code = ticketOdds.TrimEnd('^').Split('^');

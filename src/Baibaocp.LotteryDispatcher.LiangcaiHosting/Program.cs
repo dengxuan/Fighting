@@ -1,6 +1,5 @@
-﻿using Baibaocp.LotteryDispatcher.Core.Executers;
-using Baibaocp.LotteryDispatcher.DependencyInjection;
-using Baibaocp.LotteryDispatcher.Internal;
+﻿using Baibaocp.LotteryDispatcher.DependencyInjection;
+using Baibaocp.LotteryDispatcher.MessageServices.Messages.ExecuteMessages;
 using Baibaocp.LotteryDispatcher.Shanghai.DependencyInjection;
 using Baibaocp.LotteryDispatcher.Shanghai.Handlers;
 using Fighting.DependencyInjection;
@@ -10,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using RawRabbit;
 using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Enrichers.MessageContext;
@@ -77,9 +75,9 @@ namespace Baibaocp.LotteryDispatcher.LiangcaiHosting
                             dispatchBuilder.ConfigureOptions(options =>
                             {
                                 IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
-                                options.AddHandler<ShanghaiOrderingExecuteHandler, OrderingExecuter>(dispatchConfiguration.GetValue<string>("LdpVenderId"));
-                                options.AddHandler<ShanghaiAwardingExecuteHandler, AwardingExecuter>(dispatchConfiguration.GetValue<string>("LdpVenderId"));
-                                options.AddHandler<ShanghaiTicketingExecuteHandler, TicketingExecuter>(dispatchConfiguration.GetValue<string>("LdpVenderId"));
+                                options.AddHandler<ShanghaiOrderingExecuteHandler, OrderingExecuteMessage>(dispatchConfiguration.GetValue<string>("LdpVenderId"));
+                                options.AddHandler<ShanghaiAwardingExecuteHandler, AwardingExecuteMessage>(dispatchConfiguration.GetValue<string>("LdpVenderId"));
+                                options.AddHandler<ShanghaiTicketingExecuteHandler, TicketingExecuteMessage>(dispatchConfiguration.GetValue<string>("LdpVenderId"));
                             });
                         });
 
@@ -107,7 +105,6 @@ namespace Baibaocp.LotteryDispatcher.LiangcaiHosting
                         return options;
                     });
                     services.AddSingleton<IHostedService, LiangcaiLotteryDispatcherService>();
-                    services.AddSingleton<IHostedService, LotteryOrderingService>();
                 });
 
             Console.WriteLine("Starting...");

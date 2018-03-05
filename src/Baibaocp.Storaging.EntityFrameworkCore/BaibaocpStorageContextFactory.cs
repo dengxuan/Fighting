@@ -15,8 +15,8 @@ namespace Baibaocp.Storaging.EntityFrameworkCore
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .Build();
             var optionsBuilder = new DbContextOptionsBuilder<BaibaocpStorageContext>();
-            //optionsBuilder.UseMySql(builder.GetConnectionString("Fighting.Storage"));
-            return new BaibaocpStorageContext(new StorageOptions { DefaultNameOrConnectionString = builder.GetConnectionString("Fighting.Storage") }, optionsBuilder.Options);
+            optionsBuilder.UseMySql(builder.GetConnectionString("Fighting.Storage"));
+            return new BaibaocpStorageContext(new StorageOptions { }, optionsBuilder.Options);
         }
     }
 }

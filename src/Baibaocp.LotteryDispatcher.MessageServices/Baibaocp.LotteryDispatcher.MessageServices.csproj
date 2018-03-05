@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Baibaocp.LotteryDispatcher.Abstractions\Baibaocp.LotteryDispatcher.Abstractions.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryDispatcher.MessageServices.Abstractions\Baibaocp.LotteryDispatcher.MessageServices.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

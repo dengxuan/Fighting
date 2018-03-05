@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.ApplicationServices
 {
-    public class LotteryIssueApplicationService : ApplicationService, ILotteryIssueApplicationServices
+    public class LotteryIssueApplicationService : ApplicationService, ILotteryPhaseApplicationService
     {
         private readonly IRepository<LotteryPhase> _lotteryIssueRepository;
 

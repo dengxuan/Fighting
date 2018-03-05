@@ -1,7 +1,7 @@
-﻿using Baibaocp.Storaging.Entities;
-using Baibaocp.LotteryDispatcher.Core.Executers;
-using Baibaocp.LotteryOrdering.ApplicationServices;
-using Baibaocp.LotteryOrdering.Messages;
+﻿using Baibaocp.LotteryDispatcher.MessageServices.Messages.ExecuteMessages;
+using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
+using Baibaocp.LotteryOrdering.MessageServices.Messages;
+using Baibaocp.Storaging.Entities;
 using Fighting.Abstractions;
 using Fighting.Caching.Abstractions;
 using Fighting.Hosting;
@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using RawRabbit;
 using RawRabbit.Configuration.Exchange;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -37,15 +36,15 @@ namespace Baibaocp.LotteryOrdering.Hosting
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            return _client.SubscribeAsync<LvpOrderMessage>(async (message) =>
+            return _client.SubscribeAsync<LvpOrderedMessage>(async (message) =>
             {
                 try
                 {
                     using (TransactionScope transaction = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromSeconds(30), TransactionScopeAsyncFlowOption.Enabled))
                     {
                         _logger.LogTrace("Ordering received message:{0} LvpVenderId:{1}", message.LvpOrderId, message.LvpVenderId);
-                        await _orderingApplicationService.CreateAsync(message);
-                        OrderingExecuter executer = new OrderingExecuter(_identityGenerater.Generate().ToString(), _options.LdpVenderId, message);
+                        //await _orderingApplicationService.CreateAsync(message);
+                        OrderingExecuteMessage executer = new OrderingExecuteMessage(_identityGenerater.Generate().ToString(), _options.LdpVenderId, message);
                         _logger.LogTrace("Publish executer message:{0} LdpVenderId:{1}", executer.LdpOrderId, executer.LdpVenderId);
                         await _client.PublishAsync(executer, context =>
                         {
@@ -71,7 +70,7 @@ namespace Baibaocp.LotteryOrdering.Hosting
                 }
 
                 /* 投注失败 */
-                await _client.PublishAsync(new TicketedMessage
+                await _client.PublishAsync(new LdpTicketedMessage
                 {
                     LvpOrder = message,
                     Status = OrderStatus.TicketFailed

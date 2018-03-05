@@ -1,7 +1,4 @@
-﻿using Baibaocp.Storaging.Entities;
-using Baibaocp.LotteryNotifier.Abstractions;
-
-namespace Baibaocp.LotteryNotifier.Notifiers
+﻿namespace Baibaocp.LotteryNotifier.Notifiers
 {
     public class Ticketed
     {

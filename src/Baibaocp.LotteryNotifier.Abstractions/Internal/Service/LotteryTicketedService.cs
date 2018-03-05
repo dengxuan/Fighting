@@ -1,7 +1,7 @@
-﻿using Baibaocp.Storaging.Entities;
-using Baibaocp.LotteryNotifier.Abstractions;
+﻿using Baibaocp.LotteryNotifier.Abstractions;
 using Baibaocp.LotteryNotifier.Notifiers;
-using Baibaocp.LotteryOrdering.Messages;
+using Baibaocp.LotteryOrdering.MessageServices.Messages;
+using Baibaocp.Storaging.Entities;
 using Fighting.Hosting;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
@@ -28,7 +28,7 @@ namespace Baibaocp.LotteryNotifier.Internal.Services
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            return _client.SubscribeAsync<TicketedMessage>((message) =>
+            return _client.SubscribeAsync<LdpTicketedMessage>((message) =>
             {
                 _logger.LogTrace("Received ordering LvpOrderId:{0} LvpVenderId:{1} LdpOrderId:{2} LdpVenderId:{3}", message.LvpOrder.LvpOrderId, message.LvpOrder.LvpVenderId, message.LdpOrderId, message.LdpVenderId);
                 _dispatcher.DispatchAsync(new Notifier<Ticketed>(message.LvpOrder.LvpVenderId)
