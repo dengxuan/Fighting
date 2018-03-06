@@ -11,7 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Baibaocp.LotteryDispatcher.MessageServices.Abstractions\Baibaocp.LotteryDispatcher.MessageServices.Abstractions.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryDispatcher.MessageServices.Abstractions\Baibaocp.LotteryDispatching.MessageServices.Abstractions.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryDispatcher.MessageServices\Baibaocp.LotteryDispatching.MessageServices.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.ApplicationServices.Abstractions\Baibaocp.LotteryOrdering.ApplicationServices.Abstractions.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.MessageServices.Abstractions\Baibaocp.LotteryOrdering.MessageServices.Abstractions.csproj" />
     <ProjectReference Include="..\Fighting.Caching.Abstractions\Fighting.Caching.Abstractions.csproj" />

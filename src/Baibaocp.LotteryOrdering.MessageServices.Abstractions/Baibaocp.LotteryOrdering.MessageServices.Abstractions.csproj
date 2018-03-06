@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Baibaocp.LotteryOrdering.Scheduling.Abstractions\Baibaocp.LotteryOrdering.Scheduling.Abstractions.csproj" />
     <ProjectReference Include="..\Baibaocp.Storaging\Baibaocp.Storaging.csproj" />
   </ItemGroup>
 

@@ -44,7 +44,7 @@ namespace Baibaocp.LotteryOrdering.Hosting
                     {
                         _logger.LogTrace("Ordering received message:{0} LvpVenderId:{1}", message.LvpOrderId, message.LvpVenderId);
                         //await _orderingApplicationService.CreateAsync(message);
-                        OrderingExecuteMessage executer = new OrderingExecuteMessage(_identityGenerater.Generate().ToString(), _options.LdpVenderId, message);
+                        OrderingExecuter executer = new OrderingExecuter(_identityGenerater.Generate().ToString(), _options.LdpVenderId, message);
                         _logger.LogTrace("Publish executer message:{0} LdpVenderId:{1}", executer.LdpOrderId, executer.LdpVenderId);
                         await _client.PublishAsync(executer, context =>
                         {

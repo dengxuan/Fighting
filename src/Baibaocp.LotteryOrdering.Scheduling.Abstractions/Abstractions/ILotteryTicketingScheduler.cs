@@ -2,8 +2,7 @@
 
 namespace Baibaocp.LotteryOrdering.Scheduling.Abstractions
 {
-    public interface ILotteryTicketingScheduler<TArgs> : IScheduler<TArgs>
+    public interface ILotteryTicketingScheduler : IScheduler<TicketingScheduleArgs>
     {
-
     }
 }
