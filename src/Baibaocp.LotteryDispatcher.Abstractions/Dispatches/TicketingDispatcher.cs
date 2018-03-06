@@ -1,9 +1,8 @@
 ﻿using Baibaocp.LotteryDispatcher.Abstractions;
+using Baibaocp.LotteryDispatcher.Executers;
 using Baibaocp.LotteryDispatcher.MessageServices;
-using Baibaocp.LotteryDispatcher.MessageServices.Messages.ExecuteMessages;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Baibaocp.Storaging.Entities;
-using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
@@ -14,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatcher.Dispatches
 {
-    public class TicketingDispatcher : IExecuterDispatcher<TicketingExecuteMessage>
+    public class TicketingDispatcher : IExecuterDispatcher<TicketingExecuter>
     {
 
         private readonly IServiceProvider _resolver;
@@ -86,10 +85,10 @@ namespace Baibaocp.LotteryDispatcher.Dispatches
             });
         }
 
-        public async Task<MessageHandle> DispatchAsync(TicketingExecuteMessage executer)
+        public async Task<MessageHandle> DispatchAsync(TicketingExecuter executer)
         {
-            var handlerType = _options.GetHandler<TicketingExecuteMessage>(executer.LdpVenderId);
-            var handler = (IExecuteHandler<TicketingExecuteMessage>)_resolver.GetRequiredService(handlerType);
+            var handlerType = _options.GetHandler<TicketingExecuter>(executer.LdpVenderId);
+            var handler = (IExecuteHandler<TicketingExecuter>)_resolver.GetRequiredService(handlerType);
             var handle = await handler.HandleAsync(executer);
             return handle;
             //using (TransactionScope transaction = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromSeconds(30), TransactionScopeAsyncFlowOption.Enabled))

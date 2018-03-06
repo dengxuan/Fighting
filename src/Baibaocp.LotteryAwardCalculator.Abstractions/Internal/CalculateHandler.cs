@@ -1,6 +1,6 @@
 ﻿using Baibaocp.LotteryAwardCalculator.Abstractions;
 using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.MessageServices.Messages.ExecuteMessages;
+using Baibaocp.LotteryDispatcher.Executers;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Baibaocp.Storaging.Entities;
 using Hangfire;
@@ -34,7 +34,7 @@ namespace Baibaocp.LotteryAwardCalculator.Internal
             Handle handle = _caculator.Calculate(message);
             if (handle == Internal.Handle.Winner)
             {
-                _jobClient.Enqueue<IExecuterDispatcher<AwardingExecuteMessage>>(executer => executer.DispatchAsync(new AwardingExecuteMessage(message.LdpOrderId, message.LdpVenderId, message.LvpOrder)));
+                _jobClient.Enqueue<IExecuterDispatcher<AwardingExecuter>>(executer => executer.DispatchAsync(new AwardingExecuter(message.LdpOrderId, message.LdpVenderId, message.LvpOrder)));
             }
             else if (handle == Internal.Handle.Losing)
             {

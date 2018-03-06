@@ -13,18 +13,18 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.4" />
-    <PackageReference Include="MongoDB.Driver" Version="2.4.4" />
-    <PackageReference Include="MySql.Data" Version="6.10.4" />
+    <PackageReference Include="MongoDB.Driver" Version="2.5.0" />
+    <PackageReference Include="MySql.Data" Version="6.10.6" />
     <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
     <PackageReference Include="SSH.NET" Version="2016.1.0" />
     <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
     <PackageReference Include="NLog" Version="5.0.0-beta09" />
-    <PackageReference Include="EPPlus.Core" Version="1.5.2" />
+    <PackageReference Include="EPPlus.Core" Version="1.5.4" />
     <PackageReference Include="CoreCompat.Selenium.WebDriver" Version="3.4.0-beta001" />
     <PackageReference Include="Npgsql" Version="3.2.5" />
-    <PackageReference Include="CassandraCSharpDriver" Version="3.3.2" />
-    <PackageReference Include="MessagePack" Version="1.7.2" />
-    <PackageReference Include="Npgsql" Version="3.2.5" />
-    <PackageReference Include="MailKit" Version="1.20.0" />
+    <PackageReference Include="CassandraCSharpDriver" Version="3.4.1" />
+    <PackageReference Include="MessagePack" Version="1.7.3.4" />
+    <PackageReference Include="Npgsql" Version="3.2.7" />
+    <PackageReference Include="MailKit" Version="2.0.1" />
   </ItemGroup>
 </Project>

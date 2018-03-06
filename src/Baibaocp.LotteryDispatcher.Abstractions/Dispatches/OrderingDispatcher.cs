@@ -1,7 +1,6 @@
 ﻿using Baibaocp.LotteryDispatcher.Abstractions;
+using Baibaocp.LotteryDispatcher.Executers;
 using Baibaocp.LotteryDispatcher.MessageServices;
-using Baibaocp.LotteryDispatcher.MessageServices.Messages;
-using Baibaocp.LotteryDispatcher.MessageServices.Messages.ExecuteMessages;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Baibaocp.Storaging.Entities;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatcher.Dispatches
 {
-    public class OrderingDispatcher : IExecuterDispatcher<OrderingExecuteMessage>
+    public class OrderingDispatcher : IExecuterDispatcher<OrderingExecuter>
     {
         private readonly ILogger _logger;
 
@@ -56,10 +55,10 @@ namespace Baibaocp.LotteryDispatcher.Dispatches
             });
         }
 
-        public async Task<MessageHandle> DispatchAsync(OrderingExecuteMessage executer)
+        public async Task<MessageHandle> DispatchAsync(OrderingExecuter executer)
         {
-            var handlerType = _options.GetHandler<ExecuteMessage>(executer.LdpVenderId);
-            var handler = (IExecuteHandler<ExecuteMessage>)_resolver.GetRequiredService(handlerType);
+            var handlerType = _options.GetHandler<Executer>(executer.LdpVenderId);
+            var handler = (IExecuteHandler<Executer>)_resolver.GetRequiredService(handlerType);
             var handle = await handler.HandleAsync(executer);
             return handle;
             //using (TransactionScope transaction = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromSeconds(30), TransactionScopeAsyncFlowOption.Enabled))
