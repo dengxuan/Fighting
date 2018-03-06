@@ -10,6 +10,8 @@ using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
+using Orleans.Configuration;
 
 namespace Baibaocp.LotteryOrdering.ApplicationServices.Hosting
 {
@@ -17,18 +19,17 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices.Hosting
     {
         static async Task Main(string[] args)
         {
-            var config = ClusterConfiguration.LocalhostPrimarySilo();
-            config.AddMemoryStorageProvider();
+            var siloPort = 11111;
+            int gatewayPort = 30000;
+            var siloAddress = IPAddress.Loopback;
 
             var builder = new SiloHostBuilder()
-                .UseConfiguration(config)
-                .ConfigureHostConfiguration(configurationBuilder =>
+                .Configure(options => options.ClusterId = "OrderingApplicationSergice")
+                .ConfigureAppConfiguration(configurationBuilder =>
                 {
                     configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                     configurationBuilder.AddEnvironmentVariables();
                 })
-                .ConfigureApplicationParts(parts => parts.AddApplicationPart(Assembly.GetExecutingAssembly()).WithReferences())
-                .ConfigureLogging(logging => logging.AddConsole())
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddFighting(fightBuilder =>
@@ -50,7 +51,12 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices.Hosting
                         });
 
                     });
-                });
+                })
+                .UseDevelopmentClustering(options => options.PrimarySiloEndpoint = new IPEndPoint(siloAddress, siloPort))
+                .ConfigureEndpoints(siloAddress, siloPort, gatewayPort)
+                .ConfigureApplicationParts(parts => parts.AddApplicationPart(Assembly.GetExecutingAssembly()).WithReferences())
+                .ConfigureLogging(logging => logging.AddConsole());
+
 
             var host = builder.Build();
             await host.StartAsync();

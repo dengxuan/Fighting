@@ -3,7 +3,6 @@ using Baibaocp.LotteryDispatcher.Abstractions;
 using Baibaocp.LotteryDispatcher.Executers;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Baibaocp.Storaging.Entities;
-using Hangfire;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
 using RawRabbit.Configuration.Exchange;
