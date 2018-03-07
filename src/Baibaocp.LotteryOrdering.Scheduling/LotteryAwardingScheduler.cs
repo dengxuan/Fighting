@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryOrdering.Scheduling.Abstractions
 {
-    public class ILotteryRewardingScheduler : IScheduler<object>
+    public class LotteryAwardingScheduler : IScheduler<AwardingScheduleArgs>
     {
-        public Task RunAsync(object args)
+        public Task RunAsync(AwardingScheduleArgs args)
         {
             throw new System.NotImplementedException();
         }
