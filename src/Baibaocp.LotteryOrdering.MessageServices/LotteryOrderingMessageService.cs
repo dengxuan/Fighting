@@ -6,6 +6,7 @@ using Baibaocp.LotteryOrdering.MessageServices.LotteryDispatcher.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.MessagesSevices;
 using Fighting.Abstractions;
+using Fighting.ApplicationServices.Abstractions;
 using Fighting.Scheduling.Abstractions;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
@@ -22,17 +23,17 @@ namespace Baibaocp.LotteryOrdering.MessageServices
         private readonly IBusClient _busClient;
         private readonly ISchedulerManager _schedulerManager;
         private readonly IIdentityGenerater _identityGenerater;
-        private readonly IOrderingApplicationService _orderingApplicationService;
+        private readonly IApplicationServiceCluster _applicationServiceCluster;
         private readonly ILogger<LotteryOrderingMessageService> _logger;
         private readonly ILotteryDispatcherMessageService<OrderingExecuter> _lotteryDispatcherMessageService;
         private readonly HostingConfugiration _options;
 
-        public LotteryOrderingMessageService(IBusClient busClient, ISchedulerManager schedulerManager, IIdentityGenerater identityGenerater, IOrderingApplicationService orderingApplicationService, ILogger<LotteryOrderingMessageService> logger, ILotteryDispatcherMessageService<OrderingExecuter> lotteryDispatcherMessageService, HostingConfugiration options)
+        public LotteryOrderingMessageService(IBusClient busClient, ISchedulerManager schedulerManager, IIdentityGenerater identityGenerater, IApplicationServiceCluster applicationServiceCluster, ILogger<LotteryOrderingMessageService> logger, ILotteryDispatcherMessageService<OrderingExecuter> lotteryDispatcherMessageService, HostingConfugiration options)
         {
             _busClient = busClient;
             _schedulerManager = schedulerManager;
             _identityGenerater = identityGenerater;
-            _orderingApplicationService = orderingApplicationService;
+            _applicationServiceCluster = applicationServiceCluster;
             _logger = logger;
             _lotteryDispatcherMessageService = lotteryDispatcherMessageService;
             _options = options;
@@ -65,8 +66,8 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 {
                     OrderingExecuter orderingExecuteMessage = new OrderingExecuter(ldpOrderId.ToString(), ldpVenderId, lvpOrderedMessage);
                     LotteryMerchanteOrder lotteryMerchanteOrder = new LotteryMerchanteOrder();
-
-                    await _orderingApplicationService.CreateAsync(lotteryMerchanteOrder);
+                    IOrderingApplicationService orderingApplicationService = _applicationServiceCluster.GetApplicationService<IOrderingApplicationService>();
+                    await orderingApplicationService.CreateAsync(lotteryMerchanteOrder);
                     await _lotteryDispatcherMessageService.PublishAsync(ldpVenderId, orderingExecuteMessage);
 
                     _logger.LogTrace("Received ordering executer:{0} VenderId:{1}", ldpOrderId, ldpVenderId);

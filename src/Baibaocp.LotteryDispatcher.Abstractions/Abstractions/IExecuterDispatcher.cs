@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatcher.Abstractions
 {
-    public interface IExecuterDispatcher<TExecuter> : ITransientDependency where TExecuter : IExecuter
+    [TransientDependency]
+    public interface IExecuterDispatcher<TExecuter> where TExecuter : IExecuter
     {
         Task<MessageHandle> DispatchAsync(TExecuter executer);
     }

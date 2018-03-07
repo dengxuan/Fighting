@@ -6,22 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Dispatches\OrderingDispatcher.cs~RF208b8b.TMP" />
-    <None Remove="Dispatches\TicketingDispatcher.cs~RFb3961f.TMP" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="RawRabbit.DependencyInjection.ServiceCollection" Version="2.0.0-rc4" />
-    <PackageReference Include="RawRabbit.Enrichers.MessageContext" Version="2.0.0-rc4" />
-    <PackageReference Include="RawRabbit.Enrichers.MessageContext.Subscribe" Version="2.0.0-rc4" />
-    <PackageReference Include="RawRabbit.Operations.Publish" Version="2.0.0-rc4" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.MessageServices.Abstractions\Baibaocp.LotteryOrdering.MessageServices.Abstractions.csproj" />
-    <ProjectReference Include="..\Fighting.Caching.Abstractions\Fighting.Caching.Abstractions.csproj" />
-    <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
-    <ProjectReference Include="..\Fighting.Storaging.Abstractions\Fighting.Storaging.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

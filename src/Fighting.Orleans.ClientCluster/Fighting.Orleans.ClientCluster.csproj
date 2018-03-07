@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Fighting.ApplicationServices</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fighting.Caching.Abstractions\Fighting.Caching.Abstractions.csproj" />
+    <PackageReference Include="Microsoft.Orleans.OrleansProviders" Version="2.0.0-rc1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Fighting.Orleans.Abstractions\Fighting.Orleans.Abstractions.csproj" />
-    <ProjectReference Include="..\Fighting\Fighting.csproj" />
   </ItemGroup>
 
 </Project>

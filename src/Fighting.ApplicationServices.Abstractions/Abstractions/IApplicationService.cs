@@ -1,9 +1,10 @@
 ﻿using Fighting.DependencyInjection.Builder;
-using Orleans;
+using Fighting.Orleans.Abstractions;
 
 namespace Fighting.ApplicationServices.Abstractions
 {
-    public interface IApplicationService : IGrainWithIntegerKey, ITransientDependency
+    [TransientDependency]
+    public interface IApplicationService : IOrleansCluster
     {
     }
 }

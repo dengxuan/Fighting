@@ -17,7 +17,7 @@ namespace Fighting.DependencyInjection.Builder
             Services.Scan(scanner =>
             {
                 scanner.FromApplicationDependencies()
-                       .AddClasses(fiter => fiter.AssignableTo<ISingletonDependency>())
+                       .AddClasses(fiter => fiter.WithAttribute<ISingletonDependencyAttribute>())
                        .UsingRegistrationStrategy(RegistrationStrategy.Skip)
                        .AsImplementedInterfaces()
                        .WithSingletonLifetime();
@@ -25,7 +25,7 @@ namespace Fighting.DependencyInjection.Builder
             Services.Scan(scanner =>
             {
                 scanner.FromApplicationDependencies()
-                       .AddClasses(fiter => fiter.AssignableTo<ITransientDependency>())
+                       .AddClasses(fiter => fiter.WithAttribute<TransientDependencyAttribute>())
                        .UsingRegistrationStrategy(RegistrationStrategy.Skip)
                        .AsImplementedInterfaces()
                        .WithTransientLifetime();

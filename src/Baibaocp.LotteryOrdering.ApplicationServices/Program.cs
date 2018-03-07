@@ -19,12 +19,12 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices.Hosting
     {
         static async Task Main(string[] args)
         {
-            var siloPort = 11111;
+            var siloPort = 10000;
             int gatewayPort = 30000;
             var siloAddress = IPAddress.Loopback;
 
             var builder = new SiloHostBuilder()
-                .Configure(options => options.ClusterId = "OrderingApplicationSergice")
+                .Configure(options => options.ClusterId = "OrderingApplicationService")
                 .ConfigureAppConfiguration(configurationBuilder =>
                 {
                     configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
@@ -38,7 +38,7 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices.Hosting
                         {
                             cacheBuilder.UseRedisCache(options =>
                             {
-                                options.ConnectionString = hostContext.Configuration.GetConnectionString("Hangfire.Redis");
+                                options.ConnectionString = hostContext.Configuration.GetConnectionString("Fighting.Redis");
                             });
                         });
 

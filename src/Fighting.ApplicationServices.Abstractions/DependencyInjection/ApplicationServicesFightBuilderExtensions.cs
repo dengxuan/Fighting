@@ -13,5 +13,7 @@ namespace Fighting.ApplicationServices.DependencyInjection
             builder.Build();
             return fightBuilder;
         }
+
+
     }
 }

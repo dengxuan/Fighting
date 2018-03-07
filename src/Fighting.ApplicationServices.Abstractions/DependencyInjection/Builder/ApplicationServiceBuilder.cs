@@ -20,7 +20,6 @@ namespace Fighting.ApplicationServices.DependencyInjection.Builder
         {
             Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<ApplicationServiceOptions>, ApplicationServiceOptionsSetup>());
             Services.AddSingleton(c => c.GetRequiredService<IOptions<ApplicationServiceOptions>>().Value);
-            Services.AddSingleton<IApplicationServiceCluster, ApplicationServiceCluster>();
         }
     }
 }

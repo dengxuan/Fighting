@@ -1,23 +1,31 @@
 ﻿using Baibaocp.LotteryOrdering.EntityFrameworkCore;
-using Fighting.DependencyInjection;
-using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
+using Baibaocp.LotteryOrdering.MessageServices.LotteryDispatcher.Abstractions;
+using Baibaocp.LotteryOrdering.MessagesSevices;
 using Fighting.ApplicationServices.DependencyInjection;
+using Fighting.DependencyInjection;
+using Fighting.Hosting;
+using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
+using Fighting.Orleans.DependenceInjection;
+using Fighting.Orleans.DependencyInjection;
+using Fighting.Orleans.ClientCluster.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
+using RawRabbit.Configuration;
+using RawRabbit.DependencyInjection.ServiceCollection;
+using RawRabbit.Instantiation;
 using System;
 using System.Net;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
-using Baibaocp.LotteryOrdering.MessagesSevices;
-using Microsoft.Extensions.Hosting;
-using Baibaocp.LotteryOrdering.MessageServices.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
-using Orleans.Runtime;
+using Fighting.Orleans;
+using Fighting.ApplicationServices.Abstractions;
 
 namespace Baibaocp.LotteryOrdering.MessageServices
 {
@@ -25,8 +33,8 @@ namespace Baibaocp.LotteryOrdering.MessageServices
     {
         static async Task Main(string[] args)
         {
-            var siloPort = 11111;
-            int gatewayPort = 30000;
+            var siloPort = 11000;
+            int gatewayPort = 31000;
             var siloAddress = IPAddress.Loopback;
 
             var builder = new SiloHostBuilder()
@@ -42,17 +50,15 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                     {
                         fightBuilder.ConfigureApplicationServices(applicationServiceBuilder =>
                         {
-                            applicationServiceBuilder.Services.AddSingleton<Task<IGrainFactory>>(async sp =>
-                            {
-                               var client = new ClientBuilder()
-                                    .ConfigureCluster(options => options.ClusterId = "OrderingApplicationSergice")
-                                    .UseStaticClustering(options => options.Gateways.Add((new IPEndPoint(siloAddress, gatewayPort)).ToGatewayUri()))
-                                    .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IOrderingApplicationService).Assembly).WithReferences())
-                                    .ConfigureLogging(logging => logging.AddConsole())
-                                    .Build();
+                        });
 
-                                await client.Connect();
-                                return client;
+                        fightBuilder.ConfigureOrleans(orleansSetup =>
+                        {
+                            orleansSetup.UseClientCluster<IApplicationService>(new OrleansOptions
+                            {
+                                ClusterAddress = IPAddress.Loopback,
+                                ClusterId = "ApplicationService",
+                                ClusterPort = 30000
                             });
                         });
 
@@ -74,6 +80,14 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                     });
                     services.AddSingleton<ILotteryOrderingMessageService, LotteryOrderingMessageService>();
                     services.AddSingleton<IHostedService, LotteryOrderingService>();
+                    services.AddRawRabbit(new RawRabbitOptions
+                    {
+                        ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>(),
+                        //Plugins = p =>
+                        //{
+                        //    p.UseMessageContext<MessageContext>();
+                        //}
+                    });
                 })
                 .UseDevelopmentClustering(options => options.PrimarySiloEndpoint = new IPEndPoint(siloAddress, siloPort))
                 .ConfigureEndpoints(siloAddress, siloPort, gatewayPort)
@@ -81,7 +95,10 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 .ConfigureLogging(logging => logging.AddConsole());
 
 
+
             var host = builder.Build();
+            IHostedService service = host.Services.GetRequiredService<IHostedService>();
+            await service.StartAsync(CancellationToken.None);
             await host.StartAsync();
             Console.ReadLine();
             await host.StopAsync();
