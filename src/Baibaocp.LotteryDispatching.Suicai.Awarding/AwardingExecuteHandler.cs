@@ -1,6 +1,5 @@
-﻿using Baibaocp.LotteryDispatching.Executers;
-using Baibaocp.LotteryDispatching.Extensions;
-using Baibaocp.LotteryDispatching.MessageServices;
+﻿using Baibaocp.LotteryDispatching.MessageServices;
+using Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching;
 using Baibaocp.LotteryDispatching.Suicai.Abstractions;
 using Baibaocp.LotteryDispatching.Suicai.Ticketing;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
@@ -11,11 +10,10 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Awarding
 {
-    public class AwardingExecuteHandler : ExecuteHandler<AwardingExecuter>
+    public class AwardingExecuteHandler : ExecuteHandler<AwardingMessage>
     {
 
         private readonly ILogger<AwardingExecuteHandler> _logger;
@@ -25,7 +23,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
             _logger = loggerFactory.CreateLogger<AwardingExecuteHandler>();
         }
 
-        protected override string BuildRequest(AwardingExecuter executer)
+        protected override string BuildRequest(AwardingMessage executer)
         {
             OrderTicket Ticket = new OrderTicket();
             Ticket.orderList = new List<Ticket>();
@@ -33,7 +31,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
             return JsonExtensions.ToJsonString(Ticket);
         }
 
-        public override async Task<MessageHandle> HandleAsync(AwardingExecuter executer)
+        public override async Task<MessageHandle> HandleAsync(AwardingMessage executer)
         {
             try
             {
