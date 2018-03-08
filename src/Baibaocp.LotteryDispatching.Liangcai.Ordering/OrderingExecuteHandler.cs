@@ -5,7 +5,6 @@ using Baibaocp.LotteryDispatching.MessageServices;
 using Baibaocp.LotteryOrdering.Liangcai.Extensions;
 using Baibaocp.Storaging.Entities.Extensions;
 using Microsoft.Extensions.Logging;
-using RawRabbit;
 using System;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -14,14 +13,12 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
 {
     public class OrderingExecuteHandler :ExecuteHandler<OrderingExecuter>, IExecuteHandler<OrderingExecuter>
     {
-        private readonly IBusClient _publisher;
 
         private readonly ILogger<OrderingExecuteHandler> _logger;
 
-        public OrderingExecuteHandler(DispatcherOptions options, ILoggerFactory loggerFactory, IBusClient publisher) : base(options, loggerFactory, "101")
+        public OrderingExecuteHandler(DispatcherOptions options, ILoggerFactory loggerFactory) : base(options, loggerFactory, "101")
         {
             _logger = loggerFactory.CreateLogger<OrderingExecuteHandler>();
-            _publisher = publisher;
         }
 
         protected override string BuildRequest(OrderingExecuter executer)

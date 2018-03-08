@@ -1,6 +1,6 @@
 ﻿using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
 using Baibaocp.LotteryOrdering.EntityFrameworkCore;
-using Fighting.ApplicationServices.Abstractions;
+using Fighting.ApplicationServices.DependencyInjection;
 using Fighting.DependencyInjection;
 using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection;
 using Orleans;
 using Orleans.Runtime.Configuration;
 using Swashbuckle.AspNetCore.Swagger;
@@ -137,7 +138,7 @@ namespace Baibaocp.LotteryOrdering.WebApi
 
             app.UseSwaggerUI(c =>
             {
-                c.ConfigureOAuth2("100010", "secret", "", "Baibaocp.LotteryOrdering");
+                //c.ConfigureOAuth2("100010", "secret", "", "Baibaocp.LotteryOrdering");
                 c.SwaggerEndpoint("/api-docs/v1/swagger.json", "Lottery ordering api V1");
             });
 

@@ -13,14 +13,12 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
 {
     public class AwardingExecuteHandler : ExecuteHandler<AwardingExecuter>
     {
-        private readonly IBusClient _client;
 
         private readonly ILogger<AwardingExecuteHandler> _logger;
 
-        public AwardingExecuteHandler(DispatcherOptions options, ILoggerFactory loggerFactory, IBusClient client) : base(options, loggerFactory, "111")
+        public AwardingExecuteHandler(DispatcherOptions options, ILoggerFactory loggerFactory) : base(options, loggerFactory, "111")
         {
             _logger = loggerFactory.CreateLogger<AwardingExecuteHandler>();
-            _client = client;
         }
 
         protected override string BuildRequest(AwardingExecuter executer)
@@ -51,20 +49,6 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                     Status = OrderStatus.TicketWinning,
                     BonusAmount = (int)(Convert.ToDecimal(values[2]) * 100)
                 };
-                await _client.PublishAsync(awardedMessage,context=> 
-                {
-                    context.UsePublishConfiguration(configuration => 
-                    {
-                        configuration.OnDeclaredExchange(exchange => 
-                        {
-                            exchange.WithName("Baibaocp.LotteryVender")
-                                    .WithAutoDelete(false)
-                                    .WithDurability(true)
-                                    .WithType(ExchangeType.Topic);
-                        });
-                        configuration.WithRoutingKey(RoutingkeyConsts.Awards.Completed.Winning);
-                    });
-                });
                 return MessageHandle.Winning;
             }
             // TODO: Log here and notice to admin

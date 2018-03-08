@@ -11,14 +11,14 @@ namespace Baibaocp.LotteryOrdering.WebApi.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        private readonly IApplicationServiceCluster _serviceCluster;
+        private readonly IOrderingApplicationService _orderingApplicationService;
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="serviceCluster"></param>
-        public ValuesController(IApplicationServiceCluster serviceCluster)
+        /// <param name="orderingApplicationService"></param>
+        public ValuesController(IOrderingApplicationService orderingApplicationService)
         {
-            _serviceCluster = serviceCluster;
+            _orderingApplicationService = orderingApplicationService;
         }
 
         /// <summary>
@@ -39,8 +39,7 @@ namespace Baibaocp.LotteryOrdering.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<LotteryMerchanteOrder> Get(string id)
         {
-            var applicationService = _serviceCluster.GetApplicationService<IOrderingApplicationService>();
-            var order = await applicationService.FindOrderAsync(id);
+            var order = await _orderingApplicationService.FindOrderAsync(id);
             return order;
         }
 
