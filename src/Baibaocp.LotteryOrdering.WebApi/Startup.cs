@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection;
 using Orleans;
 using Orleans.Runtime.Configuration;
 using Swashbuckle.AspNetCore.Swagger;

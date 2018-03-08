@@ -1,16 +1,12 @@
-﻿using Baibaocp.LotteryDispatching.DependencyInjection;
-using Baibaocp.LotteryDispatching.Executers;
-using Baibaocp.LotteryDispatching.Liangcai.DependencyInjection;
-using Baibaocp.LotteryDispatching.Liangcai.Handlers;
+﻿using Baibaocp.LotteryDispatching.Liangcai.Handlers;
 using Fighting.DependencyInjection;
 using Fighting.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using RawRabbit.Configuration;
-using RawRabbit.DependencyInjection.ServiceCollection;
-using RawRabbit.Instantiation;
 using System;
 using System.Threading.Tasks;
+using Baibaocp.LotteryDispatching.DependencyInjection;
+using Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Awarding
 {
@@ -45,9 +41,9 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Awarding
                             });
                         });
 
-                        fightBuilder.AddLotteryDispatcher(dispatchBuilder =>
+                        fightBuilder.ConfigureLotteryDispatcher(dispatchBuilder =>
                         {
-                            dispatchBuilder.UseDispatcherServer<AwardingExecuteHandler, AwardingExecuter>(setupOptions =>
+                            dispatchBuilder.UseLotteryDispatching<AwardingMessage>(setupOptions =>
                             {
                                 IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
                                 setupOptions.SecretKey = dispatchConfiguration.GetValue<string>("SecretKey");
@@ -59,17 +55,10 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Awarding
                             });
                         });
 
-                        services.AddRawRabbit(new RawRabbitOptions
-                        {
-                            ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>(),
-                            //Plugins = p =>
-                            //{
-                            //    p.UseMessageContext<MessageContext>();
-                            //},
-                            DependencyInjection = ioc =>
-                            {
-                            }
-                        });
+                        //services.AddRawRabbit(new RawRabbitOptions
+                        //{
+                        //    ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>()
+                        //});
 
                     });
                 });

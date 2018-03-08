@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Liangcai
 {
-    public abstract class ExecuteHandler<TExecuter> : IExecuteHandler<TExecuter> where TExecuter : IExecuter
+    public abstract class ExecuteHandler<TExecuteMessage> : IExecuteHandler<TExecuteMessage> where TExecuteMessage : IExecuteMessage
     {
         private readonly string _command;
 
-        private readonly ILogger<ExecuteHandler<TExecuter>> _logger;
+        private readonly ILogger<ExecuteHandler<TExecuteMessage>> _logger;
 
         private readonly HttpClient _httpClient;
 
@@ -24,7 +24,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai
         {
             _options = options;
             _command = command;
-            _logger = loggerFactory.CreateLogger<ExecuteHandler<TExecuter>>();
+            _logger = loggerFactory.CreateLogger<ExecuteHandler<TExecuteMessage>>();
             HttpClientHandler handler = new HttpClientHandler()
             {
                 AutomaticDecompression = System.Net.DecompressionMethods.Deflate
@@ -42,13 +42,13 @@ namespace Baibaocp.LotteryDispatching.Liangcai
             return text.ToMd5();
         }
 
-        protected async Task<string> Send(TExecuter executer)
+        protected async Task<string> Send(TExecuteMessage message)
         {
-            string value = BuildRequest(executer);
-            string sign = Signature(_command, executer.LdpVenderId, value, out DateTime timestamp);
+            string value = BuildRequest(message);
+            string sign = Signature(_command, message.LdpVenderId, value, out DateTime timestamp);
             FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("wAgent", executer.LdpVenderId),
+                new KeyValuePair<string, string>("wAgent", message.LdpVenderId),
                 new KeyValuePair<string, string>("wAction",_command),
                 new KeyValuePair<string, string>("wMsgID", timestamp.ToString("yyyyMMddHHmm")),
                 new KeyValuePair<string, string>("wSign",sign.ToLower()),
@@ -60,8 +60,8 @@ namespace Baibaocp.LotteryDispatching.Liangcai
             return msg;
         }
 
-        protected abstract string BuildRequest(TExecuter executer);
+        protected abstract string BuildRequest(TExecuteMessage message);
 
-        public abstract Task<MessageHandle> HandleAsync(TExecuter executer);
+        public abstract Task<MessageHandle> HandleAsync(TExecuteMessage message);
     }
 }

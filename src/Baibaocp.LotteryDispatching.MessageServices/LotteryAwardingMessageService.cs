@@ -1,7 +1,6 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.Executers;
-using Baibaocp.LotteryDispatching.MessageServices;
 using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
+using Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching;
 using Fighting.Scheduling.Abstractions;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
@@ -13,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.MessageServices
 {
-    public class LotteryAwardingMessageService : ILotteryDispatcherMessageService<AwardingExecuter>
+    public class LotteryAwardingMessageService : ILotteryDispatcherMessageService<AwardingMessage>
     {
         private readonly IBusClient _busClient;
 
@@ -21,16 +20,16 @@ namespace Baibaocp.LotteryDispatching.MessageServices
 
         private readonly ILogger<LotteryAwardingMessageService> _logger;
 
-        private readonly IExecuterDispatcher<AwardingExecuter> _dispatcher;
+        private readonly IExecuteDispatcher<AwardingMessage> _dispatcher;
 
-        public Task PublishAsync(string merchanerId, AwardingExecuter executer)
+        public Task PublishAsync(string merchanerId, AwardingMessage executer)
         {
             throw new NotImplementedException();
         }
 
         public Task SubscribeAsync(string merchanerId, CancellationToken stoppingToken)
         {
-            return _busClient.SubscribeAsync<AwardingExecuter>(async (executer) =>
+            return _busClient.SubscribeAsync<AwardingMessage>(async (executer) =>
             {
                 try
                 {

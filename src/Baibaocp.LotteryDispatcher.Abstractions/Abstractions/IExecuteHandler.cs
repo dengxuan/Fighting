@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 namespace Baibaocp.LotteryDispatching.Abstractions
 {
     [TransientDependency]
-    public interface IExecuteHandler<in TExecuter> where TExecuter : IExecuter
+    public interface IExecuteHandler<in TExecuteMessage> where TExecuteMessage : IExecuteMessage
     {
 
-        Task<MessageHandle> HandleAsync(TExecuter executer);
+        Task<MessageHandle> HandleAsync(TExecuteMessage message);
     }
 }

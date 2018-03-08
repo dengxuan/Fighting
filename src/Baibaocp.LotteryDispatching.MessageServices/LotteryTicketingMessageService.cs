@@ -1,11 +1,10 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.Executers;
 using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
+using Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching;
 using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.Scheduling;
 using Baibaocp.LotteryOrdering.Scheduling.Abstractions;
-using Baibaocp.Storaging.Entities;
 using Fighting.Scheduling.Abstractions;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
@@ -17,52 +16,45 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.MessageServices
 {
-    public class LotteryOrderingMessageService : ILotteryDispatcherMessageService<OrderingExecuter>
+    public class LotteryTicketingMessageService : ILotteryDispatcherMessageService<TicketingMessage>
     {
         private readonly IBusClient _busClient;
 
         private readonly ISchedulerManager _schedulerManager;
 
-        private readonly ILogger<LotteryOrderingMessageService> _logger;
+        private readonly ILogger<LotteryTicketingMessageService> _logger;
 
-        private readonly IExecuterDispatcher<OrderingExecuter> _dispatcher;
+        private readonly IExecuteDispatcher<TicketingMessage> _dispatcher;
 
-        private readonly ILotteryTicketingMessageService _lotteryTicketingMessageServiceManager;
+        private readonly ILotteryTicketingMessageService _ticketingMessageService;
 
-        public Task PublishAsync(string merchanerId, OrderingExecuter lvpOrderedMessage)
+        public Task PublishAsync(string merchanerId, TicketingMessage executer)
         {
             throw new NotImplementedException();
         }
 
         public Task SubscribeAsync(string merchanerId, CancellationToken stoppingToken)
         {
-            return _busClient.SubscribeAsync<OrderingExecuter>(async (executer) =>
+            return _busClient.SubscribeAsync<TicketingMessage>(async (executer) =>
             {
                 try
                 {
 
                     _logger.LogTrace("Received ordering executer:{0} VenderId:{1}", executer.LdpOrderId, executer.LdpVenderId);
                     MessageHandle handle = await _dispatcher.DispatchAsync(executer);
-                    if (handle == MessageHandle.Accepted)
+                    if (handle == MessageHandle.Success)
                     {
-                        /* 投注成功，添加出票查询计划任务 */
-                        await _schedulerManager.EnqueueAsync<ILotteryTicketingScheduler, TicketingScheduleArgs>(new TicketingScheduleArgs { LdpOrderId = executer.LdpOrderId, LdpVenderId = executer.LdpVenderId, LvpOrderId = executer.LvpOrder.LvpOrderId });
+                        /* 出票成功 */
+                        await _schedulerManager.EnqueueAsync<LotteryAwardingScheduler, AwardingScheduleArgs>(new AwardingScheduleArgs { });
                     }
                     else if (handle == MessageHandle.Rejected)
                     {
-                        /* 投注失败，将数据存入队列，进行通知和*/
-                        LdpTicketedMessage ldpTicketedMessage = new LdpTicketedMessage
-                        {
-                            LdpOrderId = executer.LdpOrderId,
-                            LdpVenderId = executer.LdpVenderId,
-                            LvpOrder = executer.LvpOrder,
-                            Status = OrderStatus.TicketNotRecv,
-                        };
-                        await _lotteryTicketingMessageServiceManager.PublishAsync(ldpTicketedMessage);
+                        /* 出票失败 */
+                        await _ticketingMessageService.PublishAsync(new LdpTicketedMessage { });
                     }
                     else if (handle == MessageHandle.Waiting)
                     {
-                        /* 上游暂停接单 */
+                        // 等待出票
                         return new Nack();
                     }
                     return new Ack();

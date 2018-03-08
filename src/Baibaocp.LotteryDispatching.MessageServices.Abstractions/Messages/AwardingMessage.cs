@@ -1,13 +1,13 @@
 ﻿using Baibaocp.LotteryOrdering.MessageServices.Messages;
 
-namespace Baibaocp.LotteryDispatching.Executers
+namespace Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching
 {
     /// <summary>
     /// 待返奖订单
     /// </summary>
-    public class AwardingExecuter : Executer
+    public class AwardingMessage : ExecuteMessage
     {
-        public AwardingExecuter(string ldpOrderId, string ldpVenderId, LvpOrderedMessage lvpOrder) : base(ldpVenderId)
+        public AwardingMessage(string ldpOrderId, string ldpVenderId, LvpOrderedMessage lvpOrder) : base(ldpVenderId)
         {
             LdpOrderId = ldpOrderId;
             LvpOrder = lvpOrder;

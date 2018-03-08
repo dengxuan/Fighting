@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Baibaocp.LotteryDispatching.Liangcai
+﻿namespace Baibaocp.LotteryDispatching
 {
     public class DispatcherOptions
     {

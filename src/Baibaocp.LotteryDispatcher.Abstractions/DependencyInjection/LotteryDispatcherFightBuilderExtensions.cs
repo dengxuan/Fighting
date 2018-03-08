@@ -1,4 +1,5 @@
 ﻿using Baibaocp.LotteryDispatching.DependencyInjection.Builder;
+using Baibaocp.LotteryDispatching.MessageServices;
 using Fighting.DependencyInjection.Builder;
 using System;
 
@@ -6,7 +7,7 @@ namespace Baibaocp.LotteryDispatching.DependencyInjection
 {
     public static class LotteryDispatcherFightBuilderExtensions
     {
-        public static FightBuilder AddLotteryDispatcher(this FightBuilder fightBuilder, Action<LotteryDispatcherBuilder> setupAction)
+        public static FightBuilder ConfigureLotteryDispatcher(this FightBuilder fightBuilder, Action<LotteryDispatcherBuilder> setupAction)
         {
             if (fightBuilder == null)
             {

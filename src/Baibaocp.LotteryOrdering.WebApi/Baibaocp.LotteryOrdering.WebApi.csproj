@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection.ServiceCollection\Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection.ServiceCollection.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.ApplicationServices.Abstractions\Baibaocp.LotteryOrdering.ApplicationServices.Abstractions.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.EntityFrameworkCore\Baibaocp.LotteryOrdering.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Fighting.Caching.Redis\Fighting.Caching.Redis.csproj" />
   </ItemGroup>

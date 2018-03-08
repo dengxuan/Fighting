@@ -1,20 +1,20 @@
-﻿using Baibaocp.LotteryDispatching.Suicai.Abstractions.Extensions;
+﻿using Baibaocp.LotteryDispatching.Abstractions;
+using Baibaocp.LotteryDispatching.Extensions;
+using Baibaocp.LotteryDispatching.MessageServices;
+using Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching;
+using Baibaocp.LotteryDispatching.Suicai.Abstractions;
+using Baibaocp.LotteryDispatching.Suicai.Abstractions.Extensions;
+using Fighting.Json;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using RawRabbit;
 using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using Fighting.Json;
-using Baibaocp.LotteryDispatching.Suicai.Abstractions;
-using Newtonsoft.Json.Linq;
-using Baibaocp.LotteryDispatching.Executers;
-using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.MessageServices;
-using Baibaocp.LotteryDispatching.Extensions;
+using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Ordering
 {
-    public class OrderingExecuteHandler : ExecuteHandler<OrderingExecuter>, IExecuteHandler<OrderingExecuter>
+    public class OrderingExecuteHandler : ExecuteHandler<OrderingMessage>, IExecuteHandler<OrderingMessage>
     {
         private readonly IBusClient _publisher;
 
@@ -29,7 +29,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
             _publisher = publisher;
         }
 
-        protected override string BuildRequest(OrderingExecuter executer)
+        protected override string BuildRequest(OrderingMessage executer)
         {
             OrderSending ordersend = new OrderSending();
             ordersend.gameId = executer.LvpOrder.LotteryId.ToSuicaiLottery();
@@ -47,7 +47,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
             return JsonExtensions.ToJsonString(ordersend);
         }
 
-        public override async Task<MessageHandle> HandleAsync(OrderingExecuter executer)
+        public override async Task<MessageHandle> HandleAsync(OrderingMessage executer)
         {
             try
             {

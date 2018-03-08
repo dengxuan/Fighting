@@ -1,14 +1,14 @@
 ﻿using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using System.Collections.Generic;
 
-namespace Baibaocp.LotteryDispatching.Executers
+namespace Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching
 {
     /// <summary>
     /// 待出票订单消息
     /// </summary>
-    public class TicketingExecuter : Executer
+    public class TicketingMessage : ExecuteMessage
     {
-        public TicketingExecuter(string ldpOrderId, string ldpVenderId, LvpOrderedMessage lvpOrder) : base(ldpVenderId)
+        public TicketingMessage(string ldpOrderId, string ldpVenderId, LvpOrderedMessage lvpOrder) : base(ldpVenderId)
         {
             LdpOrderId = ldpOrderId;
             LvpOrder = lvpOrder;

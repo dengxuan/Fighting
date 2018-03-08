@@ -1,5 +1,5 @@
-﻿using Baibaocp.LotteryDispatching.Executers;
-using Baibaocp.LotteryDispatching.MessageServices;
+﻿using Baibaocp.LotteryDispatching.MessageServices;
+using Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching;
 using Baibaocp.Storaging.Entities.Extensions;
 using Dapper;
 using Fighting.Storaging;
@@ -15,7 +15,7 @@ using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
 {
-    public class TicketingExecuteHandler : ExecuteHandler<TicketingExecuter>
+    public class TicketingExecuteHandler : ExecuteHandler<TicketingMessage>
     {
 
         private readonly StorageOptions _storageOptions;
@@ -54,7 +54,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                 }
             }
         }
-        protected override string BuildRequest(TicketingExecuter executer)
+        protected override string BuildRequest(TicketingMessage executer)
         {
             string[] values = new string[]
             {
@@ -99,7 +99,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             }
         }
 
-        public override async Task<MessageHandle> HandleAsync(TicketingExecuter executer)
+        public override async Task<MessageHandle> HandleAsync(TicketingMessage executer)
         {
             string xml = await Send(executer);
             XDocument document = XDocument.Parse(xml);

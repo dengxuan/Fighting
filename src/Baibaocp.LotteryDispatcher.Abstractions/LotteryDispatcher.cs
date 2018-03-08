@@ -7,26 +7,26 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching
 {
-    public class LotteryDispatcher<TExecuter> : IExecuterDispatcher<TExecuter> where TExecuter : IExecuter
+    public class LotteryDispatcher<TExecuteMessage> : IExecuteDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
     {
-        private readonly ILogger<LotteryDispatcher<TExecuter>> _logger;
+        private readonly ILogger<LotteryDispatcher<TExecuteMessage>> _logger;
 
         private readonly IServiceProvider _resolver;
 
         private readonly LotteryDispatcherOptions _options;
 
-        public LotteryDispatcher(IServiceProvider resolver, ILogger<LotteryDispatcher<TExecuter>> logger, LotteryDispatcherOptions options)
+        public LotteryDispatcher(IServiceProvider resolver, ILogger<LotteryDispatcher<TExecuteMessage>> logger, LotteryDispatcherOptions options)
         {
             _logger = logger;
             _options = options;
             _resolver = resolver;
         }
 
-        public async Task<MessageHandle> DispatchAsync(TExecuter executer)
+        public async Task<MessageHandle> DispatchAsync(TExecuteMessage message)
         {
-            var handlerType = _options.GetHandler<TExecuter>(executer.LdpVenderId);
-            var handler = (IExecuteHandler<TExecuter>)_resolver.GetRequiredService(handlerType);
-            var handle = await handler.HandleAsync(executer);
+            var handlerType = _options.GetHandler<TExecuteMessage>(message.LdpVenderId);
+            var handler = (IExecuteHandler<TExecuteMessage>)_resolver.GetRequiredService(handlerType);
+            var handle = await handler.HandleAsync(message);
             return handle;
         }
     }

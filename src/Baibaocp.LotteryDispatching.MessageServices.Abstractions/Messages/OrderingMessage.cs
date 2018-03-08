@@ -1,10 +1,10 @@
 ﻿using Baibaocp.LotteryOrdering.MessageServices.Messages;
 
-namespace Baibaocp.LotteryDispatching.Executers
+namespace Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching
 {
-    public class OrderingExecuter : Executer
+    public class OrderingMessage : ExecuteMessage
     {
-        public OrderingExecuter(string ldpOrderId, string ldpVenderId, LvpOrderedMessage lvpOrder) : base(ldpVenderId)
+        public OrderingMessage(string ldpOrderId, string ldpVenderId, LvpOrderedMessage lvpOrder) : base(ldpVenderId)
         {
             LdpOrderId = ldpOrderId;
             LvpOrder = lvpOrder;

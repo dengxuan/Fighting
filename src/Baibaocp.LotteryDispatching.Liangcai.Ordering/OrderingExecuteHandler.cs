@@ -1,7 +1,7 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.Executers;
 using Baibaocp.LotteryDispatching.Extensions;
 using Baibaocp.LotteryDispatching.MessageServices;
+using Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching;
 using Baibaocp.LotteryOrdering.Liangcai.Extensions;
 using Baibaocp.Storaging.Entities.Extensions;
 using Microsoft.Extensions.Logging;
@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
 {
-    public class OrderingExecuteHandler :ExecuteHandler<OrderingExecuter>, IExecuteHandler<OrderingExecuter>
+    public class OrderingExecuteHandler :ExecuteHandler<OrderingMessage>, IExecuteHandler<OrderingMessage>
     {
 
         private readonly ILogger<OrderingExecuteHandler> _logger;
@@ -21,7 +21,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             _logger = loggerFactory.CreateLogger<OrderingExecuteHandler>();
         }
 
-        protected override string BuildRequest(OrderingExecuter executer)
+        protected override string BuildRequest(OrderingMessage executer)
         {
             /*
              
@@ -44,7 +44,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             return string.Join("_", values);
         }
 
-        public override async Task<MessageHandle> HandleAsync(OrderingExecuter executer)
+        public override async Task<MessageHandle> HandleAsync(OrderingMessage executer)
         {
             try
             {

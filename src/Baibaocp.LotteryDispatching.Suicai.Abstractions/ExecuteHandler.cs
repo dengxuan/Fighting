@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Abstractions
 {
-    public abstract class ExecuteHandler<TExecuter> : IExecuteHandler<TExecuter> where TExecuter : IExecuter
+    public abstract class ExecuteHandler<TExecuter> : IExecuteHandler<TExecuter> where TExecuter : IExecuteMessage
     {
         private readonly string _command;
 

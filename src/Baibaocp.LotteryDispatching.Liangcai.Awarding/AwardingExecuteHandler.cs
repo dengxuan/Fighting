@@ -1,17 +1,15 @@
-﻿using Baibaocp.LotteryDispatching.Executers;
-using Baibaocp.LotteryDispatching.MessageServices;
+﻿using Baibaocp.LotteryDispatching.MessageServices;
+using Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Baibaocp.Storaging.Entities;
 using Microsoft.Extensions.Logging;
-using RawRabbit;
-using RawRabbit.Configuration.Exchange;
 using System;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
 {
-    public class AwardingExecuteHandler : ExecuteHandler<AwardingExecuter>
+    public class AwardingExecuteHandler : ExecuteHandler<AwardingMessage>
     {
 
         private readonly ILogger<AwardingExecuteHandler> _logger;
@@ -21,7 +19,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             _logger = loggerFactory.CreateLogger<AwardingExecuteHandler>();
         }
 
-        protected override string BuildRequest(AwardingExecuter executer)
+        protected override string BuildRequest(AwardingMessage executer)
         {
             string[] values = new string[]
             {
@@ -31,7 +29,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             return string.Join("_", values);
         }
 
-        public override async Task<MessageHandle> HandleAsync(AwardingExecuter executer)
+        public override async Task<MessageHandle> HandleAsync(AwardingMessage executer)
         {
             string xml = await Send(executer);
             XDocument document = XDocument.Parse(xml);

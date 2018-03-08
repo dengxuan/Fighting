@@ -24,7 +24,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Baibaocp.LotteryAwardCalculator.Abstractions\Baibaocp.LotteryAwardCalculator.Abstractions.csproj" />
     <ProjectReference Include="..\Fighting.Caching.Redis\Fighting.Caching.Redis.csproj" />
-    <ProjectReference Include="..\Fighting.HangfireWorker\Fighting.HangfireWorker.csproj" />
     <ProjectReference Include="..\Fighting.Storaging.Dapper\Fighting.Storaging.Dapper.csproj" />
   </ItemGroup>
 

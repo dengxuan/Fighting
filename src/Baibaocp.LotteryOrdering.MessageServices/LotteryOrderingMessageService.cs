@@ -1,5 +1,5 @@
-﻿using Baibaocp.LotteryDispatching.Executers;
-using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
+﻿using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
+using Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching;
 using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
 using Baibaocp.LotteryOrdering.Core.Entities.Merchantes;
 using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
@@ -23,9 +23,9 @@ namespace Baibaocp.LotteryOrdering.MessageServices
         private readonly IIdentityGenerater _identityGenerater;
         private readonly IOrderingApplicationService _orderingApplicationService;
         private readonly ILogger<LotteryOrderingMessageService> _logger;
-        private readonly ILotteryDispatcherMessageService<OrderingExecuter> _lotteryDispatcherMessageService;
+        private readonly ILotteryDispatcherMessageService<OrderingMessage> _lotteryDispatcherMessageService;
 
-        public LotteryOrderingMessageService(IBusClient busClient, ISchedulerManager schedulerManager, IIdentityGenerater identityGenerater, IOrderingApplicationService orderingApplicationService, ILogger<LotteryOrderingMessageService> logger, ILotteryDispatcherMessageService<OrderingExecuter> lotteryDispatcherMessageService)
+        public LotteryOrderingMessageService(IBusClient busClient, ISchedulerManager schedulerManager, IIdentityGenerater identityGenerater, IOrderingApplicationService orderingApplicationService, ILogger<LotteryOrderingMessageService> logger, ILotteryDispatcherMessageService<OrderingMessage> lotteryDispatcherMessageService)
         {
             _busClient = busClient;
             _schedulerManager = schedulerManager;
@@ -60,7 +60,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 string ldpVenderId = "";
                 try
                 {
-                    OrderingExecuter orderingExecuteMessage = new OrderingExecuter(ldpOrderId.ToString(), ldpVenderId, lvpOrderedMessage);
+                    OrderingMessage orderingExecuteMessage = new OrderingMessage(ldpOrderId.ToString(), ldpVenderId, lvpOrderedMessage);
                     LotteryMerchanteOrder lotteryMerchanteOrder = new LotteryMerchanteOrder();
                     await _orderingApplicationService.CreateAsync(lotteryMerchanteOrder);
                     await _lotteryDispatcherMessageService.PublishAsync(ldpVenderId, orderingExecuteMessage);
