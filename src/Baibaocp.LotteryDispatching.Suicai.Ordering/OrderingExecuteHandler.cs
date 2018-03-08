@@ -1,17 +1,16 @@
-﻿using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.Executers;
-using Baibaocp.LotteryDispatcher.Extensions;
-using Baibaocp.LotteryDispatcher.MessageServices;
-using Baibaocp.LotteryDispatching.Suicai.Abstractions.Extensions;
+﻿using Baibaocp.LotteryDispatching.Suicai.Abstractions.Extensions;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
 using System;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using System.Collections.Generic;
 using Fighting.Json;
 using Baibaocp.LotteryDispatching.Suicai.Abstractions;
 using Newtonsoft.Json.Linq;
+using Baibaocp.LotteryDispatching.Executers;
+using Baibaocp.LotteryDispatching.Abstractions;
+using Baibaocp.LotteryDispatching.MessageServices;
+using Baibaocp.LotteryDispatching.Extensions;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Ordering
 {
