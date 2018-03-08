@@ -54,19 +54,17 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
                 string jsoncontent = await Send(executer);
                 JObject jarr = JObject.Parse(jsoncontent);
                 if (jarr.HasValues) {
-                    foreach (var json in jarr["orderList"])
+                    var json = jarr["orderList"][0];
+                    string Status = json["status"].ToString();
+                    _logger.LogInformation("Response Status: {0}", Status);
+                    if (Status.Equals("0"))
                     {
-                        string Status = json["status"].ToString();
-                        _logger.LogInformation("Response Status: {0}", Status);
-                        if (Status.IsIn("0"))
-                        {
-                            return MessageHandle.Accepted;
-                        }
-                        else if (Status.IsIn("-1"))
-                        {
-                            // TODO: Log here and notice to admin
-                            return MessageHandle.Rejected;
-                        }
+                        return MessageHandle.Accepted;
+                    }
+                    else if (Status.IsIn("-1"))
+                    {
+                        // TODO: Log here and notice to admin
+                        return MessageHandle.Rejected;
                     }
                 }
             }
