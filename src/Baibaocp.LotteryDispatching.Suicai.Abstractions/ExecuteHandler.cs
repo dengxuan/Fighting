@@ -1,14 +1,16 @@
 ﻿using Baibaocp.LotteryDispatcher.Abstractions;
 using Baibaocp.LotteryDispatcher.MessageServices;
+using Fighting.Json;
+using Fighting.Security.Cryptography;
 using Fighting.Security.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Baibaocp.LotteryDispatcher.Suicai
+namespace Baibaocp.LotteryDispatching.Suicai.Abstractions
 {
     public abstract class ExecuteHandler<TExecuter> : IExecuteHandler<TExecuter> where TExecuter : IExecuter
     {
@@ -20,11 +22,14 @@ namespace Baibaocp.LotteryDispatcher.Suicai
 
         private readonly DispatcherOptions _options;
 
+        protected Tripledescrypt _crypter;
+
         public ExecuteHandler(DispatcherOptions options, ILoggerFactory loggerFactory, string command)
         {
             _options = options;
             _command = command;
             _logger = loggerFactory.CreateLogger<ExecuteHandler<TExecuter>>();
+            _crypter = Tripledescrypt.Create(CipherMode.CBC, PaddingMode.PKCS7);
             HttpClientHandler handler = new HttpClientHandler()
             {
                 AutomaticDecompression = System.Net.DecompressionMethods.Deflate
@@ -38,25 +43,29 @@ namespace Baibaocp.LotteryDispatcher.Suicai
         private string Signature(string command, string ldpVenderId, string value, out DateTime timestamp)
         {
             timestamp = DateTime.Now;
-            string text = string.Format("{0}{1}{2:yyyyMMddHHmm}{3}{4}", ldpVenderId, command, timestamp, value, _options.SecretKey);
-            return text.ToMd5();
+            string CipherText = _crypter.Encrypt(value, _options.SecretKey);
+            string s = string.Format("{0}{1}{2:yyyyMMddHHmm}{3}{4}", command, CipherText, timestamp, ldpVenderId, "1.0");
+            return s.hmac_md5(_options.SecretKey.Substring(0, 16));
         }
 
         protected async Task<string> Send(TExecuter executer)
         {
             string value = BuildRequest(executer);
             string sign = Signature(_command, executer.LdpVenderId, value, out DateTime timestamp);
-            FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+            ReqContent reqcon = new ReqContent()
             {
-                new KeyValuePair<string, string>("wAgent", executer.LdpVenderId),
-                new KeyValuePair<string, string>("wAction",_command),
-                new KeyValuePair<string, string>("wMsgID", timestamp.ToString("yyyyMMddHHmm")),
-                new KeyValuePair<string, string>("wSign",sign.ToLower()),
-                new KeyValuePair<string, string>("wParam",value),
-            });
+                version = "1.0",
+                apiCode = _command,
+                partnerId = executer.LdpVenderId,
+                messageId = timestamp.ToString("yyyyMMddHHmm"),
+                content = value,
+                hmac = sign.ToLower()
+            };
+            string json = JsonExtensions.ToJsonString(reqcon);
+            HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage responseMessage = (await _httpClient.PostAsync("lot", content)).EnsureSuccessStatusCode();
             byte[] bytes = await responseMessage.Content.ReadAsByteArrayAsync();
-            string msg = Encoding.GetEncoding("GB2312").GetString(bytes);
+            string msg = Encoding.UTF8.GetString(bytes);
             return msg;
         }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Baibaocp.LotteryDispatcher.Suicai
+namespace Baibaocp.LotteryDispatching.Suicai.Abstractions
 {
     public class DispatcherOptions
     {

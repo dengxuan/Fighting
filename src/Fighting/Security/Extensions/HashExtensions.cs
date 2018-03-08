@@ -439,5 +439,80 @@ namespace Fighting.Security.Extensions
         }
 
         #endregion
+
+        /**
+　　 *
+　　 * hmac_md5口令加密算法
+　　 * 
+　　 */
+        public static string hmac_md5(this string timespan, string password)
+        {
+            byte[] b_tmp;
+            byte[] b_tmp1;
+            if (password == null)
+            {
+                return null;
+            }
+            byte[] digest = new byte[512];
+            byte[] k_ipad = new byte[64];
+            byte[] k_opad = new byte[64];
+            byte[] source = Encoding.UTF8.GetBytes(password);
+            MD5 shainner = new MD5CryptoServiceProvider();
+            for (int i = 0; i < 64; i++)
+            {
+                k_ipad[i] = 0 ^ 0x36;
+                k_opad[i] = 0 ^ 0x5c;
+            }
+            try
+            {
+                if (source.Length > 64)
+                {
+                    shainner = new MD5CryptoServiceProvider();
+                    source = shainner.ComputeHash(source);
+                }
+                for (int i = 0; i < source.Length; i++)
+                {
+                    k_ipad[i] = (byte)(source[i] ^ 0x36);
+                    k_opad[i] = (byte)(source[i] ^ 0x5c);
+                }
+                b_tmp1 = System.Text.ASCIIEncoding.ASCII.GetBytes(timespan);
+                b_tmp = adding(k_ipad, b_tmp1);
+                shainner = new MD5CryptoServiceProvider();
+                digest = shainner.ComputeHash(b_tmp);
+                b_tmp = adding(k_opad, digest);
+                shainner = new MD5CryptoServiceProvider();
+                digest = shainner.ComputeHash(b_tmp);
+                return digest.byteToHexStr();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        /**
+     　　 *
+     　　 * 填充byte
+     　　 * 
+     　　 */
+        static byte[] adding(byte[] a, byte[] b)
+        {
+            byte[] c = new byte[a.Length + b.Length];
+            a.CopyTo(c, 0);
+            b.CopyTo(c, a.Length);
+            return c;
+        }
+
+        public static string byteToHexStr(this byte[] bytes)
+        {
+            string returnStr = "";
+            if (bytes != null)
+            {
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    returnStr += bytes[i].ToString("X2");
+                }
+            }
+            return returnStr;
+        }
     }
 }

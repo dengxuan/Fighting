@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Text;
 
-namespace Baibaocp.LotteryDispatcher.Suicai.DependencyInjection
+namespace Baibaocp.LotteryDispatching.Suicai.Abstractions.DependencyInjection
 {
     public static class SuicaiExecuterBuilderExtensions
     {
