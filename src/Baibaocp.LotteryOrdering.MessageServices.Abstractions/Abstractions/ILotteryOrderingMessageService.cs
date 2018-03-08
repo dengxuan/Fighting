@@ -1,11 +1,10 @@
 ﻿using Baibaocp.LotteryOrdering.MessageServices.Messages;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Baibaocp.LotteryOrdering.MessageServices.LotteryDispatcher.Abstractions
+namespace Baibaocp.LotteryOrdering.MessageServices.Abstractions
 {
-    public interface ILotteryOrderingMessageService
+    public interface ILotteryOrderingMessageService : IMessageService
     {
         Task PublishAsync(LvpOrderedMessage lvpOrderedMessage);
 

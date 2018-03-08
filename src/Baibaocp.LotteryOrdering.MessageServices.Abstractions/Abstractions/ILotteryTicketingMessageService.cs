@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryOrdering.MessageServices.Abstractions
 {
-    public interface ILotteryTicketingMessageService
+    public interface ILotteryTicketingMessageService: IMessageService
     {
         Task PublishAsync(LdpTicketedMessage ticketedMessage);
     }

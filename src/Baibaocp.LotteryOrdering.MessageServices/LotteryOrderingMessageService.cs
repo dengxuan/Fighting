@@ -1,10 +1,9 @@
-﻿using Baibaocp.LotteryDispatcher.Executers;
-using Baibaocp.LotteryDispatcher.MessageServices.Abstractions;
+﻿using Baibaocp.LotteryDispatching.Executers;
+using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
 using Baibaocp.LotteryOrdering.Core.Entities.Merchantes;
-using Baibaocp.LotteryOrdering.MessageServices.LotteryDispatcher.Abstractions;
+using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
-using Baibaocp.LotteryOrdering.MessagesSevices;
 using Fighting.Abstractions;
 using Fighting.Scheduling.Abstractions;
 using Microsoft.Extensions.Logging;
@@ -25,9 +24,8 @@ namespace Baibaocp.LotteryOrdering.MessageServices
         private readonly IOrderingApplicationService _orderingApplicationService;
         private readonly ILogger<LotteryOrderingMessageService> _logger;
         private readonly ILotteryDispatcherMessageService<OrderingExecuter> _lotteryDispatcherMessageService;
-        private readonly HostingConfugiration _options;
 
-        public LotteryOrderingMessageService(IBusClient busClient, ISchedulerManager schedulerManager, IIdentityGenerater identityGenerater, IOrderingApplicationService orderingApplicationService, ILogger<LotteryOrderingMessageService> logger, ILotteryDispatcherMessageService<OrderingExecuter> lotteryDispatcherMessageService, HostingConfugiration options)
+        public LotteryOrderingMessageService(IBusClient busClient, ISchedulerManager schedulerManager, IIdentityGenerater identityGenerater, IOrderingApplicationService orderingApplicationService, ILogger<LotteryOrderingMessageService> logger, ILotteryDispatcherMessageService<OrderingExecuter> lotteryDispatcherMessageService)
         {
             _busClient = busClient;
             _schedulerManager = schedulerManager;
@@ -35,7 +33,6 @@ namespace Baibaocp.LotteryOrdering.MessageServices
             _orderingApplicationService = orderingApplicationService;
             _logger = logger;
             _lotteryDispatcherMessageService = lotteryDispatcherMessageService;
-            _options = options;
         }
 
         public Task PublishAsync(LvpOrderedMessage orderingMessage)
@@ -65,7 +62,6 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 {
                     OrderingExecuter orderingExecuteMessage = new OrderingExecuter(ldpOrderId.ToString(), ldpVenderId, lvpOrderedMessage);
                     LotteryMerchanteOrder lotteryMerchanteOrder = new LotteryMerchanteOrder();
-
                     await _orderingApplicationService.CreateAsync(lotteryMerchanteOrder);
                     await _lotteryDispatcherMessageService.PublishAsync(ldpVenderId, orderingExecuteMessage);
 

@@ -8,7 +8,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Baibaocp.LotteryDispatcher.Abstractions\Baibaocp.LotteryDispatching.Abstractions.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.MessageServices.Abstractions\Baibaocp.LotteryOrdering.MessageServices.Abstractions.csproj" />
-    <ProjectReference Include="..\Baibaocp.LotteryOrdering.Scheduling\Baibaocp.LotteryOrdering.Scheduling.csproj" />
     <ProjectReference Include="..\Fighting.Scheduling.Abstractions\Fighting.Scheduling.Abstractions.csproj" />
   </ItemGroup>
 

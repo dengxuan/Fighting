@@ -1,7 +1,7 @@
-﻿using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.Executers;
-using Baibaocp.LotteryDispatcher.MessageServices;
-using Baibaocp.LotteryDispatcher.MessageServices.Abstractions;
+﻿using Baibaocp.LotteryDispatching.Abstractions;
+using Baibaocp.LotteryDispatching.Executers;
+using Baibaocp.LotteryDispatching.MessageServices;
+using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Fighting.Scheduling.Abstractions;
 using Microsoft.Extensions.Logging;
 using RawRabbit;

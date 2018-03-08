@@ -1,6 +1,6 @@
-﻿using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.Executers;
-using Baibaocp.LotteryDispatcher.MessageServices.Abstractions;
+﻿using Baibaocp.LotteryDispatching.Abstractions;
+using Baibaocp.LotteryDispatching.Executers;
+using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.Scheduling;
@@ -15,7 +15,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Baibaocp.LotteryDispatcher.MessageServices
+namespace Baibaocp.LotteryDispatching.MessageServices
 {
     public class LotteryOrderingMessageService : ILotteryDispatcherMessageService<OrderingExecuter>
     {

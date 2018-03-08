@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Baibaocp.LotteryDispatcher.Liangcai
+namespace Baibaocp.LotteryDispatching.Liangcai
 {
     public class DispatcherOptions
     {

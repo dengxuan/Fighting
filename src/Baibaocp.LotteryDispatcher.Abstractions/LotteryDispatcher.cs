@@ -1,11 +1,11 @@
-﻿using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.MessageServices;
+﻿using Baibaocp.LotteryDispatching.Abstractions;
+using Baibaocp.LotteryDispatching.MessageServices;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace Baibaocp.LotteryDispatcher
+namespace Baibaocp.LotteryDispatching
 {
     public class LotteryDispatcher<TExecuter> : IExecuterDispatcher<TExecuter> where TExecuter : IExecuter
     {

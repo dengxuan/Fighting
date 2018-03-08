@@ -1,7 +1,7 @@
 ﻿using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using System.Collections.Generic;
 
-namespace Baibaocp.LotteryDispatcher.Executers
+namespace Baibaocp.LotteryDispatching.Executers
 {
     /// <summary>
     /// 待出票订单消息

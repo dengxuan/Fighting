@@ -1,4 +1,4 @@
-﻿namespace Baibaocp.LotteryDispatcher.MessageServices
+﻿namespace Baibaocp.LotteryDispatching.MessageServices
 {
     public enum MessageHandle
     {

@@ -1,10 +1,9 @@
 ﻿using Fighting.Caching.Abstractions;
-using Orleans;
 using System;
 
 namespace Fighting.ApplicationServices.Abstractions
 {
-    public abstract class ApplicationService : Grain, IApplicationService
+    public abstract class ApplicationService : IApplicationService
     {
         protected ICacheManager CacheManager { get; }
 

@@ -1,6 +1,6 @@
 ﻿using Baibaocp.LotteryAwardCalculator.Abstractions;
-using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.Executers;
+using Baibaocp.LotteryDispatching.Abstractions;
+using Baibaocp.LotteryDispatching.Executers;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Baibaocp.Storaging.Entities;
 using Microsoft.Extensions.Logging;

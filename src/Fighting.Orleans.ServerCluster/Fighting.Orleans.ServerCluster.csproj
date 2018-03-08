@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Orleans.OrleansProviders" Version="2.0.0-rc1" />
+    <PackageReference Include="Microsoft.Orleans.OrleansRuntime" Version="2.0.0-rc1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
+    <ProjectReference Include="..\Fighting.Orleans.Abstractions\Fighting.Orleans.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,5 +1,5 @@
-﻿using Baibaocp.LotteryDispatcher.Executers;
-using Baibaocp.LotteryDispatcher.MessageServices;
+﻿using Baibaocp.LotteryDispatching.Executers;
+using Baibaocp.LotteryDispatching.MessageServices;
 using Baibaocp.Storaging.Entities.Extensions;
 using Fighting.Storaging;
 using Microsoft.Extensions.Logging;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Baibaocp.LotteryDispatcher.Liangcai.Handlers
+namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
 {
     public class ShanghaiTicketingExecuteHandler : ExecuteHandler<TicketingExecuter>
     {

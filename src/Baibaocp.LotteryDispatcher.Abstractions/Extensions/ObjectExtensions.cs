@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Linq;
 
-namespace Baibaocp.LotteryDispatcher.Extensions
+namespace Baibaocp.LotteryDispatching.Extensions
 {
     public static class ObjectExtensions
     {

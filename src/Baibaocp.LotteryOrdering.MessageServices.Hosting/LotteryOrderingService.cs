@@ -1,4 +1,4 @@
-﻿using Baibaocp.LotteryOrdering.MessageServices.LotteryDispatcher.Abstractions;
+﻿using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Fighting.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
