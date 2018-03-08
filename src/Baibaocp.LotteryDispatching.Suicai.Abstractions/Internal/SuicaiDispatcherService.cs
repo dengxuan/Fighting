@@ -1,5 +1,5 @@
-﻿using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.MessageServices.Abstractions;
+﻿using Baibaocp.LotteryDispatching.Abstractions;
+using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Fighting.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Threading;

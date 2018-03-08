@@ -1,4 +1,4 @@
-﻿using Baibaocp.LotteryDispatcher.Executers;
+﻿using Baibaocp.LotteryDispatching.Executers;
 using Baibaocp.Storaging.Entities;
 using System;
 
