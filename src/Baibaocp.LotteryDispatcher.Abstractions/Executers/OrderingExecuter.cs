@@ -1,6 +1,6 @@
 ﻿using Baibaocp.LotteryOrdering.MessageServices.Messages;
 
-namespace Baibaocp.LotteryDispatcher.Executers
+namespace Baibaocp.LotteryDispatching.Executers
 {
     public class OrderingExecuter : Executer
     {

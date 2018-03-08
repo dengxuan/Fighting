@@ -1,6 +1,6 @@
-﻿using Baibaocp.LotteryDispatcher.Abstractions;
+﻿using Baibaocp.LotteryDispatching.Abstractions;
 
-namespace Baibaocp.LotteryDispatcher
+namespace Baibaocp.LotteryDispatching
 {
     public abstract class Executer : IExecuter
     {

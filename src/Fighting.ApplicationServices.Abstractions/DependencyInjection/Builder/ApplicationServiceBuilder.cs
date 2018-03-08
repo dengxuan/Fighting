@@ -1,8 +1,6 @@
-﻿using Fighting.ApplicationServices.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Orleans;
 using System;
 
 namespace Fighting.ApplicationServices.DependencyInjection.Builder

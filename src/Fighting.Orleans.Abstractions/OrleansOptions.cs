@@ -13,5 +13,7 @@ namespace Fighting.Orleans
         public IPAddress ClusterAddress { get; set; }
 
         public int ClusterPort { get; set; }
+
+        public int GetwayPort { get; set; }
     }
 }

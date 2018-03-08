@@ -1,33 +1,30 @@
 ﻿using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
 using Baibaocp.LotteryOrdering.Core.Entities.Merchantes;
 using Baibaocp.Storaging.Entities;
-using Dapper;
 using Fighting.Abstractions;
 using Fighting.ApplicationServices.Abstractions;
 using Fighting.Caching.Abstractions;
 using Fighting.Storaging;
 using Fighting.Storaging.Repositories.Abstractions;
 using Microsoft.Extensions.Logging;
-using Pomelo.Data.MySql;
 using System;
 using System.Threading.Tasks;
-using System.Transactions;
 
 namespace Baibaocp.LotteryOrdering.ApplicationServices
 {
-    public class OrderingApplicationServices : ApplicationService, IOrderingApplicationService
+    public class OrderingApplicationService : ApplicationService, IOrderingApplicationService
     {
 
         private readonly StorageOptions _options;
 
-        private readonly ILogger<OrderingApplicationServices> _logger;
+        private readonly ILogger<OrderingApplicationService> _logger;
 
         private readonly IIdentityGenerater _identityGenerater;
 
         private readonly IRepository<LotteryMerchanteOrder, string> _orderingReoository;
 
 
-        public OrderingApplicationServices(StorageOptions options, IRepository<LotteryMerchanteOrder, string> orderingReoository, ILogger<OrderingApplicationServices> logger, IIdentityGenerater identityGenerater, ICacheManager cacheManager) : base(cacheManager)
+        public OrderingApplicationService(StorageOptions options, IRepository<LotteryMerchanteOrder, string> orderingReoository, ILogger<OrderingApplicationService> logger, IIdentityGenerater identityGenerater, ICacheManager cacheManager) : base(cacheManager)
         {
             _options = options;
             _logger = logger;

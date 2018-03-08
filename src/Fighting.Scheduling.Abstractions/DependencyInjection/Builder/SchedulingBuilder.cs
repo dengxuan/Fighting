@@ -1,8 +1,6 @@
 ﻿using Baibaocp.LotteryOrdering.Hosting;
 using Fighting.DependencyInjection.Builder;
 using Fighting.Scheduling.Abstractions;
-using Fighting.Threading;
-using Fighting.Threading.Works;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;

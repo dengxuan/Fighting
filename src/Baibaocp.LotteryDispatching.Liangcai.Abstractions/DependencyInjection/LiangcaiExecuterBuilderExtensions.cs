@@ -1,11 +1,11 @@
-﻿using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.DependencyInjection.Builder;
+﻿using Baibaocp.LotteryDispatching.Abstractions;
+using Baibaocp.LotteryDispatching.DependencyInjection.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Text;
 
-namespace Baibaocp.LotteryDispatcher.Liangcai.DependencyInjection
+namespace Baibaocp.LotteryDispatching.Liangcai.DependencyInjection
 {
     public static class LiangcaiExecuterBuilderExtensions
     {

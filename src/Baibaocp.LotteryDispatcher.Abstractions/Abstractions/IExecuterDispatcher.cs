@@ -1,8 +1,8 @@
-﻿using Baibaocp.LotteryDispatcher.MessageServices;
+﻿using Baibaocp.LotteryDispatching.MessageServices;
 using Fighting.DependencyInjection.Builder;
 using System.Threading.Tasks;
 
-namespace Baibaocp.LotteryDispatcher.Abstractions
+namespace Baibaocp.LotteryDispatching.Abstractions
 {
     [TransientDependency]
     public interface IExecuterDispatcher<TExecuter> where TExecuter : IExecuter

@@ -1,8 +1,8 @@
-﻿using Baibaocp.LotteryDispatcher.Abstractions;
+﻿using Baibaocp.LotteryDispatching.Abstractions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Baibaocp.LotteryDispatcher.MessageServices.Abstractions
+namespace Baibaocp.LotteryDispatching.MessageServices.Abstractions
 {
     public interface ILotteryDispatcherMessageService<TExecuter> where TExecuter : IExecuter
     {

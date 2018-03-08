@@ -1,7 +1,7 @@
-﻿using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.Executers;
-using Baibaocp.LotteryDispatcher.Extensions;
-using Baibaocp.LotteryDispatcher.MessageServices;
+﻿using Baibaocp.LotteryDispatching.Abstractions;
+using Baibaocp.LotteryDispatching.Executers;
+using Baibaocp.LotteryDispatching.Extensions;
+using Baibaocp.LotteryDispatching.MessageServices;
 using Baibaocp.LotteryOrdering.Liangcai.Extensions;
 using Baibaocp.Storaging.Entities.Extensions;
 using Microsoft.Extensions.Logging;
@@ -10,7 +10,7 @@ using System;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Baibaocp.LotteryDispatcher.Liangcai.Handlers
+namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
 {
     public class OrderingExecuteHandler :ExecuteHandler<OrderingExecuter>, IExecuteHandler<OrderingExecuter>
     {

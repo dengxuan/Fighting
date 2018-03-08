@@ -1,8 +1,8 @@
-﻿using Baibaocp.LotteryDispatcher.Abstractions;
+﻿using Baibaocp.LotteryDispatching.Abstractions;
 using System;
 using System.Collections.Concurrent;
 
-namespace Baibaocp.LotteryDispatcher
+namespace Baibaocp.LotteryDispatching
 {
     public class LotteryDispatcherOptions
     {

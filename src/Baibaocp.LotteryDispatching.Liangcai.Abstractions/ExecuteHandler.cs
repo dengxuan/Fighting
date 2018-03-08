@@ -1,5 +1,5 @@
-﻿using Baibaocp.LotteryDispatcher.Abstractions;
-using Baibaocp.LotteryDispatcher.MessageServices;
+﻿using Baibaocp.LotteryDispatching.Abstractions;
+using Baibaocp.LotteryDispatching.MessageServices;
 using Fighting.Security.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Baibaocp.LotteryDispatcher.Liangcai
+namespace Baibaocp.LotteryDispatching.Liangcai
 {
     public abstract class ExecuteHandler<TExecuter> : IExecuteHandler<TExecuter> where TExecuter : IExecuter
     {

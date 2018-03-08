@@ -1,5 +1,5 @@
-﻿using Baibaocp.LotteryDispatcher.Executers;
-using Baibaocp.LotteryDispatcher.MessageServices;
+﻿using Baibaocp.LotteryDispatching.Executers;
+using Baibaocp.LotteryDispatching.MessageServices;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Baibaocp.Storaging.Entities;
 using Microsoft.Extensions.Logging;
@@ -9,7 +9,7 @@ using System;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Baibaocp.LotteryDispatcher.Liangcai.Handlers
+namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
 {
     public class AwardingExecuteHandler : ExecuteHandler<AwardingExecuter>
     {

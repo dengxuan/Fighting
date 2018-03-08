@@ -1,4 +1,4 @@
-﻿namespace Baibaocp.LotteryDispatcher.Abstractions
+﻿namespace Baibaocp.LotteryDispatching.Abstractions
 {
     public interface IExecuter
     {

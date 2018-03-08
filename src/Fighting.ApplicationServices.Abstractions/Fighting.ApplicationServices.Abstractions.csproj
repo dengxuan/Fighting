@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Fighting.Caching.Abstractions\Fighting.Caching.Abstractions.csproj" />
-    <ProjectReference Include="..\Fighting.Orleans.Abstractions\Fighting.Orleans.Abstractions.csproj" />
     <ProjectReference Include="..\Fighting\Fighting.csproj" />
   </ItemGroup>
 

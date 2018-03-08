@@ -5,6 +5,7 @@ using Orleans;
 using Orleans.Runtime;
 using System.Net;
 using System.Threading.Tasks;
+using Scrutor;
 
 namespace Fighting.Orleans.ClientCluster.DependencyInjection
 {
@@ -12,7 +13,6 @@ namespace Fighting.Orleans.ClientCluster.DependencyInjection
     {
         public static OrleansBuilder UseClientCluster<TOrleansCluster>(this OrleansBuilder orleansBuilder, OrleansOptions orleansOptions) where TOrleansCluster : IOrleansCluster
         {
-            orleansBuilder.Services.AddSingleton<IOrleansClusterManager<TOrleansCluster>, DefaultOrleansClusterManager<TOrleansCluster>>();
             orleansBuilder.Services.AddSingleton<Task<IGrainFactory>>(async sp =>
             {
                 var client = new ClientBuilder().ConfigureCluster(options => options.ClusterId = orleansOptions.ClusterId)

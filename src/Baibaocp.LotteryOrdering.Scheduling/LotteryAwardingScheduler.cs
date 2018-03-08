@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryOrdering.Scheduling.Abstractions
 {
-    public class LotteryAwardingScheduler : IScheduler<AwardingScheduleArgs>
+    public class LotteryAwardingScheduler : ILotteryAwardingScheduler
     {
         public Task RunAsync(AwardingScheduleArgs args)
         {

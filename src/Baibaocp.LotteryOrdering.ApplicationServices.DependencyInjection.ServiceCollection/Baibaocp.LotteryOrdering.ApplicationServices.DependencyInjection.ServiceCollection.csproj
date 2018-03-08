@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.ApplicationServices\Baibaocp.LotteryOrdering.ApplicationServices.csproj" />
+    <ProjectReference Include="..\Fighting.ApplicationServices.Abstractions\Fighting.ApplicationServices.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,6 +1,6 @@
 ﻿using Baibaocp.LotteryOrdering.MessageServices.Messages;
 
-namespace Baibaocp.LotteryDispatcher.Executers
+namespace Baibaocp.LotteryDispatching.Executers
 {
     /// <summary>
     /// 待返奖订单

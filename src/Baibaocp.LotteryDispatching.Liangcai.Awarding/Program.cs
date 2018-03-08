@@ -1,7 +1,7 @@
 ﻿using Fighting.DependencyInjection;
 using Fighting.Hosting;
-using Baibaocp.LotteryDispatcher.Liangcai.DependencyInjection;
-using Baibaocp.LotteryDispatcher.DependencyInjection;
+using Baibaocp.LotteryDispatching.Liangcai.DependencyInjection;
+using Baibaocp.LotteryDispatching.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RawRabbit.Configuration;
@@ -10,8 +10,8 @@ using RawRabbit.Enrichers.MessageContext;
 using RawRabbit.Enrichers.MessageContext.Context;
 using RawRabbit.Instantiation;
 using System;
-using Baibaocp.LotteryDispatcher.Liangcai.Handlers;
-using Baibaocp.LotteryDispatcher.Executers;
+using Baibaocp.LotteryDispatching.Liangcai.Handlers;
+using Baibaocp.LotteryDispatching.Executers;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Awarding
