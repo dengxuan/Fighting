@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 
-namespace Baibaocp.LotteryDispatcher.DependencyInjection.Builder
+namespace Baibaocp.LotteryDispatching.DependencyInjection.Builder
 {
     internal class LotteryDispatcherOptionsSetup : ConfigureOptions<LotteryDispatcherOptions>
     {

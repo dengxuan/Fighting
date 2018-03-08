@@ -228,7 +228,5 @@ namespace Baibaocp.Storaging.Entities.Lotteries
         public decimal? HalfScore01 { get; set; }
 
         public decimal? HalfScore00 { get; set; }
-
-        public DateTime CreationTime { get; set; } = DateTime.Now;
     }
 }

@@ -1,8 +1,8 @@
-﻿using Baibaocp.LotteryDispatcher.DependencyInjection.Builder;
+﻿using Baibaocp.LotteryDispatching.DependencyInjection.Builder;
 using Fighting.DependencyInjection.Builder;
 using System;
 
-namespace Baibaocp.LotteryDispatcher.DependencyInjection
+namespace Baibaocp.LotteryDispatching.DependencyInjection
 {
     public static class LotteryDispatcherFightBuilderExtensions
     {

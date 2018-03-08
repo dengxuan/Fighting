@@ -2,7 +2,7 @@
 using Fighting.DependencyInjection.Builder;
 using System;
 
-namespace Fighting.ApplicationServices.Abstractions
+namespace Fighting.ApplicationServices.DependencyInjection
 {
     public static class ApplicationServicesFightBuilderExtensions
     {
@@ -13,5 +13,7 @@ namespace Fighting.ApplicationServices.Abstractions
             builder.Build();
             return fightBuilder;
         }
+
+
     }
 }

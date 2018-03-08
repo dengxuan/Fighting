@@ -6,7 +6,7 @@ namespace Baibaocp.Scheduling
 {
     public class LotteryPhaseScheduler : ILotteryPhaseScheduler
     {
-        public Task Run(LotteryPhaseSchedulerArgs args)
+        public Task RunAsync(LotteryPhaseSchedulerArgs args)
         {
             return Task.CompletedTask;
         }
