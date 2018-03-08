@@ -1,8 +1,10 @@
 ﻿using Baibaocp.LotteryDispatching.Executers;
 using Baibaocp.LotteryDispatching.MessageServices;
 using Baibaocp.Storaging.Entities.Extensions;
+using Dapper;
 using Fighting.Storaging;
 using Microsoft.Extensions.Logging;
+using Pomelo.Data.MySql;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,16 +15,16 @@ using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
 {
-    public class ShanghaiTicketingExecuteHandler : ExecuteHandler<TicketingExecuter>
+    public class TicketingExecuteHandler : ExecuteHandler<TicketingExecuter>
     {
 
         private readonly StorageOptions _storageOptions;
 
-        private readonly ILogger<ShanghaiTicketingExecuteHandler> _logger;
+        private readonly ILogger<TicketingExecuteHandler> _logger;
 
-        public ShanghaiTicketingExecuteHandler(DispatcherOptions options, StorageOptions storageOptions, ILoggerFactory loggerFactory) : base(options, loggerFactory, "102")
+        public TicketingExecuteHandler(DispatcherOptions options, StorageOptions storageOptions, ILoggerFactory loggerFactory) : base(options, loggerFactory, "102")
         {
-            _logger = loggerFactory.CreateLogger<ShanghaiTicketingExecuteHandler>();
+            _logger = loggerFactory.CreateLogger<TicketingExecuteHandler>();
             _storageOptions = storageOptions;
         }
 

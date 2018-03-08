@@ -1,17 +1,15 @@
-﻿using Fighting.DependencyInjection;
-using Fighting.Hosting;
+﻿using Baibaocp.LotteryDispatching.DependencyInjection;
+using Baibaocp.LotteryDispatching.Executers;
 using Baibaocp.LotteryDispatching.Liangcai.DependencyInjection;
-using Baibaocp.LotteryDispatching.DependencyInjection;
+using Baibaocp.LotteryDispatching.Liangcai.Handlers;
+using Fighting.DependencyInjection;
+using Fighting.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
-using RawRabbit.Enrichers.MessageContext;
-using RawRabbit.Enrichers.MessageContext.Context;
 using RawRabbit.Instantiation;
 using System;
-using Baibaocp.LotteryDispatching.Liangcai.Handlers;
-using Baibaocp.LotteryDispatching.Executers;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Awarding
@@ -64,10 +62,10 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Awarding
                         services.AddRawRabbit(new RawRabbitOptions
                         {
                             ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>(),
-                            Plugins = p =>
-                            {
-                                p.UseMessageContext<MessageContext>();
-                            },
+                            //Plugins = p =>
+                            //{
+                            //    p.UseMessageContext<MessageContext>();
+                            //},
                             DependencyInjection = ioc =>
                             {
                             }
