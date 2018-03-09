@@ -47,14 +47,15 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
                     string Status = json["status"].ToString();
                     if (Status.IsIn("0", "1"))
                     {
-                        return HandleHelper.Waiting();
+                        return new Waiting();
                     }
                     else if (Status.Equals("2"))
                     {
-                        return HandleHelper.Success();
+                        return new Success();
                     }
-                    else {
-                        return HandleHelper.Failure();
+                    else
+                    {
+                        return new Failure();
                     }
                 }
             }
@@ -62,7 +63,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
             {
                 _logger.LogError(ex, "Request Exception:{0}", ex.Message);
             }
-            return HandleHelper.Waiting();
+            return new Waiting();
         }
     }
 }

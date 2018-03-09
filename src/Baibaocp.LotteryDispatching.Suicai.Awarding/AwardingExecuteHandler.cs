@@ -44,11 +44,11 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
                     string Status = json["status"].ToString();
                     if (Status.Equals("0"))
                     {
-                        return HandleHelper.Waiting();
+                        return new Waiting();
                     }
                     else if (Status.Equals("1"))
                     {
-                        return HandleHelper.Loseing();
+                        return new Loseing();
                     }
                     else if (Status.Equals("2"))
                     {
@@ -62,7 +62,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
                                 Status = OrderStatus.TicketWinning,
                                 BonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100)
                             };
-                            return HandleHelper.Winning();
+                            return new Winning((int)(Convert.ToDecimal(json["totalPrize"]) * 100), (int)(Convert.ToDecimal(json["totalPrize"]) * 100));
                         }
                     }
                     else if (Status.Equals("3"))
@@ -75,10 +75,11 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
                             Status = OrderStatus.TicketWinning,
                             BonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100)
                         };
-                        return HandleHelper.Winning();
+                        return new Winning((int)(Convert.ToDecimal(json["totalPrize"]) * 100), (int)(Convert.ToDecimal(json["totalPrize"]) * 100));
                     }
-                    else {
-                        return HandleHelper.Waiting();
+                    else
+                    {
+                        return new Waiting();
                     }
                 }
             }
@@ -87,7 +88,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
                 _logger.LogError(ex, "Request Exception:{0}", ex.Message);
             }
             // TODO: Log here and notice to admin
-            return HandleHelper.Winning();
+            return new Waiting();
         }
     }
 }

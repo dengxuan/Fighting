@@ -35,20 +35,24 @@ namespace Baibaocp.LotteryDispatching.MessageServices
                 {
 
                     _logger.LogTrace("Received ordering executer:{0} VenderId:{1}", executer.LdpOrderId, executer.LdpVenderId);
-                    HandleTypes handle = await _dispatcher.DispatchAsync(executer);
-                    if (handle == HandleTypes.Winning)
+                    bool result = await _dispatcher.DispatchAsync(executer);
+                    if(result == true)
                     {
-                        /* 中奖 */
+                        return new Ack();
                     }
-                    else if (handle == HandleTypes.Loseing)
-                    {
-                        /* 未中奖 */
-                    }
-                    else if (handle == HandleTypes.Waiting)
-                    {
-                        return new Nack();
-                    }
-                    return new Ack();
+                    //if (handle == HandleTypes.Winning)
+                    //{
+                    //    /* 中奖 */
+                    //}
+                    //else if (handle == HandleTypes.Loseing)
+                    //{
+                    //    /* 未中奖 */
+                    //}
+                    //else if (handle == HandleTypes.Waiting)
+                    //{
+                    //    return new Nack();
+                    //}
+                    //return new Ack();
                 }
                 catch (Exception ex)
                 {

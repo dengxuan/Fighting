@@ -27,21 +27,21 @@ namespace Baibaocp.LotteryDispatching
             var handlerType = _options.GetHandler<TExecuteMessage>(message.LdpVenderId);
             var handler = (IExecuteHandler<TExecuteMessage>)_resolver.GetRequiredService(handlerType);
             var handle = await handler.HandleAsync(message);
-            switch (handle.HandleType)
+            switch (handle)
             {
-                case HandleTypes.Accepted:
+                case Accepted accepted:
                     break;
-                case HandleTypes.Rejected:
+                case Rejected rejected:
                     break;
-                case HandleTypes.Success:
+                case Success success:
                     break;
-                case HandleTypes.Failure:
+                case Failure failure:
                     break;
-                case HandleTypes.Winning:
+                case Winning winning:
                     break;
-                case HandleTypes.Loseing:
+                case Loseing loseing:
                     break;
-                case HandleTypes.Waiting: return false;
+                case Waiting waiting: return false;
             }
             return true;
         }

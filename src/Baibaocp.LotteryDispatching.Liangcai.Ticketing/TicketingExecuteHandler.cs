@@ -111,13 +111,13 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                 string oddsXml = DeflateDecompress(odds);
                 Dictionary<string, string> oddsValues = new Dictionary<string, string>();
                 executer.TicketContext.Add("TicketOdds", GetOdds(oddsXml, executer.LvpOrder.LotteryId));
-                return HandleHelper.Success();
+                return new Success(string.Empty, GetOdds(oddsXml, executer.LvpOrder.LotteryId));
             }
             else if (Status.Equals("2003"))
             {
-                return HandleHelper.Failure();
+                return new Failure();
             }
-            return HandleHelper.Waiting();
+            return new Waiting();
         }
     }
 }

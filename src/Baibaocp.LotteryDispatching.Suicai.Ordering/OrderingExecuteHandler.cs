@@ -59,12 +59,12 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
                     _logger.LogInformation("Response Status: {0}", Status);
                     if (Status.Equals("0"))
                     {
-                        return HandleHelper.Accept();
+                        return new Accepted();
                     }
                     else if (Status.IsIn("-1"))
                     {
                         // TODO: Log here and notice to admin
-                        return HandleHelper.Reject();
+                        return new Rejected();
                     }
                 }
             }
@@ -72,7 +72,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
             {
                 _logger.LogError(ex, "Request Exception:{0}", ex.Message);
             }
-            return HandleHelper.Reject();
+            return new Rejected();
         }
     }
 }

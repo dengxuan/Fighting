@@ -47,126 +47,64 @@ namespace Baibaocp.LotteryDispatching
         HandleTypes HandleType { get; }
     }
 
-    internal class Handle : IHandle
+    public struct Accepted : IHandle
     {
-        public HandleTypes HandleType { get; }
-
-        internal Handle(HandleTypes handleType) => HandleType = handleType;
+        public HandleTypes HandleType => HandleTypes.Accepted;
     }
 
-    public interface IHandleAwarded : IHandle
+    public struct Rejected : IHandle
     {
-        /// <summary>
-        /// 奖金。单位：分
-        /// </summary>
-        int BonusAmount { get; }
-
-        /// <summary>
-        /// 税后奖金。单位：分
-        /// </summary>
-        int AftertaxBonusAmount { get; }
+        public HandleTypes HandleType => HandleTypes.Rejected;
     }
 
-    internal class HandleAwarded : Handle, IHandleAwarded
+    public struct Success : IHandle
     {
-        public int BonusAmount { get; }
-
-        public int AftertaxBonusAmount { get; }
-
-        internal HandleAwarded(HandleTypes handleType) : base(handleType)
-        {
-        }
-    }
-
-    public interface IHandleTicketed : IHandle
-    {
-        string TicketNumber { get; }
-
-        string TicketOdds { get; }
-    }
-
-    internal class HandleTicketed : Handle, IHandleTicketed
-    {
+        public HandleTypes HandleType => HandleTypes.Success;
 
         public string TicketNumber { get; }
 
         public string TicketOdds { get; }
 
-        internal HandleTicketed(HandleTypes handleType) : this(handleType, string.Empty, string.Empty)
-        {
-
-        }
-
-        internal HandleTicketed(HandleTypes handleType, string ticketNumber, string ticketOdds) : base(handleType)
+        public Success(string ticketNumber, string ticketOdds)
         {
             TicketNumber = ticketNumber;
             TicketOdds = ticketOdds;
         }
     }
 
-    public class HandleHelper
+    public struct Failure : IHandle
     {
-        /// <summary>
-        /// 接票
-        /// </summary>
-        /// <returns></returns>
-        public static IHandle Accept()
-        {
-            return new Handle(HandleTypes.Accepted);
-        }
+        public HandleTypes HandleType => HandleTypes.Failure;
+    }
+
+    public struct Winning : IHandle
+    {
+        public HandleTypes HandleType => HandleTypes.Winning;
 
         /// <summary>
-        /// 未接票
+        /// 奖金。单位：分
         /// </summary>
-        /// <returns></returns>
-        public static IHandle Reject()
-        {
-            return new Handle(HandleTypes.Rejected);
-        }
+        public int BonusAmount { get; }
 
         /// <summary>
-        /// 等待状态
+        /// 税后奖金。单位：分
         /// </summary>
-        /// <returns></returns>
-        public static IHandle Waiting()
-        {
-            return new Handle(HandleTypes.Waiting);
-        }
+        public int AftertaxBonusAmount { get; }
 
-        /// <summary>
-        /// 出票成功
-        /// </summary>
-        /// <returns></returns>
-        public static IHandle Success()
+        public Winning(int bonusAmount, int aftertaxBonusAmount)
         {
-            return new HandleTicketed(HandleTypes.Success);
+            BonusAmount = bonusAmount;
+            AftertaxBonusAmount = aftertaxBonusAmount;
         }
+    }
 
-        /// <summary>
-        /// 出票失败
-        /// </summary>
-        /// <returns></returns>
-        public static IHandle Failure()
-        {
-            return new HandleTicketed(HandleTypes.Failure);
-        }
+    public struct Loseing : IHandle
+    {
+        public HandleTypes HandleType => HandleTypes.Loseing;
+    }
 
-        /// <summary>
-        /// 中奖
-        /// </summary>
-        /// <returns></returns>
-        public static IHandle Winning()
-        {
-            return new HandleAwarded(HandleTypes.Winning);
-        }
-
-        /// <summary>
-        /// 未中奖
-        /// </summary>
-        /// <returns></returns>
-        public static IHandle Loseing()
-        {
-            return new HandleAwarded(HandleTypes.Loseing);
-        }
+    public struct Waiting : IHandle
+    {
+        public HandleTypes HandleType => HandleTypes.Waiting;
     }
 }

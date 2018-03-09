@@ -55,19 +55,19 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                 _logger.LogInformation("Response Status: {0}", Status);
                 if (Status.IsIn("0", "1", "1008"))
                 {
-                    return HandleHelper.Accept();
+                    return new Accepted();
                 }
                 else if (Status.IsIn("1003", "1011", "1014"))
                 {
                     // TODO: Log here and notice to admin
-                    return HandleHelper.Waiting();
+                    return new Waiting();
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Request Exception:{0}", ex.Message);
             }
-            return HandleHelper.Reject();
+            return new Rejected();
         }
     }
 }
