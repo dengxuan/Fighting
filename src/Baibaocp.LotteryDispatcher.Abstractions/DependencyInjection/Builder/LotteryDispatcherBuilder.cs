@@ -26,16 +26,16 @@ namespace Baibaocp.LotteryDispatching.DependencyInjection.Builder
             });
         }
 
-        public LotteryDispatcherBuilder ConfigureOptions(Action<LotteryDispatcherOptions> options)
-        {
-            Services.Configure(options);
-            return this;
-        }
+        //public LotteryDispatcherBuilder ConfigureOptions(Action<LotteryDispatcherOptions> options)
+        //{
+        //    Services.Configure(options);
+        //    return this;
+        //}
 
         internal void Build()
         {
-            Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<LotteryDispatcherOptions>, LotteryDispatcherOptionsSetup>());
-            Services.AddSingleton(c => c.GetRequiredService<IOptions<LotteryDispatcherOptions>>().Value);
+            Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<DispatcherOptions>, LotteryDispatcherOptionsSetup>());
+            Services.AddSingleton(c => c.GetRequiredService<IOptions<DispatcherOptions>>().Value);
             AddHandlerDiscovery();
         }
     }

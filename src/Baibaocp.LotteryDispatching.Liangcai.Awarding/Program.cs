@@ -1,12 +1,14 @@
-﻿using Baibaocp.LotteryDispatching.Liangcai.Handlers;
+﻿using Baibaocp.LotteryDispatching.DependencyInjection;
+using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Fighting.DependencyInjection;
 using Fighting.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using RawRabbit.Configuration;
+using RawRabbit.DependencyInjection.ServiceCollection;
+using RawRabbit.Instantiation;
 using System;
 using System.Threading.Tasks;
-using Baibaocp.LotteryDispatching.DependencyInjection;
-using Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Awarding
 {
@@ -43,22 +45,18 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Awarding
 
                         fightBuilder.ConfigureLotteryDispatcher(dispatchBuilder =>
                         {
-                            dispatchBuilder.UseLotteryDispatching<AwardingMessage>(setupOptions =>
+                            dispatchBuilder.UseLotteryDispatching<QueryingExecuteMessage>(setupOptions =>
                             {
                                 IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
                                 setupOptions.SecretKey = dispatchConfiguration.GetValue<string>("SecretKey");
                                 setupOptions.Url = dispatchConfiguration.GetValue<string>("Url");
                             });
-                            dispatchBuilder.ConfigureOptions(options =>
-                            {
-                                IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
-                            });
                         });
 
-                        //services.AddRawRabbit(new RawRabbitOptions
-                        //{
-                        //    ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>()
-                        //});
+                        services.AddRawRabbit(new RawRabbitOptions
+                        {
+                            ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>()
+                        });
 
                     });
                 });

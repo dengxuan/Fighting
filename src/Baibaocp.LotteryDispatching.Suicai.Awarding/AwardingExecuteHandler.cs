@@ -1,5 +1,4 @@
-﻿using Baibaocp.LotteryDispatching.MessageServices;
-using Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching;
+﻿using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryDispatching.Suicai.Abstractions;
 using Baibaocp.LotteryDispatching.Suicai.Ticketing;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
@@ -13,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Awarding
 {
-    public class AwardingExecuteHandler : ExecuteHandler<AwardingMessage>
+    public class AwardingExecuteHandler : ExecuteHandler<QueryingExecuteMessage>
     {
 
         private readonly ILogger<AwardingExecuteHandler> _logger;
@@ -23,7 +22,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
             _logger = loggerFactory.CreateLogger<AwardingExecuteHandler>();
         }
 
-        protected override string BuildRequest(AwardingMessage executer)
+        protected override string BuildRequest(QueryingExecuteMessage executer)
         {
             OrderTicket Ticket = new OrderTicket();
             Ticket.orderList = new List<Ticket>();
@@ -31,7 +30,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
             return JsonExtensions.ToJsonString(Ticket);
         }
 
-        public override async Task<IHandle> HandleAsync(AwardingMessage executer)
+        public override async Task<IHandle> HandleAsync(QueryingExecuteMessage executer)
         {
             try
             {
@@ -52,29 +51,29 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
                     }
                     else if (Status.Equals("2"))
                     {
-                        if (executer.LvpOrder.LotteryId == (int)LotteryTypes.GxSyxw)
-                        {
-                            LdpAwardedMessage awardedMessage = new LdpAwardedMessage
-                            {
-                                LvpOrder = executer.LvpOrder,
-                                LdpOrderId = executer.LdpOrderId,
-                                LdpVenderId = executer.LdpVenderId,
-                                Status = OrderStatus.TicketWinning,
-                                BonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100)
-                            };
-                            return new Winning((int)(Convert.ToDecimal(json["totalPrize"]) * 100), (int)(Convert.ToDecimal(json["totalPrize"]) * 100));
-                        }
+                        //if (executer.LvpOrder.LotteryId == (int)LotteryTypes.GxSyxw)
+                        //{
+                        //    //LdpAwardedMessage awardedMessage = new LdpAwardedMessage
+                        //    //{
+                        //    //    LvpOrder = executer.LvpOrder,
+                        //    //    LdpOrderId = executer.LdpOrderId,
+                        //    //    LdpVenderId = executer.LdpVenderId,
+                        //    //    Status = OrderStatus.TicketWinning,
+                        //    //    BonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100)
+                        //    //};
+                        //    return new Winning((int)(Convert.ToDecimal(json["totalPrize"]) * 100), (int)(Convert.ToDecimal(json["totalPrize"]) * 100));
+                        //}
                     }
                     else if (Status.Equals("3"))
                     {
-                        LdpAwardedMessage awardedMessage = new LdpAwardedMessage
-                        {
-                            LvpOrder = executer.LvpOrder,
-                            LdpOrderId = executer.LdpOrderId,
-                            LdpVenderId = executer.LdpVenderId,
-                            Status = OrderStatus.TicketWinning,
-                            BonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100)
-                        };
+                        //LdpAwardedMessage awardedMessage = new LdpAwardedMessage
+                        //{
+                        //    LvpOrder = executer.LvpOrder,
+                        //    LdpOrderId = executer.LdpOrderId,
+                        //    LdpVenderId = executer.LdpVenderId,
+                        //    Status = OrderStatus.TicketWinning,
+                        //    BonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100)
+                        //};
                         return new Winning((int)(Convert.ToDecimal(json["totalPrize"]) * 100), (int)(Convert.ToDecimal(json["totalPrize"]) * 100));
                     }
                     else

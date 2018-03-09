@@ -1,10 +1,18 @@
 ﻿using Baibaocp.LotteryDispatching.DependencyInjection;
-using Baibaocp.LotteryDispatching.Liangcai.Handlers;
-using Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching;
+using Baibaocp.LotteryDispatching.MessageServices.DependencyInjection;
+using Baibaocp.LotteryDispatching.MessageServices.Messages;
+using Baibaocp.LotteryOrdering.Scheduling.DependencyInjection;
 using Fighting.DependencyInjection;
 using Fighting.Hosting;
+using Fighting.MessageServices.DependencyInjection;
+using Fighting.Scheduling;
+using Fighting.Scheduling.DependencyInjection;
+using Fighting.Scheduling.Mysql.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using RawRabbit.Configuration;
+using RawRabbit.DependencyInjection.ServiceCollection;
+using RawRabbit.Instantiation;
 using System;
 using System.Threading.Tasks;
 
@@ -41,24 +49,32 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
                             });
                         });
 
+                        fightBuilder.ConfigureScheduling(setupAction =>
+                        {
+                            setupAction.AddLotteryOrderingScheduling();
+                            SchedulingConfiguration schedulingOptions = hostContext.Configuration.GetSection("SchedulingConfiguration").Get<SchedulingConfiguration>();
+                            setupAction.UseMysqlStorage(schedulingOptions);
+                        });
+
+                        fightBuilder.ConfigureMessageServices(messageServiceBuilder =>
+                        {
+                            messageServiceBuilder.UseLotteryDispatchingMessageService();
+                        });
+
                         fightBuilder.ConfigureLotteryDispatcher(dispatchBuilder =>
                         {
-                            dispatchBuilder.UseLotteryDispatching<OrderingMessage>(setupOptions =>
+                            dispatchBuilder.UseLotteryDispatching<OrderingExecuteMessage>(setupOptions =>
                             {
                                 IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
                                 setupOptions.SecretKey = dispatchConfiguration.GetValue<string>("SecretKey");
                                 setupOptions.Url = dispatchConfiguration.GetValue<string>("Url");
                             });
-                            dispatchBuilder.ConfigureOptions(options =>
-                            {
-                                IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
-                            });
                         });
 
-                        //services.AddRawRabbit(new RawRabbitOptions
-                        //{
-                        //    ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>()
-                        //});
+                        services.AddRawRabbit(new RawRabbitOptions
+                        {
+                            ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>()
+                        });
 
                     });
                 });

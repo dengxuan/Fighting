@@ -1,5 +1,4 @@
-﻿using Baibaocp.LotteryDispatching.MessageServices;
-using Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching;
+﻿using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Baibaocp.Storaging.Entities;
 using Microsoft.Extensions.Logging;
@@ -9,7 +8,7 @@ using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
 {
-    public class AwardingExecuteHandler : ExecuteHandler<AwardingMessage>
+    public class AwardingExecuteHandler : ExecuteHandler<QueryingExecuteMessage>
     {
 
         private readonly ILogger<AwardingExecuteHandler> _logger;
@@ -19,7 +18,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             _logger = loggerFactory.CreateLogger<AwardingExecuteHandler>();
         }
 
-        protected override string BuildRequest(AwardingMessage executer)
+        protected override string BuildRequest(QueryingExecuteMessage executer)
         {
             string[] values = new string[]
             {
@@ -29,7 +28,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             return string.Join("_", values);
         }
 
-        public override async Task<IHandle> HandleAsync(AwardingMessage executer)
+        public override async Task<IHandle> HandleAsync(QueryingExecuteMessage executer)
         {
             string xml = await Send(executer);
             XDocument document = XDocument.Parse(xml);
@@ -39,14 +38,14 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             if (Status.Equals("0"))
             {
                 string[] values = value.Split('_');
-                LdpAwardedMessage awardedMessage = new LdpAwardedMessage
-                {
-                    LvpOrder = executer.LvpOrder,
-                    LdpOrderId = executer.LdpOrderId,
-                    LdpVenderId = executer.LdpVenderId,
-                    Status = OrderStatus.TicketWinning,
-                    BonusAmount = (int)(Convert.ToDecimal(values[2]) * 100)
-                };
+                //LdpAwardedMessage awardedMessage = new LdpAwardedMessage
+                //{
+                //    LvpOrder = executer.LvpOrder,
+                //    LdpOrderId = executer.LdpOrderId,
+                //    LdpVenderId = executer.LdpVenderId,
+                //    Status = OrderStatus.TicketWinning,
+                //    BonusAmount = (int)(Convert.ToDecimal(values[2]) * 100)
+                //};
                 return new Winning();
             }
             // TODO: Log here and notice to admin

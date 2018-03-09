@@ -1,5 +1,5 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.MessageServices;
+using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Fighting.Json;
 using Fighting.Security.Cryptography;
 using Fighting.Security.Extensions;

@@ -1,5 +1,5 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.MessageServices;
+using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -9,23 +9,20 @@ namespace Baibaocp.LotteryDispatching
 {
     public class LotteryDispatcher<TExecuteMessage> : IExecuteDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
     {
-        private readonly ILogger<LotteryDispatcher<TExecuteMessage>> _logger;
 
         private readonly IServiceProvider _resolver;
 
-        private readonly LotteryDispatcherOptions _options;
+        private readonly ILogger<LotteryDispatcher<TExecuteMessage>> _logger;
 
-        public LotteryDispatcher(IServiceProvider resolver, ILogger<LotteryDispatcher<TExecuteMessage>> logger, LotteryDispatcherOptions options)
+        public LotteryDispatcher(IServiceProvider resolver, ILogger<LotteryDispatcher<TExecuteMessage>> logger)
         {
             _logger = logger;
-            _options = options;
             _resolver = resolver;
         }
 
         public async Task<bool> DispatchAsync(TExecuteMessage message)
         {
-            var handlerType = _options.GetHandler<TExecuteMessage>(message.LdpVenderId);
-            var handler = (IExecuteHandler<TExecuteMessage>)_resolver.GetRequiredService(handlerType);
+            var handler = _resolver.GetRequiredService<IExecuteHandler<TExecuteMessage>>();
             var handle = await handler.HandleAsync(message);
             switch (handle)
             {

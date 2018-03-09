@@ -1,6 +1,5 @@
 ﻿using Baibaocp.LotteryDispatching.Extensions;
-using Baibaocp.LotteryDispatching.MessageServices;
-using Baibaocp.LotteryDispatching.MessageServices.Messages.Dispatching;
+using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryDispatching.Suicai.Abstractions;
 using Fighting.Json;
 using Fighting.Storaging;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
 {
-    public class TicketingExecuteHandler : ExecuteHandler<TicketingMessage>
+    public class TicketingExecuteHandler : ExecuteHandler<QueryingExecuteMessage>
     {
 
         private readonly StorageOptions _storageOptions;
@@ -25,7 +24,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
             _storageOptions = storageOptions;
         }
 
-        protected override string BuildRequest(TicketingMessage executer)
+        protected override string BuildRequest(QueryingExecuteMessage executer)
         {
             OrderTicket Ticket = new OrderTicket();
             Ticket.orderList = new List<Ticket>();
@@ -34,7 +33,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
         }
 
 
-        public override async Task<IHandle> HandleAsync(TicketingMessage executer)
+        public override async Task<IHandle> HandleAsync(QueryingExecuteMessage executer)
         {
             try
             {

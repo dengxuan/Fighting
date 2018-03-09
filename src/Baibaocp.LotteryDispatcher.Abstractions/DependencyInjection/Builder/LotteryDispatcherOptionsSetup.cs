@@ -2,14 +2,14 @@
 
 namespace Baibaocp.LotteryDispatching.DependencyInjection.Builder
 {
-    internal class LotteryDispatcherOptionsSetup : ConfigureOptions<LotteryDispatcherOptions>
+    internal class LotteryDispatcherOptionsSetup : ConfigureOptions<DispatcherOptions>
     {
         public LotteryDispatcherOptionsSetup()
             : base(ConfigureOptions)
         {
         }
 
-        private static void ConfigureOptions(LotteryDispatcherOptions options)
+        private static void ConfigureOptions(DispatcherOptions options)
         {
         }
     }

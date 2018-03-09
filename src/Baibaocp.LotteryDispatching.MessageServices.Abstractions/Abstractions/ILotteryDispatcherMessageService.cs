@@ -1,12 +1,12 @@
-﻿using Baibaocp.LotteryOrdering.MessageServices.Messages;
+﻿using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.MessageServices.Abstractions
 {
-    public interface ILotteryDispatcherMessageService<TMessage> where TMessage : IExecuteMessage
+    public interface ILotteryDispatcherMessageService<in TExecuteMessage> where TExecuteMessage : IExecuteMessage
     {
-        Task PublishAsync(string merchanerId, TMessage message);
+        Task PublishAsync(string merchanerId, TExecuteMessage message);
 
         Task SubscribeAsync(string merchanerId, CancellationToken stoppingToken);
     }

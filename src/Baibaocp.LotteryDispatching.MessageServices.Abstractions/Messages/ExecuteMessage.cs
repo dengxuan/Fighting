@@ -2,11 +2,15 @@
 {
     public abstract class ExecuteMessage : IExecuteMessage
     {
-        internal ExecuteMessage(string ldpVenderId)
-        {
-            LdpVenderId = ldpVenderId;
-        }
+
+        public string LdpOrderId { get; }
 
         public string LdpVenderId { get; }
+
+        internal ExecuteMessage(string ldpOrderId, string ldpVenderId)
+        {
+            LdpVenderId = ldpVenderId;
+            LdpOrderId = ldpOrderId;
+        }
     }
 }

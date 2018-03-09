@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="RawRabbit.DependencyInjection.ServiceCollection" Version="2.0.0-rc4" />
+    <PackageReference Include="RawRabbit.Operations.Publish" Version="2.0.0-rc4" />
+    <PackageReference Include="RawRabbit.Operations.Subscribe" Version="2.0.0-rc4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Baibaocp.LotteryDispatcher.Abstractions\Baibaocp.LotteryDispatching.Abstractions.csproj" />
     <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
   </ItemGroup>

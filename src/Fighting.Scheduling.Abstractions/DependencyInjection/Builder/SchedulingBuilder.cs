@@ -27,7 +27,7 @@ namespace Fighting.Scheduling.DependencyInjection.Builder
             Services.AddSingleton(c => c.GetRequiredService<IOptions<SchedulingConfiguration>>().Value);
             Services.TryAddSingleton<IScheduleStore, InMemoryScheduleStore>();
             Services.TryAddSingleton<ISchedulerManager, SchedulerManager>();
-            Services.TryAddScoped<IHostedService, ScheduleHostingService>();
+            //Services.TryAddSingleton<IHostedService, ScheduleHostingService>();
         }
     }
 }
