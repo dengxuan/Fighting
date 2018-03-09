@@ -1,5 +1,5 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.MessageServices;
+using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -7,27 +7,40 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching
 {
-    public class LotteryDispatcher<TExecuter> : IExecuterDispatcher<TExecuter> where TExecuter : IExecuter
+    public class LotteryDispatcher<TExecuteMessage> : IExecuteDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
     {
-        private readonly ILogger<LotteryDispatcher<TExecuter>> _logger;
 
         private readonly IServiceProvider _resolver;
 
-        private readonly LotteryDispatcherOptions _options;
+        private readonly ILogger<LotteryDispatcher<TExecuteMessage>> _logger;
 
-        public LotteryDispatcher(IServiceProvider resolver, ILogger<LotteryDispatcher<TExecuter>> logger, LotteryDispatcherOptions options)
+        public LotteryDispatcher(IServiceProvider resolver, ILogger<LotteryDispatcher<TExecuteMessage>> logger)
         {
             _logger = logger;
-            _options = options;
             _resolver = resolver;
         }
 
-        public async Task<MessageHandle> DispatchAsync(TExecuter executer)
+        public async Task<bool> DispatchAsync(TExecuteMessage message)
         {
-            var handlerType = _options.GetHandler<TExecuter>(executer.LdpVenderId);
-            var handler = (IExecuteHandler<TExecuter>)_resolver.GetRequiredService(handlerType);
-            var handle = await handler.HandleAsync(executer);
-            return handle;
+            var handler = _resolver.GetRequiredService<IExecuteHandler<TExecuteMessage>>();
+            var handle = await handler.HandleAsync(message);
+            switch (handle)
+            {
+                case Accepted accepted:
+                    break;
+                case Rejected rejected:
+                    break;
+                case Success success:
+                    break;
+                case Failure failure:
+                    break;
+                case Winning winning:
+                    break;
+                case Loseing loseing:
+                    break;
+                case Waiting waiting: return false;
+            }
+            return true;
         }
     }
 }

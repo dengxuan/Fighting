@@ -1,5 +1,5 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.MessageServices;
+using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Fighting.Json;
 using Fighting.Security.Cryptography;
 using Fighting.Security.Extensions;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Abstractions
 {
-    public abstract class ExecuteHandler<TExecuter> : IExecuteHandler<TExecuter> where TExecuter : IExecuter
+    public abstract class ExecuteHandler<TExecuter> : IExecuteHandler<TExecuter> where TExecuter : IExecuteMessage
     {
         private readonly string _command;
 
@@ -71,6 +71,6 @@ namespace Baibaocp.LotteryDispatching.Suicai.Abstractions
 
         protected abstract string BuildRequest(TExecuter executer);
 
-        public abstract Task<MessageHandle> HandleAsync(TExecuter executer);
+        public abstract Task<IHandle> HandleAsync(TExecuter executer);
     }
 }

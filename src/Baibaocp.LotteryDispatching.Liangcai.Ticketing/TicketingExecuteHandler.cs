@@ -1,5 +1,4 @@
-﻿using Baibaocp.LotteryDispatching.Executers;
-using Baibaocp.LotteryDispatching.MessageServices;
+﻿using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.Storaging.Entities.Extensions;
 using Dapper;
 using Fighting.Storaging;
@@ -15,7 +14,7 @@ using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
 {
-    public class TicketingExecuteHandler : ExecuteHandler<TicketingExecuter>
+    public class TicketingExecuteHandler : ExecuteHandler<QueryingExecuteMessage>
     {
 
         private readonly StorageOptions _storageOptions;
@@ -54,7 +53,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                 }
             }
         }
-        protected override string BuildRequest(TicketingExecuter executer)
+        protected override string BuildRequest(QueryingExecuteMessage executer)
         {
             string[] values = new string[]
             {
@@ -99,7 +98,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             }
         }
 
-        public override async Task<MessageHandle> HandleAsync(TicketingExecuter executer)
+        public override async Task<IHandle> HandleAsync(QueryingExecuteMessage executer)
         {
             string xml = await Send(executer);
             XDocument document = XDocument.Parse(xml);
@@ -110,14 +109,14 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                 string odds = document.Element("ActionResult").Element("xValue").Value.Split('_')[3];
                 string oddsXml = DeflateDecompress(odds);
                 Dictionary<string, string> oddsValues = new Dictionary<string, string>();
-                executer.TicketContext.Add("TicketOdds", GetOdds(oddsXml, executer.LvpOrder.LotteryId));
-                return MessageHandle.Success;
+                //executer.TicketContext.Add("TicketOdds", GetOdds(oddsXml, executer.LvpOrder.LotteryId));
+                return new Success(string.Empty, GetOdds(oddsXml, 1));
             }
             else if (Status.Equals("2003"))
             {
-                return MessageHandle.Failure;
+                return new Failure();
             }
-            return MessageHandle.Waiting;
+            return new Waiting();
         }
     }
 }

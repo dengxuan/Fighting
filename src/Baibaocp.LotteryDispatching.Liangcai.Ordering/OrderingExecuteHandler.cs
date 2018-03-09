@@ -1,7 +1,5 @@
-﻿using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.Executers;
-using Baibaocp.LotteryDispatching.Extensions;
-using Baibaocp.LotteryDispatching.MessageServices;
+﻿using Baibaocp.LotteryDispatching.Extensions;
+using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.Liangcai.Extensions;
 using Baibaocp.Storaging.Entities.Extensions;
 using Microsoft.Extensions.Logging;
@@ -11,7 +9,7 @@ using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
 {
-    public class OrderingExecuteHandler :ExecuteHandler<OrderingExecuter>, IExecuteHandler<OrderingExecuter>
+    public class OrderingExecuteHandler : ExecuteHandler<OrderingExecuteMessage>
     {
 
         private readonly ILogger<OrderingExecuteHandler> _logger;
@@ -21,7 +19,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             _logger = loggerFactory.CreateLogger<OrderingExecuteHandler>();
         }
 
-        protected override string BuildRequest(OrderingExecuter executer)
+        protected override string BuildRequest(OrderingExecuteMessage executer)
         {
             /*
              
@@ -44,7 +42,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             return string.Join("_", values);
         }
 
-        public override async Task<MessageHandle> HandleAsync(OrderingExecuter executer)
+        public override async Task<IHandle> HandleAsync(OrderingExecuteMessage executer)
         {
             try
             {
@@ -55,19 +53,19 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                 _logger.LogInformation("Response Status: {0}", Status);
                 if (Status.IsIn("0", "1", "1008"))
                 {
-                    return MessageHandle.Accepted;
+                    return new Accepted();
                 }
                 else if (Status.IsIn("1003", "1011", "1014"))
                 {
                     // TODO: Log here and notice to admin
-                    return MessageHandle.Waiting;
+                    return new Waiting();
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Request Exception:{0}", ex.Message);
             }
-            return MessageHandle.Rejected;
+            return new Rejected();
         }
     }
 }

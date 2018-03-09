@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Baibaocp.LotteryDispatcher.Abstractions\Baibaocp.LotteryDispatching.Abstractions.csproj" />
-    <ProjectReference Include="..\Baibaocp.LotteryDispatcher.MessageServices.Abstractions\Baibaocp.LotteryDispatching.MessageServices.Abstractions.csproj" />
     <ProjectReference Include="..\Fighting.Caching.Redis\Fighting.Caching.Redis.csproj" />
     <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
   </ItemGroup>

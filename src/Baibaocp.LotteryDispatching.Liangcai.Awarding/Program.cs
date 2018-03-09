@@ -1,7 +1,5 @@
 ﻿using Baibaocp.LotteryDispatching.DependencyInjection;
-using Baibaocp.LotteryDispatching.Executers;
-using Baibaocp.LotteryDispatching.Liangcai.DependencyInjection;
-using Baibaocp.LotteryDispatching.Liangcai.Handlers;
+using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Fighting.DependencyInjection;
 using Fighting.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -45,30 +43,19 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Awarding
                             });
                         });
 
-                        fightBuilder.AddLotteryDispatcher(dispatchBuilder =>
+                        fightBuilder.ConfigureLotteryDispatcher(dispatchBuilder =>
                         {
-                            dispatchBuilder.UseDispatcherServer<AwardingExecuteHandler, AwardingExecuter>(setupOptions =>
+                            dispatchBuilder.UseLotteryDispatching<QueryingExecuteMessage>(setupOptions =>
                             {
                                 IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
                                 setupOptions.SecretKey = dispatchConfiguration.GetValue<string>("SecretKey");
                                 setupOptions.Url = dispatchConfiguration.GetValue<string>("Url");
                             });
-                            dispatchBuilder.ConfigureOptions(options =>
-                            {
-                                IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
-                            });
                         });
 
                         services.AddRawRabbit(new RawRabbitOptions
                         {
-                            ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>(),
-                            //Plugins = p =>
-                            //{
-                            //    p.UseMessageContext<MessageContext>();
-                            //},
-                            DependencyInjection = ioc =>
-                            {
-                            }
+                            ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>()
                         });
 
                     });

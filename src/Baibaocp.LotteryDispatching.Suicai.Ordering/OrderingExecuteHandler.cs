@@ -1,20 +1,18 @@
-﻿using Baibaocp.LotteryDispatching.Suicai.Abstractions.Extensions;
+﻿using Baibaocp.LotteryDispatching.Extensions;
+using Baibaocp.LotteryDispatching.MessageServices.Messages;
+using Baibaocp.LotteryDispatching.Suicai.Abstractions;
+using Baibaocp.LotteryDispatching.Suicai.Abstractions.Extensions;
+using Fighting.Json;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using RawRabbit;
 using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using Fighting.Json;
-using Baibaocp.LotteryDispatching.Suicai.Abstractions;
-using Newtonsoft.Json.Linq;
-using Baibaocp.LotteryDispatching.Executers;
-using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.MessageServices;
-using Baibaocp.LotteryDispatching.Extensions;
+using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Ordering
 {
-    public class OrderingExecuteHandler : ExecuteHandler<OrderingExecuter>, IExecuteHandler<OrderingExecuter>
+    public class OrderingExecuteHandler : ExecuteHandler<OrderingExecuteMessage>
     {
         private readonly IBusClient _publisher;
 
@@ -29,7 +27,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
             _publisher = publisher;
         }
 
-        protected override string BuildRequest(OrderingExecuter executer)
+        protected override string BuildRequest(OrderingExecuteMessage executer)
         {
             OrderSending ordersend = new OrderSending();
             ordersend.gameId = executer.LvpOrder.LotteryId.ToSuicaiLottery();
@@ -47,26 +45,24 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
             return JsonExtensions.ToJsonString(ordersend);
         }
 
-        public override async Task<MessageHandle> HandleAsync(OrderingExecuter executer)
+        public override async Task<IHandle> HandleAsync(OrderingExecuteMessage executer)
         {
             try
             {
                 string jsoncontent = await Send(executer);
                 JObject jarr = JObject.Parse(jsoncontent);
                 if (jarr.HasValues) {
-                    foreach (var json in jarr["orderList"])
+                    var json = jarr["orderList"][0];
+                    string Status = json["status"].ToString();
+                    _logger.LogInformation("Response Status: {0}", Status);
+                    if (Status.Equals("0"))
                     {
-                        string Status = json["status"].ToString();
-                        _logger.LogInformation("Response Status: {0}", Status);
-                        if (Status.IsIn("0"))
-                        {
-                            return MessageHandle.Accepted;
-                        }
-                        else if (Status.IsIn("-1"))
-                        {
-                            // TODO: Log here and notice to admin
-                            return MessageHandle.Rejected;
-                        }
+                        return new Accepted();
+                    }
+                    else if (Status.IsIn("-1"))
+                    {
+                        // TODO: Log here and notice to admin
+                        return new Rejected();
                     }
                 }
             }
@@ -74,7 +70,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
             {
                 _logger.LogError(ex, "Request Exception:{0}", ex.Message);
             }
-            return MessageHandle.Rejected;
+            return new Rejected();
         }
     }
 }

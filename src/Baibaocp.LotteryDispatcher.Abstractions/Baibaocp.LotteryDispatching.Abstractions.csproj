@@ -2,11 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Baibaocp.LotteryDispatcher</RootNamespace>
+    <RootNamespace>Baibaocp.LotteryDispatching</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Baibaocp.LotteryDispatching.MessageServices.Abstractions\Baibaocp.LotteryDispatching.MessageServices.Abstractions.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.MessageServices.Abstractions\Baibaocp.LotteryOrdering.MessageServices.Abstractions.csproj" />
+    <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
   </ItemGroup>
 
 </Project>

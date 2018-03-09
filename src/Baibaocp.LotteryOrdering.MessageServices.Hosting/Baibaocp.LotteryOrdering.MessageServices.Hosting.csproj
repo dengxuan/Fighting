@@ -21,11 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Baibaocp.LotteryDispatching.DependencyInjection.ServiceCollection\Baibaocp.LotteryDispatching.DependencyInjection.ServiceCollection.csproj" />
-    <ProjectReference Include="..\Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection.ServiceCollection\Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection.ServiceCollection.csproj" />
-    <ProjectReference Include="..\Baibaocp.LotteryOrdering.MessageServices.DependencyInjection.ServiceCollection\Baibaocp.LotteryOrdering.MessageServices.DependencyInjection.ServiceCollection.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryDispatching.MessageServices\Baibaocp.LotteryDispatching.MessageServices.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.ApplicationServices\Baibaocp.LotteryOrdering.ApplicationServices.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.MessageServices\Baibaocp.LotteryOrdering.MessageServices.csproj" />
-    <ProjectReference Include="..\Baibaocp.LotteryOrdering.Scheduling.DependencyInjection.ServiceCollection\Baibaocp.LotteryOrdering.Scheduling.DependencyInjection.ServiceCollection.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.Scheduling\Baibaocp.LotteryOrdering.Scheduling.csproj" />
     <ProjectReference Include="..\Fighting.Caching.Redis\Fighting.Caching.Redis.csproj" />
     <ProjectReference Include="..\Fighting.Scheduling.Mysql\Fighting.Scheduling.Mysql.csproj" />
   </ItemGroup>
