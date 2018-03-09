@@ -31,7 +31,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
             return JsonExtensions.ToJsonString(Ticket);
         }
 
-        public override async Task<MessageHandle> HandleAsync(AwardingMessage executer)
+        public override async Task<IHandle> HandleAsync(AwardingMessage executer)
         {
             try
             {
@@ -44,11 +44,11 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
                     string Status = json["status"].ToString();
                     if (Status.Equals("0"))
                     {
-                        return MessageHandle.Waiting;
+                        return HandleHelper.Waiting();
                     }
                     else if (Status.Equals("1"))
                     {
-                        return MessageHandle.Loseing;
+                        return HandleHelper.Loseing();
                     }
                     else if (Status.Equals("2"))
                     {
@@ -62,7 +62,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
                                 Status = OrderStatus.TicketWinning,
                                 BonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100)
                             };
-                            return MessageHandle.Winning;
+                            return HandleHelper.Winning();
                         }
                     }
                     else if (Status.Equals("3"))
@@ -75,10 +75,10 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
                             Status = OrderStatus.TicketWinning,
                             BonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100)
                         };
-                        return MessageHandle.Winning;
+                        return HandleHelper.Winning();
                     }
                     else {
-                        return MessageHandle.Waiting;
+                        return HandleHelper.Waiting();
                     }
                 }
             }
@@ -87,7 +87,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
                 _logger.LogError(ex, "Request Exception:{0}", ex.Message);
             }
             // TODO: Log here and notice to admin
-            return MessageHandle.Waiting;
+            return HandleHelper.Winning();
         }
     }
 }

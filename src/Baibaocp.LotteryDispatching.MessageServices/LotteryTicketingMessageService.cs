@@ -41,18 +41,18 @@ namespace Baibaocp.LotteryDispatching.MessageServices
                 {
 
                     _logger.LogTrace("Received ordering executer:{0} VenderId:{1}", executer.LdpOrderId, executer.LdpVenderId);
-                    MessageHandle handle = await _dispatcher.DispatchAsync(executer);
-                    if (handle == MessageHandle.Success)
+                    HandleTypes handle = await _dispatcher.DispatchAsync(executer);
+                    if (handle == HandleTypes.Success)
                     {
                         /* 出票成功 */
                         await _schedulerManager.EnqueueAsync<LotteryAwardingScheduler, AwardingScheduleArgs>(new AwardingScheduleArgs { });
                     }
-                    else if (handle == MessageHandle.Rejected)
+                    else if (handle == HandleTypes.Rejected)
                     {
                         /* 出票失败 */
                         await _ticketingMessageService.PublishAsync(new LdpTicketedMessage { });
                     }
-                    else if (handle == MessageHandle.Waiting)
+                    else if (handle == HandleTypes.Waiting)
                     {
                         // 等待出票
                         return new Nack();

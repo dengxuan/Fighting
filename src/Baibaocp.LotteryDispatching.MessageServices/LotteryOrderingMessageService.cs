@@ -40,32 +40,35 @@ namespace Baibaocp.LotteryDispatching.MessageServices
             {
                 try
                 {
-
                     _logger.LogTrace("Received ordering executer:{0} VenderId:{1}", executer.LdpOrderId, executer.LdpVenderId);
-                    MessageHandle handle = await _dispatcher.DispatchAsync(executer);
-                    if (handle == MessageHandle.Accepted)
+                    bool result = await _dispatcher.DispatchAsync(executer);
+                    if(result == true)
                     {
-                        /* 投注成功，添加出票查询计划任务 */
-                        await _schedulerManager.EnqueueAsync<ILotteryTicketingScheduler, TicketingScheduleArgs>(new TicketingScheduleArgs { LdpOrderId = executer.LdpOrderId, LdpVenderId = executer.LdpVenderId, LvpOrderId = executer.LvpOrder.LvpOrderId });
+                        return new Ack();
                     }
-                    else if (handle == MessageHandle.Rejected)
-                    {
-                        /* 投注失败，将数据存入队列，进行通知和*/
-                        LdpTicketedMessage ldpTicketedMessage = new LdpTicketedMessage
-                        {
-                            LdpOrderId = executer.LdpOrderId,
-                            LdpVenderId = executer.LdpVenderId,
-                            LvpOrder = executer.LvpOrder,
-                            Status = OrderStatus.TicketNotRecv,
-                        };
-                        await _lotteryTicketingMessageServiceManager.PublishAsync(ldpTicketedMessage);
-                    }
-                    else if (handle == MessageHandle.Waiting)
-                    {
-                        /* 上游暂停接单 */
-                        return new Nack();
-                    }
-                    return new Ack();
+                    //if (result == MessageHandle.Accepted)
+                    //{
+                    //    /* 投注成功，添加出票查询计划任务 */
+                    //    await _schedulerManager.EnqueueAsync<ILotteryTicketingScheduler, TicketingScheduleArgs>(new TicketingScheduleArgs { LdpOrderId = executer.LdpOrderId, LdpVenderId = executer.LdpVenderId, LvpOrderId = executer.LvpOrder.LvpOrderId });
+                    //}
+                    //else if (result == MessageHandle.Rejected)
+                    //{
+                    //    /* 投注失败，将数据存入队列，进行通知和*/
+                    //    LdpTicketedMessage ldpTicketedMessage = new LdpTicketedMessage
+                    //    {
+                    //        LdpOrderId = executer.LdpOrderId,
+                    //        LdpVenderId = executer.LdpVenderId,
+                    //        LvpOrder = executer.LvpOrder,
+                    //        Status = OrderStatus.TicketNotRecv,
+                    //    };
+                    //    await _lotteryTicketingMessageServiceManager.PublishAsync(ldpTicketedMessage);
+                    //}
+                    //else if (result == MessageHandle.Waiting)
+                    //{
+                    //    /* 上游暂停接单 */
+                    //    return new Nack();
+                    //}
+                    //return new Ack();
                 }
                 catch (Exception ex)
                 {

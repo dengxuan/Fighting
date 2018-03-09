@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
 {
-    public class OrderingExecuteHandler :ExecuteHandler<OrderingMessage>, IExecuteHandler<OrderingMessage>
+    public class OrderingExecuteHandler : ExecuteHandler<OrderingMessage>, IExecuteHandler<OrderingMessage>
     {
 
         private readonly ILogger<OrderingExecuteHandler> _logger;
@@ -44,7 +44,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             return string.Join("_", values);
         }
 
-        public override async Task<MessageHandle> HandleAsync(OrderingMessage executer)
+        public override async Task<IHandle> HandleAsync(OrderingMessage executer)
         {
             try
             {
@@ -55,19 +55,19 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                 _logger.LogInformation("Response Status: {0}", Status);
                 if (Status.IsIn("0", "1", "1008"))
                 {
-                    return MessageHandle.Accepted;
+                    return HandleHelper.Accept();
                 }
                 else if (Status.IsIn("1003", "1011", "1014"))
                 {
                     // TODO: Log here and notice to admin
-                    return MessageHandle.Waiting;
+                    return HandleHelper.Waiting();
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Request Exception:{0}", ex.Message);
             }
-            return MessageHandle.Rejected;
+            return HandleHelper.Reject();
         }
     }
 }

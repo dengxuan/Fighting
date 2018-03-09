@@ -29,7 +29,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             return string.Join("_", values);
         }
 
-        public override async Task<MessageHandle> HandleAsync(AwardingMessage executer)
+        public override async Task<IHandle> HandleAsync(AwardingMessage executer)
         {
             string xml = await Send(executer);
             XDocument document = XDocument.Parse(xml);
@@ -47,10 +47,10 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                     Status = OrderStatus.TicketWinning,
                     BonusAmount = (int)(Convert.ToDecimal(values[2]) * 100)
                 };
-                return MessageHandle.Winning;
+                return HandleHelper.Winning();
             }
             // TODO: Log here and notice to admin
-            return MessageHandle.Waiting;
+            return HandleHelper.Waiting();
         }
     }
 }

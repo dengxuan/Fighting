@@ -35,16 +35,16 @@ namespace Baibaocp.LotteryDispatching.MessageServices
                 {
 
                     _logger.LogTrace("Received ordering executer:{0} VenderId:{1}", executer.LdpOrderId, executer.LdpVenderId);
-                    MessageHandle handle = await _dispatcher.DispatchAsync(executer);
-                    if (handle == MessageHandle.Winning)
+                    HandleTypes handle = await _dispatcher.DispatchAsync(executer);
+                    if (handle == HandleTypes.Winning)
                     {
                         /* 中奖 */
                     }
-                    else if (handle == MessageHandle.Loseing)
+                    else if (handle == HandleTypes.Loseing)
                     {
                         /* 未中奖 */
                     }
-                    else if (handle == MessageHandle.Waiting)
+                    else if (handle == HandleTypes.Waiting)
                     {
                         return new Nack();
                     }

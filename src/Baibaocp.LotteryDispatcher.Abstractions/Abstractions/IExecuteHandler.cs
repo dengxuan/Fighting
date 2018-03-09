@@ -8,6 +8,6 @@ namespace Baibaocp.LotteryDispatching.Abstractions
     public interface IExecuteHandler<in TExecuteMessage> where TExecuteMessage : IExecuteMessage
     {
 
-        Task<MessageHandle> HandleAsync(TExecuteMessage message);
+        Task<IHandle> HandleAsync(TExecuteMessage message);
     }
 }

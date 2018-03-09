@@ -34,7 +34,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
         }
 
 
-        public override async Task<MessageHandle> HandleAsync(TicketingMessage executer)
+        public override async Task<IHandle> HandleAsync(TicketingMessage executer)
         {
             try
             {
@@ -47,14 +47,14 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
                     string Status = json["status"].ToString();
                     if (Status.IsIn("0", "1"))
                     {
-                        return MessageHandle.Waiting;
+                        return HandleHelper.Waiting();
                     }
                     else if (Status.Equals("2"))
                     {
-                        return MessageHandle.Success;
+                        return HandleHelper.Success();
                     }
                     else {
-                        return MessageHandle.Failure;
+                        return HandleHelper.Failure();
                     }
                 }
             }
@@ -62,7 +62,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
             {
                 _logger.LogError(ex, "Request Exception:{0}", ex.Message);
             }
-            return MessageHandle.Waiting;
+            return HandleHelper.Waiting();
         }
     }
 }

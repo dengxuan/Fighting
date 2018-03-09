@@ -71,6 +71,6 @@ namespace Baibaocp.LotteryDispatching.Suicai.Abstractions
 
         protected abstract string BuildRequest(TExecuter executer);
 
-        public abstract Task<MessageHandle> HandleAsync(TExecuter executer);
+        public abstract Task<IHandle> HandleAsync(TExecuter executer);
     }
 }

@@ -99,7 +99,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             }
         }
 
-        public override async Task<MessageHandle> HandleAsync(TicketingMessage executer)
+        public override async Task<IHandle> HandleAsync(TicketingMessage executer)
         {
             string xml = await Send(executer);
             XDocument document = XDocument.Parse(xml);
@@ -111,13 +111,13 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                 string oddsXml = DeflateDecompress(odds);
                 Dictionary<string, string> oddsValues = new Dictionary<string, string>();
                 executer.TicketContext.Add("TicketOdds", GetOdds(oddsXml, executer.LvpOrder.LotteryId));
-                return MessageHandle.Success;
+                return HandleHelper.Success();
             }
             else if (Status.Equals("2003"))
             {
-                return MessageHandle.Failure;
+                return HandleHelper.Failure();
             }
-            return MessageHandle.Waiting;
+            return HandleHelper.Waiting();
         }
     }
 }

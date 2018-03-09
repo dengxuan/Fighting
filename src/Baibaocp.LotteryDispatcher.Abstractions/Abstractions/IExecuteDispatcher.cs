@@ -7,6 +7,6 @@ namespace Baibaocp.LotteryDispatching.Abstractions
     [TransientDependency]
     public interface IExecuteDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
     {
-        Task<MessageHandle> DispatchAsync(TExecuteMessage message);
+        Task<bool> DispatchAsync(TExecuteMessage message);
     }
 }

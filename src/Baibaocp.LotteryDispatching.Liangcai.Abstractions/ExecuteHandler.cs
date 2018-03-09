@@ -62,6 +62,6 @@ namespace Baibaocp.LotteryDispatching.Liangcai
 
         protected abstract string BuildRequest(TExecuteMessage message);
 
-        public abstract Task<MessageHandle> HandleAsync(TExecuteMessage message);
+        public abstract Task<IHandle> HandleAsync(TExecuteMessage message);
     }
 }

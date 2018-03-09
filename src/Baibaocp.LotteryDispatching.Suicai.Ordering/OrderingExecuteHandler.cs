@@ -47,7 +47,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
             return JsonExtensions.ToJsonString(ordersend);
         }
 
-        public override async Task<MessageHandle> HandleAsync(OrderingMessage executer)
+        public override async Task<IHandle> HandleAsync(OrderingMessage executer)
         {
             try
             {
@@ -59,12 +59,12 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
                     _logger.LogInformation("Response Status: {0}", Status);
                     if (Status.Equals("0"))
                     {
-                        return MessageHandle.Accepted;
+                        return HandleHelper.Accept();
                     }
                     else if (Status.IsIn("-1"))
                     {
                         // TODO: Log here and notice to admin
-                        return MessageHandle.Rejected;
+                        return HandleHelper.Reject();
                     }
                 }
             }
@@ -72,7 +72,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
             {
                 _logger.LogError(ex, "Request Exception:{0}", ex.Message);
             }
-            return MessageHandle.Rejected;
+            return HandleHelper.Reject();
         }
     }
 }
