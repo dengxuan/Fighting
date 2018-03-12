@@ -46,7 +46,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                 //    Status = OrderStatus.TicketWinning,
                 //    BonusAmount = (int)(Convert.ToDecimal(values[2]) * 100)
                 //};
-                return new Winning();
+                return new Winning(0, 0);
             }
             // TODO: Log here and notice to admin
             return new Waiting();

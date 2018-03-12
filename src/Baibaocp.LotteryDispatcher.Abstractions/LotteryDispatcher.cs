@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching
 {
-    public class LotteryDispatcher<TExecuteMessage> : IExecuteDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
+    internal class LotteryDispatcher<TExecuteMessage> : IExecuteDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
     {
 
         private readonly IServiceProvider _resolver;

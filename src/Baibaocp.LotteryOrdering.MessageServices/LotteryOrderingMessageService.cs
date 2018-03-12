@@ -43,27 +43,26 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 {
                     configuration.OnDeclaredExchange(exchange =>
                     {
-                        exchange.WithName("Baibaocp.LotteryVender")
+                        exchange.WithName("Baibaocp.LotteryOrdering")
                                 .WithAutoDelete(false)
                                 .WithType(ExchangeType.Topic);
                     });
-                    configuration.WithRoutingKey("Orders.Storaged.#");
+                    configuration.WithRoutingKey("Orders.Accepted.#");
                 });
             });
         }
 
         public Task SubscribeAsync(CancellationToken stoppingToken)
         {
-            return _busClient.SubscribeAsync<LvpOrderedMessage>(async (lvpOrderedMessage) =>
+            return _busClient.SubscribeAsync<LvpOrderedMessage>(async (message) =>
             {
                 long ldpOrderId = _identityGenerater.Generate();
-                string ldpVenderId = "";
+                string ldpVenderId = "800";
                 try
                 {
-                    OrderingExecuteMessage orderingExecuteMessage = new OrderingExecuteMessage(ldpOrderId.ToString(), ldpVenderId, lvpOrderedMessage);
-                    LotteryMerchanteOrder lotteryMerchanteOrder = new LotteryMerchanteOrder();
-                    await _orderingApplicationService.CreateAsync(lotteryMerchanteOrder);
-                    await _lotteryDispatcherMessageService.PublishAsync(ldpVenderId, orderingExecuteMessage);
+                    OrderingExecuteMessage executeMessage = new OrderingExecuteMessage(ldpOrderId.ToString(), ldpVenderId, message);
+                    await _orderingApplicationService.CreateAsync(message.LvpOrderId, message.LvpUserId, message.LvpVenderId, message.LotteryId, message.LotteryPlayId, message.IssueNumber, message.InvestCode, message.InvestType, message.InvestCount, message.InvestTimes, message.InvestAmount);
+                    await _lotteryDispatcherMessageService.PublishAsync(ldpVenderId, executeMessage);
 
                     _logger.LogTrace("Received ordering executer:{0} VenderId:{1}", ldpOrderId, ldpVenderId);
                     return new Ack();
@@ -97,20 +96,20 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 {
                     configuration.OnDeclaredExchange(exchange =>
                     {
-                        exchange.WithName("Baibaocp.LotteryVender")
+                        exchange.WithName("Baibaocp.LotteryOrdering")
                                 .WithDurability(true)
                                 .WithAutoDelete(false)
                                 .WithType(ExchangeType.Topic);
                     });
                     configuration.FromDeclaredQueue(queue =>
                     {
-                        queue.WithName("Orders.Dispatching")
+                        queue.WithName("Orders.Ordering")
                              .WithAutoDelete(false)
                              .WithDurability(true);
                     });
                     configuration.Consume(consume =>
                     {
-                        consume.WithRoutingKey("Orders.Storaged.#");
+                        consume.WithRoutingKey("Orders.Accepted.#");
                     });
                 });
             }, stoppingToken);

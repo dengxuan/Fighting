@@ -1,5 +1,4 @@
 ﻿using Baibaocp.LotteryDispatching.DependencyInjection.Builder;
-using Baibaocp.LotteryDispatching.MessageServices;
 using Fighting.DependencyInjection.Builder;
 using System;
 

@@ -21,7 +21,10 @@ using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
 using System;
+using Baibaocp.LotteryDispatching.DependencyInjection;
 using System.Threading.Tasks;
+using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
+using Fighting.Abstractions;
 
 namespace Baibaocp.LotteryOrdering.MessageServices
 {
@@ -39,10 +42,15 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 {
                     services.AddFighting(fightBuilder =>
                     {
-                        fightBuilder.ConfigureMessageServices(messageServiceBuilder => 
+                        fightBuilder.ConfigureMessageServices(messageServiceBuilder =>
                         {
                             messageServiceBuilder.UseLotteryOrderingMessageServices();
                             messageServiceBuilder.UseLotteryDispatchingMessageService();
+                        });
+
+                        fightBuilder.ConfigureLotteryDispatcher(setupAction =>
+                        {
+
                         });
 
                         fightBuilder.ConfigureScheduling(setupAction =>
@@ -51,7 +59,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                             SchedulingConfiguration schedulingOptions = hostContext.Configuration.GetSection("SchedulingConfiguration").Get<SchedulingConfiguration>();
                             setupAction.UseMysqlStorage(schedulingOptions);
                         });
-                        fightBuilder.ConfigureApplicationServices(applicationServiceBuilder => 
+                        fightBuilder.ConfigureApplicationServices(applicationServiceBuilder =>
                         {
                             applicationServiceBuilder.UseLotteryOrderingApplicationService();
                         });
@@ -75,10 +83,6 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                     services.AddRawRabbit(new RawRabbitOptions
                     {
                         ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>(),
-                        //Plugins = p =>
-                        //{
-                        //    p.UseMessageContext<MessageContext>();
-                        //}
                     });
                 })
                 .ConfigureLogging(logging => logging.AddConsole());
@@ -87,6 +91,10 @@ namespace Baibaocp.LotteryOrdering.MessageServices
 
             var host = builder.Build();
             await host.StartAsync();
+            var messageService = host.Services.GetRequiredService<ILotteryOrderingMessageService>();
+            var identityGenerater = host.Services.GetRequiredService<IIdentityGenerater>();
+
+            await messageService.PublishAsync(new Messages.LvpOrderedMessage { LvpOrderId = identityGenerater.Generate().ToString(), InvestAmount = 200, InvestCode = "", InvestCount = 1, InvestTimes = 1, InvestType = false, LotteryId = 20201, LotteryPlayId = 502, LvpUserId = 1000, LvpVenderId = "800" });
             Console.ReadLine();
             await host.StopAsync();
         }

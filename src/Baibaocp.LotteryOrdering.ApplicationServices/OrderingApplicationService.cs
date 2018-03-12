@@ -37,45 +37,25 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
             return await _orderingReoository.FirstOrDefaultAsync(id);
         }
 
-        public async Task CreateAsync(LotteryMerchanteOrder message)
+        public async Task CreateAsync(string lvpOrderId, long? lvpUserId, string lvpVenderId, int lotteryId, int lotteryPlayId, int? issueNumber, string investCode, bool investType, short investCount, byte investTimes, int investAmount)
         {
-           await _orderingReoository.InsertAsync(new LotteryMerchanteOrder
+            await _orderingReoository.InsertAsync(new LotteryMerchanteOrder
             {
-                Id = message.LvpOrderId,
+                Id = lvpOrderId,
                 LotteryBuyerId = 619,
-                LvpUserId = message.LvpUserId,
-                LvpVenderId = message.LvpVenderId,
-                LotteryId = message.LotteryId,
-                LotteryPlayId = message.LotteryPlayId,
-                IssueNumber = message.IssueNumber,
-                InvestCode = message.InvestCode,
-                InvestType = message.InvestType,
-                InvestCount = message.InvestCount,
-                InvestTimes = message.InvestTimes,
-                InvestAmount = message.InvestAmount,
+                LvpUserId = lvpUserId,
+                LvpVenderId = lvpVenderId,
+                LotteryId = lotteryId,
+                LotteryPlayId = lotteryPlayId,
+                IssueNumber = issueNumber,
+                InvestCode = investCode,
+                InvestType = investType,
+                InvestCount = investCount,
+                InvestTimes = investTimes,
+                InvestAmount = investAmount,
                 Status = (int)OrderStatus.Succeed,
                 CreationTime = DateTime.Now
             });
-            //using (MySqlConnection connection = new MySqlConnection(_options.DefaultNameOrConnectionString))
-            //{
-            //    int count = await connection.ExecuteAsync(@"INSERT INTO `BbcpOrders`(`Id`,`LotteryBuyerId`,`LvpUserId`,`LvpVenderId`,`LotteryId`,`LotteryPlayId`,`IssueNumber`,`InvestCode`,`InvestType`,`InvestCount`,`InvestTimes`,`InvestAmount`,`Status`,`CreationTime`)VALUES(@Id,@LotteryBuyerId,@LvpUserId,@LvpVenderId,@LotteryId,@LotteryPlayId,@IssueNumber,@InvestCode,@InvestType,@InvestCount,@InvestTimes,@InvestAmount,@Status,@CreationTime);", new
-            //    {
-            //        Id = message.LvpOrderId,
-            //        LotteryBuyerId = 619,
-            //        LvpUserId = message.LvpUserId,
-            //        LvpVenderId = message.LvpVenderId,
-            //        LotteryId = message.LotteryId,
-            //        LotteryPlayId = message.LotteryPlayId,
-            //        IssueNumber = message.IssueNumber,
-            //        InvestCode = message.InvestCode,
-            //        InvestType = message.InvestType,
-            //        InvestCount = message.InvestCount,
-            //        InvestTimes = message.InvestTimes,
-            //        InvestAmount = message.InvestAmount,
-            //        Status = OrderStatus.Succeed,
-            //        CreationTime = DateTime.Now
-            //    });
-            //}
         }
 
 

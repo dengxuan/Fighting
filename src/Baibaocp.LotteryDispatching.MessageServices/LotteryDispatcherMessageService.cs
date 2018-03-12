@@ -32,7 +32,20 @@ namespace Baibaocp.LotteryDispatching.MessageServices
 
         public Task PublishAsync(string merchanerId, TExecuteMessage message)
         {
-            throw new NotImplementedException();
+            return _busClient.PublishAsync(message, context =>
+            {
+                context.UsePublishConfiguration(configuration =>
+                {
+                    configuration.OnDeclaredExchange(exchange =>
+                    {
+                        exchange.WithName("Baibaocp.LotteryOrdering")
+                                .WithDurability(true)
+                                .WithAutoDelete(false)
+                                .WithType(ExchangeType.Topic);
+                    });
+                    configuration.WithRoutingKey($"Orders.Storaged.{merchanerId}");
+                });
+            });
         }
 
         public Task SubscribeAsync(string merchanerId, CancellationToken stoppingToken)
@@ -59,7 +72,7 @@ namespace Baibaocp.LotteryDispatching.MessageServices
                 {
                     configuration.OnDeclaredExchange(exchange =>
                     {
-                        exchange.WithName("Baibaocp.LotteryVender")
+                        exchange.WithName("Baibaocp.LotteryOrdering")
                                 .WithDurability(true)
                                 .WithAutoDelete(false)
                                 .WithType(ExchangeType.Topic);
@@ -72,7 +85,7 @@ namespace Baibaocp.LotteryDispatching.MessageServices
                     });
                     configuration.Consume(consume =>
                     {
-                        consume.WithRoutingKey("Orders.Storaged.#");
+                        consume.WithRoutingKey($"Orders.Storaged.{merchanerId}");
                     });
                 });
             }, stoppingToken);

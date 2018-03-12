@@ -7,8 +7,9 @@ namespace Baibaocp.LotteryDispatching.MessageServices.Messages
 
         public LvpOrderedMessage LvpOrder { get; }
 
-        public OrderingExecuteMessage(string ldpOrderId, string ldpVenderId, LvpOrderedMessage lvpOrderedMessage) : base(ldpOrderId, ldpVenderId)
+        public OrderingExecuteMessage(string ldpOrderId, string ldpVenderId, LvpOrderedMessage lvpOrder) : base(ldpOrderId, ldpVenderId)
         {
+            LvpOrder = lvpOrder;
         }
     }
 }

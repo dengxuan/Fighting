@@ -7,6 +7,8 @@ namespace Baibaocp.LotteryOrdering.Core.Entities.Merchantes
     [Table("BbcpOrders")]
     public class LotteryMerchanteOrder : Entity<string>
     {
+        [MaxLength(32)]
+        public override string Id { get => base.Id; set => base.Id = value; }
 
         /// <summary>
         /// 彩民编号

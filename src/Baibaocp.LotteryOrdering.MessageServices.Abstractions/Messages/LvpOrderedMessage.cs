@@ -45,12 +45,12 @@
         /// <summary>
         /// 注数
         /// </summary>
-        public sbyte InvestCount { get; set; }
+        public short InvestCount { get; set; }
 
         /// <summary>
         /// 倍数
         /// </summary>
-        public sbyte InvestTimes { get; set; }
+        public byte InvestTimes { get; set; }
 
         /// <summary>
         /// 投注金额

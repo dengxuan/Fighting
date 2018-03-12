@@ -47,17 +47,17 @@ namespace Baibaocp.LotteryDispatching
         HandleTypes HandleType { get; }
     }
 
-    public struct Accepted : IHandle
+    public sealed class Accepted : IHandle
     {
         public HandleTypes HandleType => HandleTypes.Accepted;
     }
 
-    public struct Rejected : IHandle
+    public sealed class Rejected : IHandle
     {
         public HandleTypes HandleType => HandleTypes.Rejected;
     }
 
-    public struct Success : IHandle
+    public sealed class Success : IHandle
     {
         public HandleTypes HandleType => HandleTypes.Success;
 
@@ -72,12 +72,12 @@ namespace Baibaocp.LotteryDispatching
         }
     }
 
-    public struct Failure : IHandle
+    public sealed class Failure : IHandle
     {
         public HandleTypes HandleType => HandleTypes.Failure;
     }
 
-    public struct Winning : IHandle
+    public sealed class Winning : IHandle
     {
         public HandleTypes HandleType => HandleTypes.Winning;
 
@@ -98,12 +98,12 @@ namespace Baibaocp.LotteryDispatching
         }
     }
 
-    public struct Loseing : IHandle
+    public sealed class Loseing : IHandle
     {
         public HandleTypes HandleType => HandleTypes.Loseing;
     }
 
-    public struct Waiting : IHandle
+    public sealed class Waiting : IHandle
     {
         public HandleTypes HandleType => HandleTypes.Waiting;
     }

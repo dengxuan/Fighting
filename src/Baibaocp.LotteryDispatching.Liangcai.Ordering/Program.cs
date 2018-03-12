@@ -66,6 +66,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
                             dispatchBuilder.UseLotteryDispatching<OrderingExecuteMessage>(setupOptions =>
                             {
                                 IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
+                                setupOptions.MerchanterId = dispatchConfiguration.GetValue<string>("LdpVenderId");
                                 setupOptions.SecretKey = dispatchConfiguration.GetValue<string>("SecretKey");
                                 setupOptions.Url = dispatchConfiguration.GetValue<string>("Url");
                             });
