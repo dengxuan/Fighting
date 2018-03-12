@@ -113,15 +113,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Suicai", "Suicai", "{077F5E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.Suicai.Ordering", "src\Baibaocp.LotteryDispatching.Suicai.Ordering\Baibaocp.LotteryDispatching.Suicai.Ordering.csproj", "{F975E0E1-69DE-4446-AA51-93CDBE5C0ACA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryDispatching.Suicai.Ticketing", "src\Baibaocp.LotteryDispatching.Suicai.Ticketing\Baibaocp.LotteryDispatching.Suicai.Ticketing.csproj", "{628ACE0E-77D5-4AAE-B1B6-8432983C3EF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.Suicai.Ticketing", "src\Baibaocp.LotteryDispatching.Suicai.Ticketing\Baibaocp.LotteryDispatching.Suicai.Ticketing.csproj", "{628ACE0E-77D5-4AAE-B1B6-8432983C3EF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryDispatching.Suicai.Awarding", "src\Baibaocp.LotteryDispatching.Suicai.Awarding\Baibaocp.LotteryDispatching.Suicai.Awarding.csproj", "{6647F492-FB03-4BC2-ACE9-010158244A2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.Suicai.Awarding", "src\Baibaocp.LotteryDispatching.Suicai.Awarding\Baibaocp.LotteryDispatching.Suicai.Awarding.csproj", "{6647F492-FB03-4BC2-ACE9-010158244A2A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.MessageServices.Abstractions", "src\Baibaocp.LotteryDispatching.MessageServices.Abstractions\Baibaocp.LotteryDispatching.MessageServices.Abstractions.csproj", "{A8591BF0-AE80-40F4-B9B8-145E915DBAAA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.MessageServices", "src\Baibaocp.LotteryDispatching.MessageServices\Baibaocp.LotteryDispatching.MessageServices.csproj", "{4AD4E4BB-27A9-41DB-9199-0D34D0F177FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryDispatching", "src\Baibaocp.LotteryDispatching\Baibaocp.LotteryDispatching.csproj", "{2CA71ADF-CF84-41CC-A81D-CE37146822E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching", "src\Baibaocp.LotteryDispatching\Baibaocp.LotteryDispatching.csproj", "{2CA71ADF-CF84-41CC-A81D-CE37146822E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
