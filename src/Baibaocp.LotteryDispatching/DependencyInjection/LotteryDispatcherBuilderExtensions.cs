@@ -9,9 +9,10 @@ namespace Baibaocp.LotteryDispatching.DependencyInjection
 {
     public static class LotteryDispatcherBuilderExtensions
     {
-        public static LotteryDispatcherBuilder UseLotteryDispatching<TExecuteMessage>(this LotteryDispatcherBuilder lotteryDispatcherBuilder, Action<DispatcherOptions> setupOptions) where TExecuteMessage : IExecuteMessage
+        public static LotteryDispatcherBuilder UseLotteryDispatching<TExecuteHandler, TExecuteMessage>(this LotteryDispatcherBuilder lotteryDispatcherBuilder, Action<DispatcherOptions> setupOptions) where TExecuteHandler : class , IExecuteHandler<TExecuteMessage> where TExecuteMessage : IExecuteMessage
         {
             lotteryDispatcherBuilder.Services.Configure(setupOptions);
+            lotteryDispatcherBuilder.Services.AddSingleton<IExecuteHandler<TExecuteMessage>, TExecuteHandler>();
             lotteryDispatcherBuilder.Services.AddSingleton<IHostedService, DispatcherService<TExecuteMessage>>();
             return lotteryDispatcherBuilder;
         }

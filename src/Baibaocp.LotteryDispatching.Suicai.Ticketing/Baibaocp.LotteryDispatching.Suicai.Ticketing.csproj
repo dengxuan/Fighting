@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Baibaocp.LotteryDispatching.Suicai.Abstractions\Baibaocp.LotteryDispatching.Suicai.Abstractions.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryDispatching\Baibaocp.LotteryDispatching.csproj" />
   </ItemGroup>
 
 </Project>
