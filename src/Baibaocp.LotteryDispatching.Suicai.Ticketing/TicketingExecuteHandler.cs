@@ -18,7 +18,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
 
         private readonly ILogger<TicketingExecuteHandler> _logger;
 
-        public TicketingExecuteHandler(DispatcherOptions options, StorageOptions storageOptions, ILoggerFactory loggerFactory) : base(options, loggerFactory, "102")
+        public TicketingExecuteHandler(DispatcherConfiguration options, StorageOptions storageOptions, ILoggerFactory loggerFactory) : base(options, loggerFactory, "102")
         {
             _logger = loggerFactory.CreateLogger<TicketingExecuteHandler>();
             _storageOptions = storageOptions;

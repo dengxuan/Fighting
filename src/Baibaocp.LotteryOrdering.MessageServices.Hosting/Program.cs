@@ -1,9 +1,11 @@
-﻿using Baibaocp.LotteryDispatching.MessageServices.DependencyInjection;
+﻿using Baibaocp.LotteryDispatching.MessageServices.Publisher.DependencyInjection;
 using Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection;
 using Baibaocp.LotteryOrdering.EntityFrameworkCore;
+using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.DependencyInjection;
 using Baibaocp.LotteryOrdering.MessagesSevices;
 using Baibaocp.LotteryOrdering.Scheduling.DependencyInjection;
+using Fighting.Abstractions;
 using Fighting.ApplicationServices.DependencyInjection;
 using Fighting.DependencyInjection;
 using Fighting.Hosting;
@@ -21,10 +23,7 @@ using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
 using System;
-using Baibaocp.LotteryDispatching.DependencyInjection;
 using System.Threading.Tasks;
-using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
-using Fighting.Abstractions;
 
 namespace Baibaocp.LotteryOrdering.MessageServices
 {
@@ -45,12 +44,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                         fightBuilder.ConfigureMessageServices(messageServiceBuilder =>
                         {
                             messageServiceBuilder.UseLotteryOrderingMessageServices();
-                            messageServiceBuilder.UseLotteryDispatchingMessageService();
-                        });
-
-                        fightBuilder.ConfigureLotteryDispatcher(setupAction =>
-                        {
-
+                            messageServiceBuilder.UseLotteryDispatchingMessagePublisher();
                         });
 
                         fightBuilder.ConfigureScheduling(setupAction =>

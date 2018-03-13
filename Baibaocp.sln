@@ -119,12 +119,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.MessageServices.Abstractions", "src\Baibaocp.LotteryDispatching.MessageServices.Abstractions\Baibaocp.LotteryDispatching.MessageServices.Abstractions.csproj", "{A8591BF0-AE80-40F4-B9B8-145E915DBAAA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.MessageServices", "src\Baibaocp.LotteryDispatching.MessageServices\Baibaocp.LotteryDispatching.MessageServices.csproj", "{4AD4E4BB-27A9-41DB-9199-0D34D0F177FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.Scheduling.Abstractions", "src\Baibaocp.LotteryDispatching.Scheduling.Abstractions\Baibaocp.LotteryDispatching.Scheduling.Abstractions.csproj", "{1EF26C55-F81D-4D21-B7B3-EC5DDC2C8670}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching", "src\Baibaocp.LotteryDispatching\Baibaocp.LotteryDispatching.csproj", "{2CA71ADF-CF84-41CC-A81D-CE37146822E0}"
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching", "src\Baibaocp.LotteryDispatching\Baibaocp.LotteryDispatching.csproj", "{2CA71ADF-CF84-41CC-A81D-CE37146822E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryDispatching.MessageServices.Publisher", "src\Baibaocp.LotteryDispatching.MessageServices.Publisher\Baibaocp.LotteryDispatching.MessageServices.Publisher.csproj", "{27E21A0F-BB28-4EF0-B432-989B105FB3B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryDispatching.Scheduling.Abstractions", "src\Baibaocp.LotteryDispatching.Scheduling.Abstractions\Baibaocp.LotteryDispatching.Scheduling.Abstractions.csproj", "{1EF26C55-F81D-4D21-B7B3-EC5DDC2C8670}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryDispatching.MessageServices.Subscriber", "src\Baibaocp.LotteryDispatching.MessageServices.Subscriber\Baibaocp.LotteryDispatching.MessageServices.Subscriber.csproj", "{6317548D-D96E-4313-B911-103E5C0AEF13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -336,18 +335,18 @@ Global
 		{A8591BF0-AE80-40F4-B9B8-145E915DBAAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8591BF0-AE80-40F4-B9B8-145E915DBAAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8591BF0-AE80-40F4-B9B8-145E915DBAAA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4AD4E4BB-27A9-41DB-9199-0D34D0F177FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4AD4E4BB-27A9-41DB-9199-0D34D0F177FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4AD4E4BB-27A9-41DB-9199-0D34D0F177FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4AD4E4BB-27A9-41DB-9199-0D34D0F177FE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2CA71ADF-CF84-41CC-A81D-CE37146822E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2CA71ADF-CF84-41CC-A81D-CE37146822E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2CA71ADF-CF84-41CC-A81D-CE37146822E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2CA71ADF-CF84-41CC-A81D-CE37146822E0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1EF26C55-F81D-4D21-B7B3-EC5DDC2C8670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1EF26C55-F81D-4D21-B7B3-EC5DDC2C8670}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EF26C55-F81D-4D21-B7B3-EC5DDC2C8670}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EF26C55-F81D-4D21-B7B3-EC5DDC2C8670}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27E21A0F-BB28-4EF0-B432-989B105FB3B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27E21A0F-BB28-4EF0-B432-989B105FB3B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27E21A0F-BB28-4EF0-B432-989B105FB3B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27E21A0F-BB28-4EF0-B432-989B105FB3B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6317548D-D96E-4313-B911-103E5C0AEF13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6317548D-D96E-4313-B911-103E5C0AEF13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6317548D-D96E-4313-B911-103E5C0AEF13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6317548D-D96E-4313-B911-103E5C0AEF13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -381,9 +380,9 @@ Global
 		{628ACE0E-77D5-4AAE-B1B6-8432983C3EF9} = {077F5E93-E83F-447B-9F4E-A1C2F3CCEA39}
 		{6647F492-FB03-4BC2-ACE9-010158244A2A} = {077F5E93-E83F-447B-9F4E-A1C2F3CCEA39}
 		{A8591BF0-AE80-40F4-B9B8-145E915DBAAA} = {6F364ECB-76BE-42E0-96D8-36DD069F95ED}
-		{4AD4E4BB-27A9-41DB-9199-0D34D0F177FE} = {6F364ECB-76BE-42E0-96D8-36DD069F95ED}
-		{2CA71ADF-CF84-41CC-A81D-CE37146822E0} = {6F364ECB-76BE-42E0-96D8-36DD069F95ED}
 		{1EF26C55-F81D-4D21-B7B3-EC5DDC2C8670} = {6F364ECB-76BE-42E0-96D8-36DD069F95ED}
+		{27E21A0F-BB28-4EF0-B432-989B105FB3B4} = {6F364ECB-76BE-42E0-96D8-36DD069F95ED}
+		{6317548D-D96E-4313-B911-103E5C0AEF13} = {6F364ECB-76BE-42E0-96D8-36DD069F95ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B9F693E7-6A4E-4EEC-8474-82209B8E4094}

@@ -1,4 +1,5 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
+using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Fighting.Security.Extensions;
 using Microsoft.Extensions.Logging;
@@ -8,23 +9,25 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Baibaocp.LotteryDispatching.Liangcai
+namespace Baibaocp.LotteryDispatching.Liangcai.Liangcai
 {
-    public abstract class ExecuteHandler<TExecuteMessage> : IExecuteHandler<TExecuteMessage> where TExecuteMessage : IExecuteMessage
+    public abstract class LiangcaiExecuteDispatcher<TExecuteMessage> : IExecuteDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
     {
         private readonly string _command;
 
-        private readonly ILogger<ExecuteHandler<TExecuteMessage>> _logger;
+        private readonly ILogger<LiangcaiExecuteDispatcher<TExecuteMessage>> _logger;
 
         private readonly HttpClient _httpClient;
 
-        private readonly DispatcherOptions _options;
+        private readonly DispatcherConfiguration _options;
 
-        public ExecuteHandler(DispatcherOptions options, ILoggerFactory loggerFactory, string command)
+        public string Name => "Liangcai";
+
+        public LiangcaiExecuteDispatcher(DispatcherConfiguration options, string command, ILogger<LiangcaiExecuteDispatcher<TExecuteMessage>> logger)
         {
             _options = options;
             _command = command;
-            _logger = loggerFactory.CreateLogger<ExecuteHandler<TExecuteMessage>>();
+            _logger = logger;
             HttpClientHandler handler = new HttpClientHandler()
             {
                 AutomaticDecompression = System.Net.DecompressionMethods.Deflate
@@ -62,6 +65,6 @@ namespace Baibaocp.LotteryDispatching.Liangcai
 
         protected abstract string BuildRequest(TExecuteMessage message);
 
-        public abstract Task<IHandle> HandleAsync(TExecuteMessage message);
+        public abstract Task<IExecuteHandle> DispatchAsync(TExecuteMessage message);
     }
 }

@@ -1,8 +1,6 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
-using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
-using Fighting.Scheduling.Abstractions;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
 using RawRabbit.Common;
@@ -13,52 +11,31 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.MessageServices
 {
-    public class LotteryDispatcherMessageService<TExecuteMessage> : ILotteryDispatcherMessageService<TExecuteMessage> where TExecuteMessage : IExecuteMessage
+    public class LotteryTicketingMessageSubscriber : ILotteryDispatcherMessageSubscriber
     {
         private readonly IBusClient _busClient;
 
-        private readonly ISchedulerManager _schedulerManager;
+        private readonly ITicketingExecuteDispatcher _dispatcher;
 
-        private readonly ILogger<LotteryDispatcherMessageService<TExecuteMessage>> _logger;
+        private readonly ILogger<LotteryTicketingMessageSubscriber> _logger;
 
-        private readonly IExecuteDispatcher<TExecuteMessage> _dispatcher;
-
-        public LotteryDispatcherMessageService(IBusClient busClient, ISchedulerManager schedulerManager, IExecuteDispatcher<TExecuteMessage> dispatcher, ILogger<LotteryDispatcherMessageService<TExecuteMessage>> logger)
+        public LotteryTicketingMessageSubscriber(IBusClient busClient, ITicketingExecuteDispatcher dispatcher, ILogger<LotteryTicketingMessageSubscriber> logger)
         {
-            _busClient = busClient;
-            _schedulerManager = schedulerManager;
             _logger = logger;
+            _busClient = busClient;
             _dispatcher = dispatcher;
-        }
-
-        public Task PublishAsync(string merchanerId, TExecuteMessage message)
-        {
-            return _busClient.PublishAsync(message, context =>
-            {
-                context.UsePublishConfiguration(configuration =>
-                {
-                    configuration.OnDeclaredExchange(exchange =>
-                    {
-                        exchange.WithName("Baibaocp.LotteryOrdering")
-                                .WithDurability(true)
-                                .WithAutoDelete(false)
-                                .WithType(ExchangeType.Topic);
-                    });
-                    configuration.WithRoutingKey($"Orders.Storaged.{merchanerId}");
-                });
-            });
         }
 
         public Task SubscribeAsync(string merchanerId, CancellationToken stoppingToken)
         {
-            return _busClient.SubscribeAsync<TExecuteMessage>(async (executer) =>
+            return _busClient.SubscribeAsync<QueryingExecuteMessage>(async (executer) =>
             {
                 try
                 {
                     _logger.LogTrace("Received ordering executer:{0} VenderId:{1}", executer.LdpOrderId, executer.LdpVenderId);
                     IExecuteHandle handle = await _dispatcher.DispatchAsync(executer);
                     bool result = await handle.HandleAsync();
-                    if(result == true)
+                    if (result == true)
                     {
                         return new Ack();
                     }
@@ -75,20 +52,20 @@ namespace Baibaocp.LotteryDispatching.MessageServices
                 {
                     configuration.OnDeclaredExchange(exchange =>
                     {
-                        exchange.WithName("Baibaocp.LotteryOrdering")
+                        exchange.WithName("Baibaocp.LotteryDispatcher")
                                 .WithDurability(true)
                                 .WithAutoDelete(false)
                                 .WithType(ExchangeType.Topic);
                     });
                     configuration.FromDeclaredQueue(queue =>
                     {
-                        queue.WithName($"Orders.Dispatcher.{merchanerId}")
+                        queue.WithName($"{_dispatcher.Name}.Ticketing")
                              .WithAutoDelete(false)
                              .WithDurability(true);
                     });
                     configuration.Consume(consume =>
                     {
-                        consume.WithRoutingKey($"Orders.Storaged.{merchanerId}");
+                        consume.WithRoutingKey($"{_dispatcher.Name}.Ticketing.#");
                     });
                 });
             }, stoppingToken);

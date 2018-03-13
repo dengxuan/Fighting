@@ -21,7 +21,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
         
 
 
-        public OrderingExecuteHandler(DispatcherOptions options, ILoggerFactory loggerFactory, IBusClient publisher) : base(options, loggerFactory, "200008)")
+        public OrderingExecuteHandler(DispatcherConfiguration options, ILoggerFactory loggerFactory, IBusClient publisher) : base(options, loggerFactory, "200008)")
         {
             _logger = loggerFactory.CreateLogger<OrderingExecuteHandler>();
             _publisher = publisher;

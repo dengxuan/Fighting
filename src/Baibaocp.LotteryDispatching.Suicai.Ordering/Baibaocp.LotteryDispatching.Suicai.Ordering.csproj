@@ -10,9 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Baibaocp.LotteryDispatching.MessageServices\Baibaocp.LotteryDispatching.MessageServices.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryDispatching.Suicai.Abstractions\Baibaocp.LotteryDispatching.Suicai.Abstractions.csproj" />
-    <ProjectReference Include="..\Baibaocp.LotteryDispatching\Baibaocp.LotteryDispatching.csproj" />
     <ProjectReference Include="..\Fighting.Scheduling.Mysql\Fighting.Scheduling.Mysql.csproj" />
   </ItemGroup>
 

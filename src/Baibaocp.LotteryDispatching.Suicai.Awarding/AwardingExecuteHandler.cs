@@ -17,7 +17,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
 
         private readonly ILogger<AwardingExecuteHandler> _logger;
 
-        public AwardingExecuteHandler(DispatcherOptions options, ILoggerFactory loggerFactory) : base(options, loggerFactory, "111")
+        public AwardingExecuteHandler(DispatcherConfiguration options, ILoggerFactory loggerFactory) : base(options, loggerFactory, "111")
         {
             _logger = loggerFactory.CreateLogger<AwardingExecuteHandler>();
         }

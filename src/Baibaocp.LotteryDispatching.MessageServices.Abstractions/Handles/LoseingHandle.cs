@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
+using System;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.MessageServices.Handles

@@ -1,6 +1,6 @@
 ﻿namespace Baibaocp.LotteryDispatching
 {
-    public class DispatcherOptions
+    public class DispatcherConfiguration
     {
         public string MerchanterId { get; set; }
 

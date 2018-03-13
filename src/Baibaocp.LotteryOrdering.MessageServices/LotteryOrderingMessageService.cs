@@ -1,7 +1,5 @@
 ﻿using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
-using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
-using Baibaocp.LotteryOrdering.Core.Entities.Merchantes;
 using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Fighting.Abstractions;
@@ -19,20 +17,18 @@ namespace Baibaocp.LotteryOrdering.MessageServices
     public class LotteryOrderingMessageService : ILotteryOrderingMessageService
     {
         private readonly IBusClient _busClient;
-        private readonly ISchedulerManager _schedulerManager;
         private readonly IIdentityGenerater _identityGenerater;
         private readonly IOrderingApplicationService _orderingApplicationService;
         private readonly ILogger<LotteryOrderingMessageService> _logger;
-        private readonly ILotteryDispatcherMessageService<OrderingExecuteMessage> _lotteryDispatcherMessageService;
+        private readonly IOrderingMessagePublisher _orderingMessagePublisher;
 
-        public LotteryOrderingMessageService(IBusClient busClient, ISchedulerManager schedulerManager, IIdentityGenerater identityGenerater, IOrderingApplicationService orderingApplicationService, ILogger<LotteryOrderingMessageService> logger, ILotteryDispatcherMessageService<OrderingExecuteMessage> lotteryDispatcherMessageService)
+        public LotteryOrderingMessageService(IBusClient busClient, IIdentityGenerater identityGenerater, IOrderingApplicationService orderingApplicationService, ILogger<LotteryOrderingMessageService> logger, IOrderingMessagePublisher orderingMessagePublisher)
         {
             _logger = logger;
             _busClient = busClient;
-            _schedulerManager = schedulerManager;
             _identityGenerater = identityGenerater;
             _orderingApplicationService = orderingApplicationService;
-            _lotteryDispatcherMessageService = lotteryDispatcherMessageService;
+            _orderingMessagePublisher = orderingMessagePublisher;
         }
 
         public Task PublishAsync(LvpOrderedMessage orderingMessage)
@@ -47,7 +43,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                                 .WithAutoDelete(false)
                                 .WithType(ExchangeType.Topic);
                     });
-                    configuration.WithRoutingKey($"Orders.Accepted.{orderingMessage.LvpVenderId}");
+                    configuration.WithRoutingKey($"LotteryOrdering.Accepted.{orderingMessage.LvpVenderId}");
                 });
             });
         }
@@ -60,9 +56,8 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 string ldpVenderId = "800";
                 try
                 {
-                    OrderingExecuteMessage executeMessage = new OrderingExecuteMessage(ldpOrderId.ToString(), ldpVenderId, message);
                     await _orderingApplicationService.CreateAsync(message.LvpOrderId, message.LvpUserId, message.LvpVenderId, message.LotteryId, message.LotteryPlayId, message.IssueNumber, message.InvestCode, message.InvestType, message.InvestCount, message.InvestTimes, message.InvestAmount);
-                    await _lotteryDispatcherMessageService.PublishAsync(ldpVenderId, executeMessage);
+                    await _orderingMessagePublisher.PublishAsync(ldpVenderId, ldpOrderId.ToString(), message);
 
                     _logger.LogTrace("Received ordering executer:{0} VenderId:{1}", ldpOrderId, ldpVenderId);
                     return new Ack();
@@ -103,13 +98,13 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                     });
                     configuration.FromDeclaredQueue(queue =>
                     {
-                        queue.WithName("Orders.Ordering")
+                        queue.WithName("LotteryOrdering.Orders")
                              .WithAutoDelete(false)
                              .WithDurability(true);
                     });
                     configuration.Consume(consume =>
                     {
-                        consume.WithRoutingKey("Orders.Accepted.#");
+                        consume.WithRoutingKey("LotteryOrdering.Accepted.#");
                     });
                 });
             }, stoppingToken);

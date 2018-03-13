@@ -1,4 +1,7 @@
-﻿using Baibaocp.LotteryDispatching.Extensions;
+﻿using Baibaocp.LotteryDispatching.Abstractions;
+using Baibaocp.LotteryDispatching.Extensions;
+using Baibaocp.LotteryDispatching.Liangcai.Liangcai;
+using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.Liangcai.Extensions;
 using Baibaocp.Storaging.Entities.Extensions;
@@ -7,16 +10,16 @@ using System;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
+namespace Baibaocp.LotteryDispatching.Liangcai.Dispatchers
 {
-    public class OrderingExecuteHandler : ExecuteHandler<OrderingExecuteMessage>
+    public class OrderingExecuteDispatcher : LiangcaiExecuteDispatcher<OrderingExecuteMessage>, IOrderingExecuteDispatcher
     {
 
-        private readonly ILogger<OrderingExecuteHandler> _logger;
+        private readonly ILogger<OrderingExecuteDispatcher> _logger;
 
-        public OrderingExecuteHandler(DispatcherOptions options, ILoggerFactory loggerFactory) : base(options, loggerFactory, "101")
+        public OrderingExecuteDispatcher(DispatcherConfiguration options, ILogger<OrderingExecuteDispatcher> logger) : base(options, "101", logger)
         {
-            _logger = loggerFactory.CreateLogger<OrderingExecuteHandler>();
+            _logger = logger;
         }
 
         protected override string BuildRequest(OrderingExecuteMessage executer)
@@ -42,7 +45,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             return string.Join("_", values);
         }
 
-        public override async Task<IHandle> HandleAsync(OrderingExecuteMessage executer)
+        public override async Task<IExecuteHandle> DispatchAsync(OrderingExecuteMessage executer)
         {
             try
             {
@@ -53,19 +56,19 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                 _logger.LogInformation("Response Status: {0}", Status);
                 if (Status.IsIn("0", "1", "1008"))
                 {
-                    return new Accepted();
+                    return new AcceptedHandle();
                 }
                 else if (Status.IsIn("1003", "1011", "1014"))
                 {
                     // TODO: Log here and notice to admin
-                    return new Waiting();
+                    return new WaitingHandle();
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Request Exception:{0}", ex.Message);
             }
-            return new Rejected();
+            return new RejectedHandle();
         }
     }
 }

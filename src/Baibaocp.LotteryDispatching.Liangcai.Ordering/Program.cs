@@ -13,9 +13,9 @@ using Microsoft.Extensions.Logging;
 using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
+using Baibaocp.LotteryDispatcher.Liangcai.DependencyInjection;
 using System;
 using System.Threading.Tasks;
-using Baibaocp.LotteryDispatching.Liangcai.Handlers;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
 {
@@ -64,13 +64,8 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
 
                         fightBuilder.ConfigureLotteryDispatcher(dispatchBuilder =>
                         {
-                            dispatchBuilder.UseLotteryDispatching<OrderingExecuteHandler, OrderingExecuteMessage>(setupOptions =>
-                            {
-                                IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
-                                setupOptions.MerchanterId = dispatchConfiguration.GetValue<string>("LdpVenderId");
-                                setupOptions.SecretKey = dispatchConfiguration.GetValue<string>("SecretKey");
-                                setupOptions.Url = dispatchConfiguration.GetValue<string>("Url");
-                            });
+                            var dispatcherOptions = hostContext.Configuration.GetSection("DispatcherConfiguration").Get<DispatcherConfiguration>();
+                            dispatchBuilder.UseLiangcaiExecuteDispatcher(dispatcherOptions);
                         });
 
                         services.AddRawRabbit(new RawRabbitOptions

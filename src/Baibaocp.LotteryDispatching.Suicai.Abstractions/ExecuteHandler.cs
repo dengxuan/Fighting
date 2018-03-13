@@ -20,11 +20,11 @@ namespace Baibaocp.LotteryDispatching.Suicai.Abstractions
 
         private readonly HttpClient _httpClient;
 
-        private readonly DispatcherOptions _options;
+        private readonly DispatcherConfiguration _options;
 
         protected Tripledescrypt _crypter;
 
-        public ExecuteHandler(DispatcherOptions options, ILoggerFactory loggerFactory, string command)
+        public ExecuteHandler(DispatcherConfiguration options, ILoggerFactory loggerFactory, string command)
         {
             _options = options;
             _command = command;
