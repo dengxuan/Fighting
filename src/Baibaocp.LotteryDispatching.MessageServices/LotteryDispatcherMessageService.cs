@@ -1,5 +1,6 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
+using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Fighting.Scheduling.Abstractions;
 using Microsoft.Extensions.Logging;
@@ -55,11 +56,13 @@ namespace Baibaocp.LotteryDispatching.MessageServices
                 try
                 {
                     _logger.LogTrace("Received ordering executer:{0} VenderId:{1}", executer.LdpOrderId, executer.LdpVenderId);
-                    bool result = await _dispatcher.DispatchAsync(executer);
-                    if (result == true)
+                    IExecuteHandle handle = await _dispatcher.DispatchAsync(executer);
+                    bool result = await handle.HandleAsync();
+                    if(result == true)
                     {
                         return new Ack();
                     }
+
                 }
                 catch (Exception ex)
                 {

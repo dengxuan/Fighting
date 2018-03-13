@@ -47,7 +47,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                                 .WithAutoDelete(false)
                                 .WithType(ExchangeType.Topic);
                     });
-                    configuration.WithRoutingKey("Orders.Accepted.#");
+                    configuration.WithRoutingKey($"Orders.Accepted.{orderingMessage.LvpVenderId}");
                 });
             });
         }
