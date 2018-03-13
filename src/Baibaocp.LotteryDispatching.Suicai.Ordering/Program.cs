@@ -72,10 +72,9 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
                             });
                         });
 
-                        services.AddRawRabbit(new RawRabbitOptions
-                        {
-                            ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>()
-                        });
+                        RawRabbitOptions Options = new RawRabbitOptions { ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>() };
+
+                        services.AddRawRabbit(Options);
 
                     });
                 });

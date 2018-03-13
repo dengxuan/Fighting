@@ -57,7 +57,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
             return _busClient.SubscribeAsync<LvpOrderedMessage>(async (message) =>
             {
                 long ldpOrderId = _identityGenerater.Generate();
-                string ldpVenderId = "800";
+                string ldpVenderId = "450022";
                 try
                 {
                     OrderingExecuteMessage executeMessage = new OrderingExecuteMessage(ldpOrderId.ToString(), ldpVenderId, message);

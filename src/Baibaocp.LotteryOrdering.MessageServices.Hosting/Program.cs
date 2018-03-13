@@ -94,7 +94,19 @@ namespace Baibaocp.LotteryOrdering.MessageServices
             var messageService = host.Services.GetRequiredService<ILotteryOrderingMessageService>();
             var identityGenerater = host.Services.GetRequiredService<IIdentityGenerater>();
 
-            await messageService.PublishAsync(new Messages.LvpOrderedMessage { LvpOrderId = identityGenerater.Generate().ToString(), InvestAmount = 200, InvestCode = "", InvestCount = 1, InvestTimes = 1, InvestType = false, LotteryId = 20201, LotteryPlayId = 502, LvpUserId = 1000, LvpVenderId = "800" });
+            await messageService.PublishAsync(new Messages.LvpOrderedMessage {
+                LvpOrderId = identityGenerater.Generate().ToString(),
+                InvestAmount = 200,
+                InvestCode = "01,02,03,04,05,06*01",
+                InvestCount = 1,
+                InvestTimes = 1,
+                InvestType = false,
+                LotteryId = 1,
+                IssueNumber = 2018028,
+                LotteryPlayId = 10011071,
+                LvpUserId = 1000,
+                LvpVenderId = "450022"
+            });
             Console.ReadLine();
             await host.StopAsync();
         }

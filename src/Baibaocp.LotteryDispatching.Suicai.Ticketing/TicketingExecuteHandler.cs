@@ -18,7 +18,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
 
         private readonly ILogger<TicketingExecuteHandler> _logger;
 
-        public TicketingExecuteHandler(DispatcherOptions options, StorageOptions storageOptions, ILoggerFactory loggerFactory) : base(options, loggerFactory, "102")
+        public TicketingExecuteHandler(DispatcherOptions options, StorageOptions storageOptions, ILoggerFactory loggerFactory) : base(options, loggerFactory, "200009")
         {
             _logger = loggerFactory.CreateLogger<TicketingExecuteHandler>();
             _storageOptions = storageOptions;
@@ -37,25 +37,33 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
         {
             try
             {
-                string jsoncontent = await Send(executer);
-                JObject jarr = JObject.Parse(jsoncontent);
-                if (jarr.HasValues)
+                string content = string.Empty;
+                string rescontent = await Send(executer);
+                bool handle = Verify(rescontent, out content);
+                if (handle)
                 {
-                    var json = jarr["orderList"][0];
+                    JObject jarr = JObject.Parse(content);
+                    if (jarr.HasValues)
+                    {
+                        var json = jarr["orderList"][0];
 
-                    string Status = json["status"].ToString();
-                    if (Status.IsIn("0", "1"))
-                    {
-                        return new Waiting();
+                        string Status = json["status"].ToString();
+                        if (Status.IsIn("0", "1"))
+                        {
+                            return new Waiting();
+                        }
+                        else if (Status.Equals("2"))
+                        {
+                            return new Success("1", "2");
+                        }
+                        else
+                        {
+                            return new Failure();
+                        }
                     }
-                    else if (Status.Equals("2"))
-                    {
-                        return new Success("1","2");
-                    }
-                    else
-                    {
-                        return new Failure();
-                    }
+                }
+                else {
+                    return new Failure();
                 }
             }
             catch (Exception ex)
