@@ -122,6 +122,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.MessageServices", "src\Baibaocp.LotteryDispatching.MessageServices\Baibaocp.LotteryDispatching.MessageServices.csproj", "{4AD4E4BB-27A9-41DB-9199-0D34D0F177FE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching", "src\Baibaocp.LotteryDispatching\Baibaocp.LotteryDispatching.csproj", "{2CA71ADF-CF84-41CC-A81D-CE37146822E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching", "src\Baibaocp.LotteryDispatching\Baibaocp.LotteryDispatching.csproj", "{2CA71ADF-CF84-41CC-A81D-CE37146822E0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryDispatching.Scheduling.Abstractions", "src\Baibaocp.LotteryDispatching.Scheduling.Abstractions\Baibaocp.LotteryDispatching.Scheduling.Abstractions.csproj", "{1EF26C55-F81D-4D21-B7B3-EC5DDC2C8670}"
 EndProject

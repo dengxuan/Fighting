@@ -1,4 +1,5 @@
 ﻿using Baibaocp.LotteryDispatching.DependencyInjection;
+using Baibaocp.LotteryDispatching.Liangcai.Handlers;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Fighting.DependencyInjection;
 using Fighting.Hosting;
@@ -45,7 +46,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Awarding
 
                         fightBuilder.ConfigureLotteryDispatcher(dispatchBuilder =>
                         {
-                            dispatchBuilder.UseLotteryDispatching<QueryingExecuteMessage>(setupOptions =>
+                            dispatchBuilder.UseLotteryDispatching<AwardingExecuteHandler, QueryingExecuteMessage>(setupOptions =>
                             {
                                 IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
                                 setupOptions.SecretKey = dispatchConfiguration.GetValue<string>("SecretKey");

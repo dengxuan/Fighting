@@ -50,7 +50,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
                     }
                     else if (Status.Equals("2"))
                     {
-                        return new Success();
+                        return new Success("1","2");
                     }
                     else
                     {

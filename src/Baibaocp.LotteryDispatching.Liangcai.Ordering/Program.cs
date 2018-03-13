@@ -15,6 +15,7 @@ using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
 using System;
 using System.Threading.Tasks;
+using Baibaocp.LotteryDispatching.Liangcai.Handlers;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
 {
@@ -63,7 +64,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
 
                         fightBuilder.ConfigureLotteryDispatcher(dispatchBuilder =>
                         {
-                            dispatchBuilder.UseLotteryDispatching<OrderingExecuteMessage>(setupOptions =>
+                            dispatchBuilder.UseLotteryDispatching<OrderingExecuteHandler, OrderingExecuteMessage>(setupOptions =>
                             {
                                 IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
                                 setupOptions.MerchanterId = dispatchConfiguration.GetValue<string>("LdpVenderId");
