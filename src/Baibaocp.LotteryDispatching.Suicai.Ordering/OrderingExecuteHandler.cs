@@ -3,7 +3,9 @@ using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryDispatching.Suicai.Abstractions;
 using Baibaocp.LotteryDispatching.Suicai.Abstractions.Extensions;
 using Fighting.Json;
+using Fighting.Security.Extensions;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RawRabbit;
 using System;
@@ -18,10 +20,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
 
         private readonly ILogger<OrderingExecuteHandler> _logger;
 
-        
-
-
-        public OrderingExecuteHandler(DispatcherConfiguration options, ILoggerFactory loggerFactory, IBusClient publisher) : base(options, loggerFactory, "200008)")
+        public OrderingExecuteHandler(DispatcherOptions options, ILoggerFactory loggerFactory, IBusClient publisher) : base(options, loggerFactory, "200008")
         {
             _logger = loggerFactory.CreateLogger<OrderingExecuteHandler>();
             _publisher = publisher;
@@ -49,21 +48,30 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
         {
             try
             {
-                string jsoncontent = await Send(executer);
-                JObject jarr = JObject.Parse(jsoncontent);
-                if (jarr.HasValues) {
-                    var json = jarr["orderList"][0];
-                    string Status = json["status"].ToString();
-                    _logger.LogInformation("Response Status: {0}", Status);
-                    if (Status.Equals("0"))
+                string content = string.Empty;
+                string rescontent = await Send(executer);
+                bool handle = Verify(rescontent, out content);
+                if (handle)
+                {
+                    JObject jarr = JObject.Parse(content);
+                    if (jarr.HasValues)
                     {
-                        return new Accepted();
+                        var json = jarr["orderList"][0];
+                        string Status = json["status"].ToString();
+                        _logger.LogInformation("Response Status: {0}", Status);
+                        if (Status.Equals("0"))
+                        {
+                            return new Accepted();
+                        }
+                        else if (Status.IsIn("-1"))
+                        {
+                            // TODO: Log here and notice to admin
+                            return new Rejected();
+                        }
                     }
-                    else if (Status.IsIn("-1"))
-                    {
-                        // TODO: Log here and notice to admin
-                        return new Rejected();
-                    }
+                }
+                else {
+                    return new Rejected();
                 }
             }
             catch (Exception ex)
