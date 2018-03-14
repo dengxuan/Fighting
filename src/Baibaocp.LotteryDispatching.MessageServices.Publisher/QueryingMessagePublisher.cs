@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.MessageServices
 {
-    public class QueryingMessagePublisher : IQueryingMessagePublisher
+    public class QueryingMessagePublisher : IQueryingDispatcherMessagePublisher
     {
         private readonly IBusClient _busClient;
 

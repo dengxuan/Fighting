@@ -13,7 +13,7 @@ namespace Baibaocp.LotteryDispatching.MessageServices.Handles
 
         public Task<bool> HandleAsync()
         {
-            throw new NotImplementedException();
+            return Task.FromResult(false);
         }
     }
 }

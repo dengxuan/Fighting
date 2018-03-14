@@ -6,10 +6,10 @@ namespace Baibaocp.LotteryDispatching.MessageServices.Publisher.DependencyInject
 {
     public static class LotteryDispatcherMessageServiceBuilderExtensions
     {
-        public static MessageServiceBuilder UseLotteryDispatchingMessagePublisher(this MessageServiceBuilder messageServiceBuilder)
+        public static MessageServiceBuilder UseLotteryDispatchingMessageService(this MessageServiceBuilder messageServiceBuilder)
         {
-            messageServiceBuilder.Services.AddSingleton<IOrderingDispatcherMessagePublisher, OrderingMessagePublisher>();
-            messageServiceBuilder.Services.AddSingleton<IQueryingDispatcherMessagePublisher, QueryingMessagePublisher>();
+            messageServiceBuilder.Services.AddSingleton<IOrderingMessageService, OrderingMessageService>();
+            messageServiceBuilder.Services.AddSingleton<IQueryingMessageService, QueryingMessageService>();
             return messageServiceBuilder;
         }
     }

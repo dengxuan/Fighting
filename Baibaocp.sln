@@ -121,9 +121,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.Scheduling.Abstractions", "src\Baibaocp.LotteryDispatching.Scheduling.Abstractions\Baibaocp.LotteryDispatching.Scheduling.Abstractions.csproj", "{1EF26C55-F81D-4D21-B7B3-EC5DDC2C8670}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryDispatching.MessageServices.Publisher", "src\Baibaocp.LotteryDispatching.MessageServices.Publisher\Baibaocp.LotteryDispatching.MessageServices.Publisher.csproj", "{27E21A0F-BB28-4EF0-B432-989B105FB3B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.MessageServices.Publisher", "src\Baibaocp.LotteryDispatching.MessageServices.Publisher\Baibaocp.LotteryDispatching.MessageServices.Publisher.csproj", "{27E21A0F-BB28-4EF0-B432-989B105FB3B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryDispatching.MessageServices.Subscriber", "src\Baibaocp.LotteryDispatching.MessageServices.Subscriber\Baibaocp.LotteryDispatching.MessageServices.Subscriber.csproj", "{6317548D-D96E-4313-B911-103E5C0AEF13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.MessageServices.Subscriber", "src\Baibaocp.LotteryDispatching.MessageServices.Subscriber\Baibaocp.LotteryDispatching.MessageServices.Subscriber.csproj", "{6317548D-D96E-4313-B911-103E5C0AEF13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryDispatching.MessageServices", "src\Baibaocp.LotteryDispatching.MessageServices\Baibaocp.LotteryDispatching.MessageServices.csproj", "{55AE1011-8EFC-45AF-895B-7D04E12D0598}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -347,6 +349,10 @@ Global
 		{6317548D-D96E-4313-B911-103E5C0AEF13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6317548D-D96E-4313-B911-103E5C0AEF13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6317548D-D96E-4313-B911-103E5C0AEF13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55AE1011-8EFC-45AF-895B-7D04E12D0598}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55AE1011-8EFC-45AF-895B-7D04E12D0598}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55AE1011-8EFC-45AF-895B-7D04E12D0598}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55AE1011-8EFC-45AF-895B-7D04E12D0598}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -383,6 +389,7 @@ Global
 		{1EF26C55-F81D-4D21-B7B3-EC5DDC2C8670} = {6F364ECB-76BE-42E0-96D8-36DD069F95ED}
 		{27E21A0F-BB28-4EF0-B432-989B105FB3B4} = {6F364ECB-76BE-42E0-96D8-36DD069F95ED}
 		{6317548D-D96E-4313-B911-103E5C0AEF13} = {6F364ECB-76BE-42E0-96D8-36DD069F95ED}
+		{55AE1011-8EFC-45AF-895B-7D04E12D0598} = {6F364ECB-76BE-42E0-96D8-36DD069F95ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B9F693E7-6A4E-4EEC-8474-82209B8E4094}

@@ -1,9 +1,6 @@
-﻿using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
-using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
+﻿using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
-using Fighting.Abstractions;
-using Fighting.Scheduling.Abstractions;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
 using RawRabbit.Common;
@@ -14,26 +11,22 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryOrdering.MessageServices
 {
-    public class LotteryOrderingMessageService : ILotteryOrderingMessageService
+    public class LotteryTicketingMessageService : ILotteryTicketingMessageService
     {
         private readonly IBusClient _busClient;
-        private readonly IIdentityGenerater _identityGenerater;
         private readonly IOrderingApplicationService _orderingApplicationService;
         private readonly ILogger<LotteryOrderingMessageService> _logger;
-        private readonly IOrderingDispatcherMessagePublisher _orderingDispatcherMessagePublisher;
 
-        public LotteryOrderingMessageService(IBusClient busClient, IIdentityGenerater identityGenerater, IOrderingApplicationService orderingApplicationService, ILogger<LotteryOrderingMessageService> logger, IOrderingDispatcherMessagePublisher orderingDispatcherMessagePublisher)
+        public LotteryTicketingMessageService(IBusClient busClient, IOrderingApplicationService orderingApplicationService, ILogger<LotteryOrderingMessageService> logger)
         {
             _logger = logger;
             _busClient = busClient;
-            _identityGenerater = identityGenerater;
             _orderingApplicationService = orderingApplicationService;
-            _orderingDispatcherMessagePublisher = orderingDispatcherMessagePublisher;
         }
 
-        public Task PublishAsync(LvpOrderedMessage orderingMessage)
+        public Task PublishAsync(LdpTicketedMessage message)
         {
-            return _busClient.PublishAsync(orderingMessage, context =>
+            return _busClient.PublishAsync(message, context =>
             {
                 context.UsePublishConfiguration(configuration =>
                 {
@@ -43,28 +36,25 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                                 .WithAutoDelete(false)
                                 .WithType(ExchangeType.Topic);
                     });
-                    configuration.WithRoutingKey($"LotteryOrdering.Accepted.{orderingMessage.LvpVenderId}");
+                    configuration.WithRoutingKey($"LotteryOrdering.{message.TicketingType}.{message.LdpVenderId}");
                 });
             });
         }
 
         public Task SubscribeAsync(CancellationToken stoppingToken)
         {
-            return _busClient.SubscribeAsync<LvpOrderedMessage>(async (message) =>
+            return _busClient.SubscribeAsync<LdpTicketedMessage>(async (message) =>
             {
-                long ldpOrderId = _identityGenerater.Generate();
-                string ldpVenderId = "450022";
                 try
                 {
-                    await _orderingApplicationService.CreateAsync(message.LvpOrderId, message.LvpUserId, message.LvpVenderId, message.LotteryId, message.LotteryPlayId, message.IssueNumber, message.InvestCode, message.InvestType, message.InvestCount, message.InvestTimes, message.InvestAmount);
-                    await _orderingDispatcherMessagePublisher.PublishAsync(ldpVenderId, ldpOrderId.ToString(), message);
+                    await _orderingApplicationService.TicketedAsync(0, message.LdpOrderId, message.LdpVenderId, message.TicketOdds, (int)message.Status);
 
-                    _logger.LogTrace("Received ordering executer:{0} VenderId:{1}", ldpOrderId, ldpVenderId);
+                    _logger.LogTrace("Received ticketing message: {1} {0}", message.LdpVenderId, message.LdpOrderId);
                     return new Ack();
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error of the ordering executer:{0} VenderId:{1}", ldpOrderId, ldpVenderId);
+                    _logger.LogTrace("Received ticketing message: {1} {0}", message.LdpVenderId, message.LdpOrderId);
                 }
 
                 ///* 投注失败 */

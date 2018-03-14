@@ -9,10 +9,8 @@ namespace Baibaocp.LotteryOrdering.MessageServices.Messages
 
         public string LdpVenderId { get; set; }
 
-        public LvpOrderedMessage LvpOrder { get; set; }
-
         public string TicketOdds { get; set; }
 
-        public OrderStatus Status { get; set; }
+        public LdpTicketingTypes TicketingType { get; set; }
     }
 }

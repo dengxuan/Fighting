@@ -15,6 +15,8 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Liangcai
     {
         private readonly string _command;
 
+        private IServiceProvider iocResolver;
+
         private readonly ILogger<LiangcaiExecuteDispatcher<TExecuteMessage>> _logger;
 
         private readonly HttpClient _httpClient;

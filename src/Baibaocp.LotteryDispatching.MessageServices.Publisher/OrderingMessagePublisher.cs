@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.MessageServices
 {
-    public class OrderingMessagePublisher : IOrderingMessagePublisher
+    public class OrderingMessagePublisher : IOrderingDispatcherMessagePublisher
     {
         private readonly IBusClient _busClient;
 

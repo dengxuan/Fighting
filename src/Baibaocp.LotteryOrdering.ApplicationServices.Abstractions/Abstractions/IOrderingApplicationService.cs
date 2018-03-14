@@ -1,5 +1,6 @@
 ﻿using Baibaocp.LotteryOrdering.Core.Entities.Merchantes;
 using Fighting.ApplicationServices.Abstractions;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryOrdering.ApplicationServices.Abstractions
@@ -12,7 +13,7 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices.Abstractions
 
         Task UpdateAsync(LotteryMerchanteOrder order);
 
-        Task TicketedAsync(long lvpOrderId, string ldpOrderId, string ticketOdds, int status);
+        Task TicketedAsync(long lvpOrderId, string ldpOrderId, string ldpVenderId, string ticketOdds, int status);
 
         Task RewardedAsync(long lvpOrderId, int amount, int status);
     }

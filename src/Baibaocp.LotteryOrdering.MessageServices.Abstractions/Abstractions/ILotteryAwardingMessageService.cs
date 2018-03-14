@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryOrdering.MessageServices.Abstractions
 {
-    public interface ILotteryTicketingMessageService: IMessageService
+    public interface ILotteryAwardingMessageService
     {
-        Task PublishAsync(LdpTicketedMessage message);
+        Task PublishAsync(LdpAwardedMessage message);
 
         Task SubscribeAsync(CancellationToken stoppingToken);
     }

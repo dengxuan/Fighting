@@ -1,6 +1,8 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
+using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
+using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
 using RawRabbit.Common;
@@ -32,8 +34,17 @@ namespace Baibaocp.LotteryDispatching.MessageServices
             {
                 try
                 {
-                    _logger.LogTrace("Received ordering executer:{0} VenderId:{1}", executer.LdpOrderId, executer.LdpVenderId);
+                    _logger.LogTrace("Received ordering message:{0} VenderId:{1}", executer.LdpOrderId, executer.LdpVenderId);
                     IExecuteHandle handle = await _dispatcher.DispatchAsync(executer);
+                    switch (handle)
+                    {
+                        case AcceptedHandle accepted:
+                            {
+                                break;
+                            }
+                        default:
+                            break;
+                    }
                     bool result = await handle.HandleAsync();
                     if (result == true)
                     {
