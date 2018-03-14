@@ -1,5 +1,6 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
 using Baibaocp.LotteryDispatching.Liangcai.Liangcai;
+using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Microsoft.Extensions.Logging;

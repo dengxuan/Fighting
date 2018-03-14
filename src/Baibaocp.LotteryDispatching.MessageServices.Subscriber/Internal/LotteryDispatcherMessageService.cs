@@ -1,17 +1,15 @@
 ﻿using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
-using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Fighting.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System;
-using Microsoft.Extensions.DependencyInjection;
-using System.Collections;
-using System.Collections.Generic;
 
-namespace Baibaocp.LotteryDispatching
+namespace Baibaocp.LotteryDispatching.MessageServices.Subscriber.Internal
 {
-    public class LotteryDispatcherMessageService : BackgroundService
+    internal class LotteryDispatcherMessageService : BackgroundService
     {
         private readonly IServiceProvider _iocResolver;
         private readonly DispatcherConfiguration _dispatcherOptions;

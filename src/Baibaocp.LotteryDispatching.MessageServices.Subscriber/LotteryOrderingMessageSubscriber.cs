@@ -65,7 +65,7 @@ namespace Baibaocp.LotteryDispatching.MessageServices
                     });
                     configuration.Consume(consume =>
                     {
-                        consume.WithRoutingKey($"{_dispatcher.Name}.Ordering.#");
+                        consume.WithRoutingKey($"LotteryDispatcher.Ordering.#");
                     });
                 });
             }, stoppingToken);

@@ -2,7 +2,7 @@
 {
     public enum QueryingTypes
     {
-        Rewarding,
+        Awarding,
 
         Ticketing,
     }

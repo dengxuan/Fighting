@@ -15,7 +15,6 @@ namespace Baibaocp.LotteryDispatcher.Liangcai.DependencyInjection
             lotteryDispatcherBuilder.Services.AddSingleton<IAwardingExecuteDispatcher, AwardingExecuteDispatcher>();
             lotteryDispatcherBuilder.Services.AddSingleton<IOrderingExecuteDispatcher, OrderingExecuteDispatcher>();
             lotteryDispatcherBuilder.Services.AddSingleton<ITicketingExecuteDispatcher, TicketingExecuteDispatcher>();
-            lotteryDispatcherBuilder.Services.AddSingleton<IHostedService, DispatcherService>();
             lotteryDispatcherBuilder.Services.AddSingleton(dispatcherConfiguration);
             return lotteryDispatcherBuilder;
         }
