@@ -1,28 +1,29 @@
-﻿using Baibaocp.LotteryDispatching.Extensions;
+﻿using Baibaocp.LotteryDispatching.Abstractions;
+using Baibaocp.LotteryDispatching.Extensions;
+using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
+using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryDispatching.Suicai.Abstractions;
 using Baibaocp.LotteryDispatching.Suicai.Abstractions.Extensions;
 using Fighting.Json;
-using Fighting.Security.Extensions;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RawRabbit;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Baibaocp.LotteryDispatching.Suicai.Ordering
+namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
 {
-    public class OrderingExecuteHandler : ExecuteHandler<OrderingExecuteMessage>
+    public class OrderingExecuteDispatcher : SuicaiExecuteDispatcher<OrderingExecuteMessage>, IOrderingExecuteDispatcher
     {
         private readonly IBusClient _publisher;
 
-        private readonly ILogger<OrderingExecuteHandler> _logger;
+        private readonly ILogger<OrderingExecuteDispatcher> _logger;
 
-        public OrderingExecuteHandler(DispatcherOptions options, ILoggerFactory loggerFactory, IBusClient publisher) : base(options, loggerFactory, "200008")
+        public OrderingExecuteDispatcher(DispatcherConfiguration options, ILogger<OrderingExecuteDispatcher> logger, IBusClient publisher) : base(options, logger, "200008")
         {
-            _logger = loggerFactory.CreateLogger<OrderingExecuteHandler>();
+            _logger = logger;
             _publisher = publisher;
         }
 
@@ -44,7 +45,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
             return JsonExtensions.ToJsonString(ordersend);
         }
 
-        public override async Task<IHandle> HandleAsync(OrderingExecuteMessage executer)
+        public override async Task<IExecuteHandle> DispatchAsync(OrderingExecuteMessage executer)
         {
             try
             {
@@ -61,24 +62,24 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
                         _logger.LogInformation("Response Status: {0}", Status);
                         if (Status.Equals("0"))
                         {
-                            return new Accepted();
+                            return new AcceptedHandle();
                         }
                         else if (Status.IsIn("-1"))
                         {
                             // TODO: Log here and notice to admin
-                            return new Rejected();
+                            return new RejectedHandle();
                         }
                     }
                 }
                 else {
-                    return new Rejected();
+                    return new RejectedHandle();
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Request Exception:{0}", ex.Message);
             }
-            return new Rejected();
+            return new RejectedHandle();
         }
     }
 }

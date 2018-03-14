@@ -1,8 +1,8 @@
-﻿using Baibaocp.LotteryDispatching.MessageServices.Messages;
+﻿using Baibaocp.LotteryDispatching.Abstractions;
+using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
+using Baibaocp.LotteryDispatching.MessageServices.Handles;
+using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryDispatching.Suicai.Abstractions;
-using Baibaocp.LotteryDispatching.Suicai.Ticketing;
-using Baibaocp.LotteryOrdering.MessageServices.Messages;
-using Baibaocp.Storaging.Entities;
 using Fighting.Json;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
@@ -10,16 +10,16 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Baibaocp.LotteryDispatching.Suicai.Awarding
+namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
 {
-    public class AwardingExecuteHandler : ExecuteHandler<QueryingExecuteMessage>
+    public class AwardingExecuteDispatcher : SuicaiExecuteDispatcher<QueryingExecuteMessage>, IAwardingExecuteDispatcher
     {
 
-        private readonly ILogger<AwardingExecuteHandler> _logger;
+        private readonly ILogger<AwardingExecuteDispatcher> _logger;
 
-        public AwardingExecuteHandler(DispatcherConfiguration options, ILoggerFactory loggerFactory) : base(options, loggerFactory, "111")
+        public AwardingExecuteDispatcher(DispatcherConfiguration options, ILogger<AwardingExecuteDispatcher> logger) : base(options, logger, "111")
         {
-            _logger = loggerFactory.CreateLogger<AwardingExecuteHandler>();
+            _logger = logger;
         }
 
         protected override string BuildRequest(QueryingExecuteMessage executer)
@@ -30,7 +30,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
             return JsonExtensions.ToJsonString(Ticket);
         }
 
-        public override async Task<IHandle> HandleAsync(QueryingExecuteMessage executer)
+        public override async Task<IExecuteHandle> DispatchAsync(QueryingExecuteMessage executer)
         {
             try
             {
@@ -43,11 +43,11 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
                     string Status = json["status"].ToString();
                     if (Status.Equals("0"))
                     {
-                        return new Waiting();
+                        return new WaitingHandle();
                     }
                     else if (Status.Equals("1"))
                     {
-                        return new Loseing();
+                        return new LoseingHandle();
                     }
                     else if (Status.Equals("2"))
                     {
@@ -74,11 +74,11 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
                         //    Status = OrderStatus.TicketWinning,
                         //    BonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100)
                         //};
-                        return new Winning((int)(Convert.ToDecimal(json["totalPrize"]) * 100), (int)(Convert.ToDecimal(json["totalPrize"]) * 100));
+                        return new WinningHandle((int)(Convert.ToDecimal(json["totalPrize"]) * 100), (int)(Convert.ToDecimal(json["totalPrize"]) * 100));
                     }
                     else
                     {
-                        return new Waiting();
+                        return new WaitingHandle();
                     }
                 }
             }
@@ -87,7 +87,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Awarding
                 _logger.LogError(ex, "Request Exception:{0}", ex.Message);
             }
             // TODO: Log here and notice to admin
-            return new Waiting();
+            return new WaitingHandle();
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Baibaocp.LotteryDispatching.Suicai.Abstractions
+﻿namespace Baibaocp.LotteryDispatching.Suicai
 {
     public class ResContent
     {

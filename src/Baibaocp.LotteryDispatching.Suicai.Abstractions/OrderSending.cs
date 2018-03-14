@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Baibaocp.LotteryDispatching.Suicai.Ordering
+namespace Baibaocp.LotteryDispatching.Suicai
 {
     public class OrderSending
     {

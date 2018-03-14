@@ -1,13 +1,9 @@
-﻿using Baibaocp.LotteryDispatching.DependencyInjection;
+﻿using Baibaocp.LotteryDispatcher.Liangcai.DependencyInjection;
+using Baibaocp.LotteryDispatching.DependencyInjection;
 using Baibaocp.LotteryDispatching.MessageServices.DependencyInjection;
-using Baibaocp.LotteryDispatching.MessageServices.Messages;
-using Baibaocp.LotteryOrdering.Scheduling.DependencyInjection;
 using Fighting.DependencyInjection;
 using Fighting.Hosting;
 using Fighting.MessageServices.DependencyInjection;
-using Fighting.Scheduling;
-using Fighting.Scheduling.DependencyInjection;
-using Fighting.Scheduling.Mysql.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RawRabbit.Configuration;
@@ -15,6 +11,10 @@ using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
 using System;
 using System.Threading.Tasks;
+using Fighting.Scheduling.DependencyInjection;
+using Baibaocp.LotteryOrdering.Scheduling.DependencyInjection;
+using Fighting.Scheduling;
+using Fighting.Scheduling.Mysql.DependencyInjection;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Ordering
 {
@@ -58,18 +58,14 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
 
                         fightBuilder.ConfigureMessageServices(messageServiceBuilder =>
                         {
-                            messageServiceBuilder.UseLotteryDispatchingMessageService();
+                            messageServiceBuilder.UseLotteryDispatchingMessageSubscriber();
                         });
+
 
                         fightBuilder.ConfigureLotteryDispatcher(dispatchBuilder =>
                         {
-                            dispatchBuilder.UseLotteryDispatching<OrderingExecuteHandler, OrderingExecuteMessage>(setupOptions =>
-                            {
-                                IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
-                                setupOptions.MerchanterId = dispatchConfiguration.GetValue<string>("LdpVenderId");
-                                setupOptions.SecretKey = dispatchConfiguration.GetValue<string>("SecretKey");
-                                setupOptions.Url = dispatchConfiguration.GetValue<string>("Url");
-                            });
+                            var dispatcherOptions = hostContext.Configuration.GetSection("DispatcherConfiguration").Get<DispatcherConfiguration>();
+                            dispatchBuilder.UseSuicaiExecuteDispatcher(dispatcherOptions);
                         });
 
                         RawRabbitOptions Options = new RawRabbitOptions { ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>() };

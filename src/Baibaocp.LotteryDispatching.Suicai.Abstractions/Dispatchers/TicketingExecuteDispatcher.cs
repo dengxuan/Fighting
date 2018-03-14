@@ -1,4 +1,7 @@
-﻿using Baibaocp.LotteryDispatching.Extensions;
+﻿using Baibaocp.LotteryDispatching.Abstractions;
+using Baibaocp.LotteryDispatching.Extensions;
+using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
+using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryDispatching.Suicai.Abstractions;
 using Fighting.Json;
@@ -9,18 +12,18 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
+namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
 {
-    public class TicketingExecuteHandler : ExecuteHandler<QueryingExecuteMessage>
+    public class TicketingExecuteDispatcher : SuicaiExecuteDispatcher<QueryingExecuteMessage>, ITicketingExecuteDispatcher
     {
 
         private readonly StorageOptions _storageOptions;
 
-        private readonly ILogger<TicketingExecuteHandler> _logger;
+        private readonly ILogger<TicketingExecuteDispatcher> _logger;
 
-        public TicketingExecuteHandler(DispatcherOptions options, StorageOptions storageOptions, ILoggerFactory loggerFactory) : base(options, loggerFactory, "200009")
+        public TicketingExecuteDispatcher(DispatcherConfiguration options, StorageOptions storageOptions, ILogger<TicketingExecuteDispatcher> logger) : base(options, logger, "200009")
         {
-            _logger = loggerFactory.CreateLogger<TicketingExecuteHandler>();
+            _logger = logger;
             _storageOptions = storageOptions;
         }
 
@@ -33,7 +36,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
         }
 
 
-        public override async Task<IHandle> HandleAsync(QueryingExecuteMessage executer)
+        public override async Task<IExecuteHandle> DispatchAsync(QueryingExecuteMessage executer)
         {
             try
             {
@@ -50,27 +53,27 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
                         string Status = json["status"].ToString();
                         if (Status.IsIn("0", "1"))
                         {
-                            return new Waiting();
+                            return new WaitingHandle();
                         }
                         else if (Status.Equals("2"))
                         {
-                            return new Success("1", "2");
+                            return new SuccessHandle("1", "2");
                         }
                         else
                         {
-                            return new Failure();
+                            return new FailureHandle();
                         }
                     }
                 }
                 else {
-                    return new Failure();
+                    return new FailureHandle();
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Request Exception:{0}", ex.Message);
             }
-            return new Waiting();
+            return new WaitingHandle();
         }
     }
 }

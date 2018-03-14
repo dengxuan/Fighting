@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
+namespace Baibaocp.LotteryDispatching.Suicai
 {
     public class OrderTicket
     {

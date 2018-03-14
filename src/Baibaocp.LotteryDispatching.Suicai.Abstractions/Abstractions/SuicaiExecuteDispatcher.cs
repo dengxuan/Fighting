@@ -1,4 +1,5 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
+using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Fighting.Json;
 using Fighting.Security.Cryptography;
@@ -13,24 +14,26 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Abstractions
 {
-    public abstract class ExecuteHandler<TExecuter> : IExecuteHandler<TExecuter> where TExecuter : IExecuteMessage
+    public abstract class SuicaiExecuteDispatcher<TExecuteMessage> : IExecuteDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
     {
         private readonly string _command;
 
-        private readonly ILogger<ExecuteHandler<TExecuter>> _logger;
+        private readonly ILogger<SuicaiExecuteDispatcher<TExecuteMessage>> _logger;
 
         private readonly HttpClient _httpClient;
 
-        private readonly DispatcherOptions _options;
+        private readonly DispatcherConfiguration _options;
 
         protected Tripledescrypt _crypter;
 
+        public string Name => "Suicai";
 
-        public ExecuteHandler(DispatcherOptions options, ILoggerFactory loggerFactory, string command)
+
+        public SuicaiExecuteDispatcher(DispatcherConfiguration options, ILogger<SuicaiExecuteDispatcher<TExecuteMessage>> logger, string command)
         {
             _options = options;
             _command = command;
-            _logger = loggerFactory.CreateLogger<ExecuteHandler<TExecuter>>();
+            _logger = logger;
             _crypter = Tripledescrypt.Create(CipherMode.CBC, PaddingMode.PKCS7);
             HttpClientHandler handler = new HttpClientHandler()
             {
@@ -50,16 +53,16 @@ namespace Baibaocp.LotteryDispatching.Suicai.Abstractions
             return s.hmac_md5(_options.SecretKey.Substring(0, 16));
         }
 
-        protected async Task<string> Send(TExecuter executer)
+        protected async Task<string> Send(TExecuteMessage message)
         {
-            string value = BuildRequest(executer);
+            string value = BuildRequest(message);
             string CipherText = _crypter.Encrypt(value, _options.SecretKey);
-            string sign = Signature(_command, executer.LdpVenderId, CipherText, out DateTime timestamp);
+            string sign = Signature(_command, message.LdpVenderId, CipherText, out DateTime timestamp);
             ReqContent reqcon = new ReqContent()
             {
                 version = "1.0",
                 apiCode = _command,
-                partnerId = executer.LdpVenderId,
+                partnerId = message.LdpVenderId,
                 messageId = timestamp.ToString("yyyyMMddHHmm"),
                 content = CipherText,
                 hmac = sign.ToLower()
@@ -92,8 +95,8 @@ namespace Baibaocp.LotteryDispatching.Suicai.Abstractions
             return true; 
         }
 
-        protected abstract string BuildRequest(TExecuter executer);
+        protected abstract string BuildRequest(TExecuteMessage message);
 
-        public abstract Task<IHandle> HandleAsync(TExecuter executer);
+        public abstract Task<IExecuteHandle> DispatchAsync(TExecuteMessage message);
     }
 }

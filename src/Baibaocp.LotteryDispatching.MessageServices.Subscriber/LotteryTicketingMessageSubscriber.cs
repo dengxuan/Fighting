@@ -59,13 +59,13 @@ namespace Baibaocp.LotteryDispatching.MessageServices
                     });
                     configuration.FromDeclaredQueue(queue =>
                     {
-                        queue.WithName($"{_dispatcher.Name}.Ticketing")
+                        queue.WithName($"LotteryDispatcher.{_dispatcher.Name}.Ticketing")
                              .WithAutoDelete(false)
                              .WithDurability(true);
                     });
                     configuration.Consume(consume =>
                     {
-                        consume.WithRoutingKey($"LotteryDispatcher.{QueryingTypes.Ticketing}.#");
+                        consume.WithRoutingKey($"LotteryDispatcher.{QueryingTypes.Ticketing}.{merchanerId}");
                     });
                 });
             }, stoppingToken);
