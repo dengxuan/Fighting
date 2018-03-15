@@ -1,19 +1,15 @@
 ﻿using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.MessageServices.Handles
 {
 
-    public sealed class WaitingHandle : IExecuteHandle
+    public sealed class WaitingHandle : IQueryingHandle
     {
-        public WaitTypes WaitType { get; }
+        public int DelayTime { get; }
 
-        public Task<bool> HandleAsync()
+        public WaitingHandle(int delayTime = 10)
         {
-            return Task.FromResult(false);
+            DelayTime = delayTime;
         }
     }
 }

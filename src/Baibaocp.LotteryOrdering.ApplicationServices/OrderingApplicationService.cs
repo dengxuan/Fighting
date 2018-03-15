@@ -183,8 +183,8 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
         {
             throw new NotImplementedException();
         }
-
-        public Task TicketedAsync(long lvpOrderId, string ldpOrderId, string ticketOdds, int status)
+        
+        public Task TicketedAsync(long lvpOrderId, string ldpOrderId, string ldpVenderId, string ticketOdds, int status)
         {
             throw new NotImplementedException();
         }

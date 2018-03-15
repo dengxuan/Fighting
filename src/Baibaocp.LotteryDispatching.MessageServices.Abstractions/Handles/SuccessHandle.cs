@@ -1,27 +1,18 @@
 ﻿using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.MessageServices.Handles
 {
 
-    public sealed class SuccessHandle : IExecuteHandle
+    public sealed class SuccessHandle : IQueryingHandle
     {
         public string TicketNumber { get; }
 
-        public string TicketOdds { get; }
+        public string TicketOdds{ get; }
 
         public SuccessHandle(string ticketNumber, string ticketOdds)
         {
             TicketNumber = ticketNumber;
             TicketOdds = ticketOdds;
-        }
-
-        public Task<bool> HandleAsync()
-        {
-            return Task.FromResult(true);
         }
     }
 }

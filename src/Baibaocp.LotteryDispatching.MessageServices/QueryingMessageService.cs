@@ -41,7 +41,7 @@ namespace Baibaocp.LotteryDispatching.MessageServices
             });
         }
 
-        public Task SubscribeAsync(string merchanerId, string merchanerName, QueryingTypes queryingType, Func<QueryingExecuteMessage, Task<bool>> subscriber, CancellationToken stoppingToken)
+        public Task SubscribeAsync(string merchanerName, QueryingTypes queryingType, Func<QueryingExecuteMessage, Task<bool>> subscriber, CancellationToken stoppingToken)
         {
             return _busClient.SubscribeAsync<QueryingExecuteMessage>(async (message) =>
             {
@@ -53,7 +53,6 @@ namespace Baibaocp.LotteryDispatching.MessageServices
                     {
                         return new Ack();
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -79,7 +78,7 @@ namespace Baibaocp.LotteryDispatching.MessageServices
                     });
                     configuration.Consume(consume =>
                     {
-                        consume.WithRoutingKey($"LotteryDispatcher.{queryingType}.{merchanerId}");
+                        consume.WithRoutingKey($"LotteryDispatcher.{queryingType}.#");
                     });
                 });
             }, stoppingToken);

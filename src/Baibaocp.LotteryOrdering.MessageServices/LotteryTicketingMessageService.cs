@@ -47,14 +47,14 @@ namespace Baibaocp.LotteryOrdering.MessageServices
             {
                 try
                 {
-                    await _orderingApplicationService.TicketedAsync(0, message.LdpOrderId, message.LdpVenderId, message.TicketOdds, (int)message.Status);
+                    await _orderingApplicationService.TicketedAsync(0, message.LdpOrderId, message.LdpVenderId, message.TicketOdds, 2000);
 
                     _logger.LogTrace("Received ticketing message: {1} {0}", message.LdpVenderId, message.LdpOrderId);
                     return new Ack();
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogTrace("Received ticketing message: {1} {0}", message.LdpVenderId, message.LdpOrderId);
+                    _logger.LogError(ex, "Received ticketing message: {1} {0}", message.LdpVenderId, message.LdpOrderId);
                 }
 
                 ///* 投注失败 */

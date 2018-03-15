@@ -43,7 +43,7 @@ namespace Baibaocp.LotteryDispatching.MessageServices
             });
         }
 
-        public Task SubscribeAsync(string merchanerId, Func<OrderingExecuteMessage, Task<bool>> subscriber, CancellationToken stoppingToken)
+        public Task SubscribeAsync(string merchanerName, Func<OrderingExecuteMessage, Task<bool>> subscriber, CancellationToken stoppingToken)
         {
             return _busClient.SubscribeAsync<OrderingExecuteMessage>(async (message) =>
             {
@@ -74,13 +74,13 @@ namespace Baibaocp.LotteryDispatching.MessageServices
                     });
                     configuration.FromDeclaredQueue(queue =>
                     {
-                        queue.WithName($"LotteryDispatcher.Ordering")
+                        queue.WithName($"LotteryDispatcher.{merchanerName}.Ordering")
                              .WithAutoDelete(false)
                              .WithDurability(true);
                     });
                     configuration.Consume(consume =>
                     {
-                        consume.WithRoutingKey($"LotteryDispatcher.Ordering.{merchanerId}");
+                        consume.WithRoutingKey($"LotteryDispatcher.Ordering.#");
                     });
                 });
             }, stoppingToken);

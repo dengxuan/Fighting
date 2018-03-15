@@ -10,9 +10,9 @@ namespace Baibaocp.LotteryDispatcher.Liangcai.DependencyInjection
     {
         public static LotteryDispatcherBuilder UseSuicaiExecuteDispatcher(this LotteryDispatcherBuilder lotteryDispatcherBuilder, DispatcherConfiguration dispatcherConfiguration)
         {
-            lotteryDispatcherBuilder.Services.AddSingleton<IAwardingExecuteDispatcher, AwardingExecuteDispatcher>();
-            lotteryDispatcherBuilder.Services.AddSingleton<IOrderingExecuteDispatcher, OrderingExecuteDispatcher>();
-            lotteryDispatcherBuilder.Services.AddSingleton<ITicketingExecuteDispatcher, TicketingExecuteDispatcher>();
+            lotteryDispatcherBuilder.Services.AddSingleton<IAwardingDispatcher, AwardingExecuteDispatcher>();
+            lotteryDispatcherBuilder.Services.AddSingleton<IOrderingDispatcher, OrderingExecuteDispatcher>();
+            lotteryDispatcherBuilder.Services.AddSingleton<ITicketingDispatcher, TicketingExecuteDispatcher>();
             lotteryDispatcherBuilder.Services.AddSingleton(dispatcherConfiguration);
             return lotteryDispatcherBuilder;
         }

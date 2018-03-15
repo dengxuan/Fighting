@@ -1,6 +1,4 @@
-﻿using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
-using Baibaocp.LotteryDispatching.MessageServices.Messages;
+﻿using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Fighting.Json;
 using Fighting.Security.Cryptography;
 using Fighting.Security.Extensions;
@@ -14,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Abstractions
 {
-    public abstract class SuicaiExecuteDispatcher<TExecuteMessage> : IExecuteDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
+    public abstract class SuicaiLotteryDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
     {
         private readonly string _command;
 
-        private readonly ILogger<SuicaiExecuteDispatcher<TExecuteMessage>> _logger;
+        private readonly ILogger<SuicaiLotteryDispatcher<TExecuteMessage>> _logger;
 
         private readonly HttpClient _httpClient;
 
@@ -26,10 +24,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Abstractions
 
         protected Tripledescrypt _crypter;
 
-        public string Name => "Suicai";
-
-
-        public SuicaiExecuteDispatcher(DispatcherConfiguration options, ILogger<SuicaiExecuteDispatcher<TExecuteMessage>> logger, string command)
+        public SuicaiLotteryDispatcher(DispatcherConfiguration options, ILogger<SuicaiLotteryDispatcher<TExecuteMessage>> logger, string command)
         {
             _options = options;
             _command = command;
@@ -96,7 +91,5 @@ namespace Baibaocp.LotteryDispatching.Suicai.Abstractions
         }
 
         protected abstract string BuildRequest(TExecuteMessage message);
-
-        public abstract Task<IExecuteHandle> DispatchAsync(TExecuteMessage message);
     }
 }

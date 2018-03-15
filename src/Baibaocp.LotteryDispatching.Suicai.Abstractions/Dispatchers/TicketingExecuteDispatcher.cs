@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
 {
-    public class TicketingExecuteDispatcher : SuicaiExecuteDispatcher<QueryingExecuteMessage>, ITicketingExecuteDispatcher
+    public class TicketingExecuteDispatcher : SuicaiLotteryDispatcher<QueryingExecuteMessage>, ITicketingDispatcher
     {
 
         private readonly StorageOptions _storageOptions;
@@ -36,7 +36,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
         }
 
 
-        public override async Task<IExecuteHandle> DispatchAsync(QueryingExecuteMessage executer)
+        public async Task<IQueryingHandle> DispatchAsync(QueryingExecuteMessage executer)
         {
             try
             {

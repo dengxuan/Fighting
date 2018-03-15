@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Liangcai
 {
-    public abstract class LiangcaiExecuteDispatcher<TExecuteMessage> : IExecuteDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
+    public abstract class LiangcaiExecuteDispatcher<TExecuteMessage> : IDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
     {
         private readonly string _command;
 
@@ -67,6 +67,6 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Liangcai
 
         protected abstract string BuildRequest(TExecuteMessage message);
 
-        public abstract Task<IExecuteHandle> DispatchAsync(TExecuteMessage message);
+        public abstract Task<IOrderingHandle> DispatchAsync(TExecuteMessage message);
     }
 }

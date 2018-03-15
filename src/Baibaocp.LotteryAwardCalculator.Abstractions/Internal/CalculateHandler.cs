@@ -33,7 +33,7 @@ namespace Baibaocp.LotteryAwardCalculator.Internal
             Handle handle = _caculator.Calculate(message);
             if (handle == Internal.Handle.Winner)
             {
-                _jobClient.Enqueue<IExecuteDispatcher<AwardingMessage>>(executer => executer.DispatchAsync(new AwardingMessage(message.LdpOrderId, message.LdpVenderId, message.LvpOrder)));
+                _jobClient.Enqueue<IDispatcher<AwardingMessage>>(executer => executer.DispatchAsync(new AwardingMessage(message.LdpOrderId, message.LdpVenderId, message.LvpOrder)));
             }
             else if (handle == Internal.Handle.Losing)
             {

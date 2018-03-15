@@ -3,7 +3,6 @@ using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Fighting.Abstractions;
-using Fighting.Scheduling.Abstractions;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
 using RawRabbit.Common;
@@ -18,17 +17,17 @@ namespace Baibaocp.LotteryOrdering.MessageServices
     {
         private readonly IBusClient _busClient;
         private readonly IIdentityGenerater _identityGenerater;
-        private readonly IOrderingApplicationService _orderingApplicationService;
         private readonly ILogger<LotteryOrderingMessageService> _logger;
-        private readonly IOrderingDispatcherMessagePublisher _orderingDispatcherMessagePublisher;
+        private readonly IOrderingMessageService _orderingMessageService;
+        private readonly IOrderingApplicationService _orderingApplicationService;
 
-        public LotteryOrderingMessageService(IBusClient busClient, IIdentityGenerater identityGenerater, IOrderingApplicationService orderingApplicationService, ILogger<LotteryOrderingMessageService> logger, IOrderingDispatcherMessagePublisher orderingDispatcherMessagePublisher)
+        public LotteryOrderingMessageService(IBusClient busClient, IIdentityGenerater identityGenerater, IOrderingApplicationService orderingApplicationService, ILogger<LotteryOrderingMessageService> logger, IOrderingMessageService orderingMessageService)
         {
             _logger = logger;
             _busClient = busClient;
             _identityGenerater = identityGenerater;
             _orderingApplicationService = orderingApplicationService;
-            _orderingDispatcherMessagePublisher = orderingDispatcherMessagePublisher;
+            _orderingMessageService = orderingMessageService;
         }
 
         public Task PublishAsync(LvpOrderedMessage orderingMessage)
@@ -57,7 +56,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 try
                 {
                     await _orderingApplicationService.CreateAsync(message.LvpOrderId, message.LvpUserId, message.LvpVenderId, message.LotteryId, message.LotteryPlayId, message.IssueNumber, message.InvestCode, message.InvestType, message.InvestCount, message.InvestTimes, message.InvestAmount);
-                    await _orderingDispatcherMessagePublisher.PublishAsync(ldpVenderId, ldpOrderId.ToString(), message);
+                    await _orderingMessageService.PublishAsync(ldpVenderId, ldpOrderId.ToString(), message);
 
                     _logger.LogTrace("Received ordering executer:{0} VenderId:{1}", ldpOrderId, ldpVenderId);
                     return new Ack();

@@ -13,7 +13,7 @@ using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
 {
-    public class TicketingExecuteDispatcher : LiangcaiExecuteDispatcher<QueryingExecuteMessage>, ITicketingExecuteDispatcher
+    public class TicketingExecuteDispatcher : LiangcaiExecuteDispatcher<QueryingExecuteMessage>, ITicketingDispatcher
     {
 
         private readonly ILogger<TicketingExecuteDispatcher> _logger;
@@ -95,7 +95,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             return string.Empty;
         }
 
-        public override async Task<IExecuteHandle> DispatchAsync(QueryingExecuteMessage executer)
+        public override async Task<IOrderingHandle> DispatchAsync(QueryingExecuteMessage executer)
         {
             string xml = await Send(executer);
             XDocument document = XDocument.Parse(xml);

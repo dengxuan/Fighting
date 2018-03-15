@@ -1,12 +1,10 @@
 ﻿using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.MessageServices.Handles
 {
-    public sealed class WinningHandle : IExecuteHandle
+    public sealed class WinningHandle : IQueryingHandle
     {
         /// <summary>
         /// 奖金。单位：分

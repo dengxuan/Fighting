@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
 {
-    public class OrderingExecuteDispatcher : SuicaiExecuteDispatcher<OrderingExecuteMessage>, IOrderingExecuteDispatcher
+    public class OrderingExecuteDispatcher : SuicaiLotteryDispatcher<OrderingExecuteMessage>, IOrderingDispatcher
     {
         private readonly IBusClient _publisher;
 
@@ -45,7 +45,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
             return JsonExtensions.ToJsonString(ordersend);
         }
 
-        public override async Task<IExecuteHandle> DispatchAsync(OrderingExecuteMessage executer)
+        public async Task<IOrderingHandle> DispatchAsync(OrderingExecuteMessage executer)
         {
             try
             {

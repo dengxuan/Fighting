@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Dispatchers
 {
-    public class AwardingExecuteDispatcher : LiangcaiExecuteDispatcher<QueryingExecuteMessage>, IAwardingExecuteDispatcher
+    public class AwardingExecuteDispatcher : LiangcaiExecuteDispatcher<QueryingExecuteMessage>, IAwardingDispatcher
     {
 
         private readonly ILogger<AwardingExecuteDispatcher> _logger;
@@ -29,7 +29,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Dispatchers
             return string.Join("_", values);
         }
 
-        public override async Task<IExecuteHandle> DispatchAsync(QueryingExecuteMessage executer)
+        public override async Task<IOrderingHandle> DispatchAsync(QueryingExecuteMessage executer)
         {
             string xml = await Send(executer);
             XDocument document = XDocument.Parse(xml);

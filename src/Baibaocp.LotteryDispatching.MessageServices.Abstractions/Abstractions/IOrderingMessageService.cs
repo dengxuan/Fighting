@@ -10,6 +10,6 @@ namespace Baibaocp.LotteryDispatching.MessageServices.Abstractions
     {
         Task PublishAsync(string merchanerId, string ldpOrderId, LvpOrderedMessage message);
 
-        Task SubscribeAsync(string merchanerId, Func<OrderingExecuteMessage, Task<bool>> subscriber, CancellationToken stoppingToken);
+        Task SubscribeAsync(string merchanerName, Func<OrderingExecuteMessage, Task<bool>> subscriber, CancellationToken stoppingToken);
     }
 }

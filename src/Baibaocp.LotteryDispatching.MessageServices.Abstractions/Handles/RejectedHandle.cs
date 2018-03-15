@@ -1,16 +1,14 @@
 ﻿using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
-using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.MessageServices.Handles
 {
-    public sealed class RejectedHandle : IExecuteHandle
+    public sealed class RejectedHandle : IOrderingHandle
     {
+        public bool Reorder { get; }
 
-        public bool ReOrdering { get; }
-
-        public Task<bool> HandleAsync()
+        public RejectedHandle(bool reorder = false)
         {
-            return Task.FromResult(true);
+            Reorder = reorder;
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
+﻿using Baibaocp.LotteryDispatching.Internal;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Baibaocp.LotteryDispatching.DependencyInjection.Builder
 {
@@ -15,6 +15,9 @@ namespace Baibaocp.LotteryDispatching.DependencyInjection.Builder
 
         internal void Build()
         {
+            Services.AddSingleton<IHostedService, AwardingDispatcherService>();
+            Services.AddSingleton<IHostedService, OrderingDispatcherService>();
+            Services.AddSingleton<IHostedService, TicketingDispatcherService>();
         }
     }
 }

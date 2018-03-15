@@ -2,11 +2,11 @@
 using Fighting.MessageServices.DependencyInjection.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Baibaocp.LotteryDispatching.MessageServices.Publisher.DependencyInjection
+namespace Baibaocp.LotteryDispatching.MessageServices.DependencyInjection
 {
     public static class LotteryDispatcherMessageServiceBuilderExtensions
     {
-        public static MessageServiceBuilder UseLotteryDispatchingMessageService(this MessageServiceBuilder messageServiceBuilder)
+        public static MessageServiceBuilder UseLotteryDispatchingMessageServices(this MessageServiceBuilder messageServiceBuilder)
         {
             messageServiceBuilder.Services.AddSingleton<IOrderingMessageService, OrderingMessageService>();
             messageServiceBuilder.Services.AddSingleton<IQueryingMessageService, QueryingMessageService>();

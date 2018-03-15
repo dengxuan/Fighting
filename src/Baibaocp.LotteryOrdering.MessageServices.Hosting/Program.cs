@@ -1,8 +1,8 @@
-﻿using Baibaocp.LotteryDispatching.MessageServices.Publisher.DependencyInjection;
-using Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection;
+﻿using Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection;
 using Baibaocp.LotteryOrdering.EntityFrameworkCore;
 using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.DependencyInjection;
+using Baibaocp.LotteryDispatching.MessageServices.DependencyInjection;
 using Baibaocp.LotteryOrdering.MessagesSevices;
 using Baibaocp.LotteryOrdering.Scheduling.DependencyInjection;
 using Fighting.Abstractions;
@@ -44,7 +44,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                         fightBuilder.ConfigureMessageServices(messageServiceBuilder =>
                         {
                             messageServiceBuilder.UseLotteryOrderingMessageServices();
-                            messageServiceBuilder.UseLotteryDispatchingMessagePublisher();
+                            messageServiceBuilder.UseLotteryDispatchingMessageServices();
                         });
 
                         fightBuilder.ConfigureScheduling(setupAction =>
@@ -96,7 +96,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 InvestTimes = 1,
                 InvestType = false,
                 LotteryId = 1,
-                IssueNumber = 2018028,
+                IssueNumber = 2018029,
                 LotteryPlayId = 10011071,
                 LvpUserId = 1000,
                 LvpVenderId = "450022"
