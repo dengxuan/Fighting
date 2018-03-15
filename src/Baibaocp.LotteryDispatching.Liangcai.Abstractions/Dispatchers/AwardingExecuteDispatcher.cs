@@ -29,7 +29,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Dispatchers
             return string.Join("_", values);
         }
 
-        public override async Task<IOrderingHandle> DispatchAsync(QueryingExecuteMessage executer)
+        public async Task<IQueryingHandle> DispatchAsync(QueryingExecuteMessage executer)
         {
             string xml = await Send(executer);
             XDocument document = XDocument.Parse(xml);

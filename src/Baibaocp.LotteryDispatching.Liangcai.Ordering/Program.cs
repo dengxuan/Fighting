@@ -58,7 +58,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
 
                         fightBuilder.ConfigureMessageServices(messageServiceBuilder =>
                         {
-                            messageServiceBuilder.UseLotteryDispatchingMessageSubscriber();
+                            messageServiceBuilder.UseLotteryDispatchingMessageServices();
                         });
 
                         fightBuilder.ConfigureLotteryDispatcher(dispatchBuilder =>

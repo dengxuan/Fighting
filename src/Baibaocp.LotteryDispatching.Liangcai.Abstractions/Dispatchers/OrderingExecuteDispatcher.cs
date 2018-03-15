@@ -46,7 +46,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Dispatchers
             return string.Join("_", values);
         }
 
-        public override async Task<IOrderingHandle> DispatchAsync(OrderingExecuteMessage executer)
+        public async Task<IOrderingHandle> DispatchAsync(OrderingExecuteMessage executer)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Dispatchers
                 else if (Status.IsIn("1003", "1011", "1014"))
                 {
                     // TODO: Log here and notice to admin
-                    return new WaitingHandle();
+                    return new RejectedHandle(true);
                 }
             }
             catch (Exception ex)

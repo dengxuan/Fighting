@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Liangcai
 {
-    public abstract class LiangcaiExecuteDispatcher<TExecuteMessage> : IDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
+    public abstract class LiangcaiExecuteDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
     {
         private readonly string _command;
 
@@ -22,8 +22,6 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Liangcai
         private readonly HttpClient _httpClient;
 
         private readonly DispatcherConfiguration _options;
-
-        public string Name => "Liangcai";
 
         public LiangcaiExecuteDispatcher(DispatcherConfiguration options, string command, ILogger<LiangcaiExecuteDispatcher<TExecuteMessage>> logger)
         {
@@ -66,7 +64,5 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Liangcai
         }
 
         protected abstract string BuildRequest(TExecuteMessage message);
-
-        public abstract Task<IOrderingHandle> DispatchAsync(TExecuteMessage message);
     }
 }
