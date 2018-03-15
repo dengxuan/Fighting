@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Abstractions
 {
-    public interface IAwardingDispatcher
+    public interface IQueryingDispatcher
     {
         Task<IQueryingHandle> DispatchAsync(QueryingExecuteMessage message);
     }

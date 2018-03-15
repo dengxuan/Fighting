@@ -11,19 +11,17 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Liangcai
 {
-    public abstract class LiangcaiExecuteDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
+    public abstract class LiangcaiDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
     {
         private readonly string _command;
 
-        private IServiceProvider iocResolver;
-
-        private readonly ILogger<LiangcaiExecuteDispatcher<TExecuteMessage>> _logger;
+        private readonly ILogger<LiangcaiDispatcher<TExecuteMessage>> _logger;
 
         private readonly HttpClient _httpClient;
 
         private readonly DispatcherConfiguration _options;
 
-        public LiangcaiExecuteDispatcher(DispatcherConfiguration options, string command, ILogger<LiangcaiExecuteDispatcher<TExecuteMessage>> logger)
+        public LiangcaiDispatcher(DispatcherConfiguration options, string command, ILogger<LiangcaiDispatcher<TExecuteMessage>> logger)
         {
             _options = options;
             _command = command;

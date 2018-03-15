@@ -13,12 +13,12 @@ using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
 {
-    public class TicketingExecuteDispatcher : LiangcaiExecuteDispatcher<QueryingExecuteMessage>, ITicketingDispatcher
+    public class QueryingExecuteDispatcher : LiangcaiDispatcher<QueryingExecuteMessage>, IQueryingDispatcher
     {
 
-        private readonly ILogger<TicketingExecuteDispatcher> _logger;
+        private readonly ILogger<QueryingExecuteDispatcher> _logger;
 
-        public TicketingExecuteDispatcher(DispatcherConfiguration options, ILogger<TicketingExecuteDispatcher> logger) : base(options, "102", logger)
+        public QueryingExecuteDispatcher(DispatcherConfiguration options, ILogger<QueryingExecuteDispatcher> logger) : base(options, "102", logger)
         {
             _logger = logger;
         }
@@ -101,12 +101,17 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             XDocument document = XDocument.Parse(xml);
 
             string Status = document.Element("ActionResult").Element("xCode").Value;
+            string value = document.Element("ActionResult").Element("xValue").Value;
+            if (Status.Equals("0"))
+            {
+                string[] values = value.Split('_');
+                return new WinningHandle((int)(Convert.ToDecimal(values[2]) * 100), (int)(Convert.ToDecimal(values[2]) * 100));
+            }
             if (Status.Equals("1"))
             {
                 string odds = document.Element("ActionResult").Element("xValue").Value.Split('_')[3];
                 string oddsXml = DeflateDecompress(odds);
                 Dictionary<string, string> oddsValues = new Dictionary<string, string>();
-                //executer.TicketContext.Add("TicketOdds", GetOdds(oddsXml, executer.LvpOrder.LotteryId));
                 return new SuccessHandle(string.Empty, GetOdds(oddsXml, 1));
             }
             else if (Status.Equals("2003"))

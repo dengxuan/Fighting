@@ -17,9 +17,9 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
 
         private readonly StorageOptions _options;
 
-        private readonly ILogger<OrderingApplicationService> _logger;
-
         private readonly IIdentityGenerater _identityGenerater;
+
+        private readonly ILogger<OrderingApplicationService> _logger;
 
         private readonly IRepository<LotteryMerchanteOrder, string> _orderingReoository;
 
@@ -37,11 +37,12 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
             return await _orderingReoository.FirstOrDefaultAsync(id);
         }
 
-        public async Task CreateAsync(string lvpOrderId, long? lvpUserId, string lvpVenderId, int lotteryId, int lotteryPlayId, int? issueNumber, string investCode, bool investType, short investCount, byte investTimes, int investAmount)
+        public async Task<LotteryMerchanteOrder> CreateAsync(string lvpOrderId, long? lvpUserId, string lvpVenderId, int lotteryId, int lotteryPlayId, int? issueNumber, string investCode, bool investType, short investCount, byte investTimes, int investAmount)
         {
-            await _orderingReoository.InsertAsync(new LotteryMerchanteOrder
+            string id = _identityGenerater.Generate().ToString();
+            return await _orderingReoository.InsertAsync(new LotteryMerchanteOrder
             {
-                Id = lvpOrderId,
+                Id = id,
                 LotteryBuyerId = 619,
                 LvpUserId = lvpUserId,
                 LvpVenderId = lvpVenderId,
@@ -179,17 +180,45 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
         //    //await cacher.SetAsync(order.Id, Task.FromResult(order));
         //}
 
-        public Task UpdateAsync(LotteryMerchanteOrder message)
+        public async Task UpdateAsync(LotteryMerchanteOrder order)
         {
-            throw new NotImplementedException();
-        }
-        
-        public Task TicketedAsync(long lvpOrderId, string ldpOrderId, string ldpVenderId, string ticketOdds, int status)
-        {
-            throw new NotImplementedException();
+            await _orderingReoository.UpdateAsync(order);
         }
 
-        public Task RewardedAsync(long lvpOrderId, int amount, int status)
+        public async Task TicketedAsync(long ldpOrderId, string ldpVenderId, string ticketOdds)
+        {
+            var order = await _orderingReoository.FirstOrDefaultAsync(ldpOrderId.ToString());
+            order.TicketOdds = ticketOdds;
+            order.LdpVenderId = ldpVenderId;
+            order.Status = (int)OrderStatus.TicketDrawing;
+            await _orderingReoository.UpdateAsync(order);
+        }
+
+        public async Task TicketedAsync(string ldpOrderId, string ldpVenderId)
+        {
+            var order = await _orderingReoository.FirstOrDefaultAsync(ldpOrderId.ToString());
+            order.LdpVenderId = ldpVenderId;
+            order.Status = (int)OrderStatus.TicketDrawing;
+            await _orderingReoository.UpdateAsync(order);
+        }
+
+        public async Task WinningAsync(long ldpOrderId, int amount, int aftertaxBonusAmount)
+        {
+            var order = await _orderingReoository.FirstOrDefaultAsync(ldpOrderId.ToString());
+            order.BonusAmount = amount;
+            order.AftertaxBonusAmount = aftertaxBonusAmount;
+            order.Status = (int)OrderStatus.TicketWinning;
+            await _orderingReoository.UpdateAsync(order);
+        }
+
+        public async Task RejectedAsync(long ldpOrderId)
+        {
+            var order = await _orderingReoository.FirstOrDefaultAsync(ldpOrderId.ToString());
+            order.Status = (int)OrderStatus.TicketFailed;
+            await _orderingReoository.UpdateAsync(order);
+        }
+
+        public Task LoseingAsync(long lvpOrderId)
         {
             throw new NotImplementedException();
         }

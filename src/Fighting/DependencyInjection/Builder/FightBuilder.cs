@@ -20,6 +20,7 @@ namespace Fighting.DependencyInjection.Builder
                        .AddClasses(fiter => fiter.WithAttribute<ISingletonDependencyAttribute>())
                        .UsingRegistrationStrategy(RegistrationStrategy.Skip)
                        .AsImplementedInterfaces()
+                       .AsSelf()
                        .WithSingletonLifetime();
             });
             Services.Scan(scanner =>
@@ -28,6 +29,7 @@ namespace Fighting.DependencyInjection.Builder
                        .AddClasses(fiter => fiter.WithAttribute<TransientDependencyAttribute>())
                        .UsingRegistrationStrategy(RegistrationStrategy.Skip)
                        .AsImplementedInterfaces()
+                       .AsSelf()
                        .WithTransientLifetime();
             });
 

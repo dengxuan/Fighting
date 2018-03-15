@@ -13,7 +13,7 @@ using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Dispatchers
 {
-    public class OrderingExecuteDispatcher : LiangcaiExecuteDispatcher<OrderingExecuteMessage>, IOrderingDispatcher
+    public class OrderingExecuteDispatcher : LiangcaiDispatcher<OrderingExecuteMessage>, IOrderingDispatcher
     {
 
         private readonly ILogger<OrderingExecuteDispatcher> _logger;

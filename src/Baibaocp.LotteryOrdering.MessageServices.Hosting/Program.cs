@@ -24,6 +24,8 @@ using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
 using System;
 using System.Threading.Tasks;
+using Baibaocp.ApplicationServices.DependencyInjection;
+using Baibaocp.Storaging.EntityFrameworkCore;
 
 namespace Baibaocp.LotteryOrdering.MessageServices
 {
@@ -55,6 +57,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                         });
                         fightBuilder.ConfigureApplicationServices(applicationServiceBuilder =>
                         {
+                            applicationServiceBuilder.UseBaibaocpApplicationService();
                             applicationServiceBuilder.UseLotteryOrderingApplicationService();
                         });
                         fightBuilder.ConfigureCacheing(cacheBuilder =>
@@ -68,6 +71,10 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                         fightBuilder.ConfigureStorage(storageBuilder =>
                         {
                             storageBuilder.UseEntityFrameworkCore<LotteryOrderingDbContext>(optionsBuilder =>
+                            {
+                                optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
+                            });
+                            storageBuilder.UseEntityFrameworkCore<BaibaocpStorageContext>(optionsBuilder =>
                             {
                                 optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
                             });

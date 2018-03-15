@@ -47,8 +47,14 @@ namespace Baibaocp.LotteryOrdering.MessageServices
             {
                 try
                 {
-                    await _orderingApplicationService.TicketedAsync(0, message.LdpOrderId, message.LdpVenderId, message.TicketOdds, 2000);
-
+                    if(message.TicketingType == LdpTicketingTypes.Success)
+                    {
+                        await _orderingApplicationService.TicketedAsync(long.Parse(message.LdpOrderId), message.LdpVenderId, message.TicketOdds);
+                    }
+                    else
+                    {
+                        await _orderingApplicationService.RejectedAsync(long.Parse(message.LdpOrderId));
+                    }
                     _logger.LogTrace("Received ticketing message: {1} {0}", message.LdpVenderId, message.LdpOrderId);
                     return new Ack();
                 }

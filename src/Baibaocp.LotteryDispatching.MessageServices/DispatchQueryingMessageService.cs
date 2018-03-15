@@ -1,6 +1,5 @@
 ﻿using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
-using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
 using RawRabbit.Common;
@@ -11,23 +10,22 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.MessageServices
 {
-    public class OrderingMessageService : IOrderingMessageService
+    public class DispatchQueryingMessageService : IDispatchQueryingMessageService
     {
         private readonly IBusClient _busClient;
 
-        private readonly ILogger<OrderingMessageService> _logger;
+        private readonly ILogger<DispatchQueryingMessageService> _logger;
 
-        public OrderingMessageService(IBusClient busClient, ILogger<OrderingMessageService> logger)
+        public DispatchQueryingMessageService(IBusClient busClient, ILogger<DispatchQueryingMessageService> logger)
         {
             _logger = logger;
             _busClient = busClient;
         }
 
-        public Task PublishAsync(string merchanerId, string ldpOrderId, LvpOrderedMessage message)
+        public Task PublishAsync(string merchanerId, string ldpOrderId, QueryingTypes queryingType)
         {
-            OrderingExecuteMessage orderingMessage = new OrderingExecuteMessage(ldpOrderId, merchanerId, message);
-
-            return _busClient.PublishAsync(orderingMessage, context =>
+            QueryingExecuteMessage queryingMessage = new QueryingExecuteMessage(ldpOrderId, merchanerId, queryingType);
+            return _busClient.PublishAsync(queryingMessage, context =>
             {
                 context.UsePublishConfiguration(configuration =>
                 {
@@ -38,19 +36,19 @@ namespace Baibaocp.LotteryDispatching.MessageServices
                                 .WithAutoDelete(false)
                                 .WithType(ExchangeType.Topic);
                     });
-                    configuration.WithRoutingKey($"LotteryDispatcher.Ordering.{merchanerId}");
+                    configuration.WithRoutingKey($"LotteryDispatcher.Querying.{merchanerId}");
                 });
             });
         }
 
-        public Task SubscribeAsync(string merchanerName, Func<OrderingExecuteMessage, Task<bool>> subscriber, CancellationToken stoppingToken)
+        public Task SubscribeAsync(string merchanerName, QueryingTypes queryingType, Func<QueryingExecuteMessage, Task<bool>> subscriber, CancellationToken stoppingToken)
         {
-            return _busClient.SubscribeAsync<OrderingExecuteMessage>(async (message) =>
+            return _busClient.SubscribeAsync<QueryingExecuteMessage>(async (message) =>
             {
                 try
                 {
-                    _logger.LogTrace("Received ordering message:{0} VenderId:{1}", message.LdpOrderId, message.LdpVenderId);
-                    bool? result = await subscriber?.Invoke(message);
+                    _logger.LogTrace("Received ordering executer:{0} VenderId:{1}", message.LdpOrderId, message.LdpVenderId);
+                    var result = await subscriber?.Invoke(message);
                     if (result == true)
                     {
                         return new Ack();
@@ -74,13 +72,13 @@ namespace Baibaocp.LotteryDispatching.MessageServices
                     });
                     configuration.FromDeclaredQueue(queue =>
                     {
-                        queue.WithName($"LotteryDispatcher.{merchanerName}.Ordering")
+                        queue.WithName($"LotteryDispatcher.{merchanerName}.{queryingType}")
                              .WithAutoDelete(false)
                              .WithDurability(true);
                     });
                     configuration.Consume(consume =>
                     {
-                        consume.WithRoutingKey($"LotteryDispatcher.Ordering.#");
+                        consume.WithRoutingKey($"LotteryDispatcher.Querying.#");
                     });
                 });
             }, stoppingToken);

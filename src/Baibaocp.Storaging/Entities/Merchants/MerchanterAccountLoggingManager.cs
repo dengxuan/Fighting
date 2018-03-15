@@ -1,9 +1,11 @@
 ﻿using Fighting.Storaging.Repositories.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
+using Fighting.DependencyInjection.Builder;
 
 namespace Baibaocp.Storaging.Entities.Merchants
 {
+    [TransientDependency]
     public class MerchanterAccountLoggingManager
     {
 

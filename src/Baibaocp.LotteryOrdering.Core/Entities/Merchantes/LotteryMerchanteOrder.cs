@@ -16,13 +16,13 @@ namespace Baibaocp.LotteryOrdering.Core.Entities.Merchantes
         public long LotteryBuyerId { get; set; }
 
         /// <summary>
-        /// 渠道编号
+        /// 投注渠道编号
         /// </summary>
         [Required]
         public string LvpVenderId { get; set; }
 
         /// <summary>
-        /// 渠道订单号
+        /// 投注渠道订单号
         /// </summary>
         [Required]
         [Column("ChannelOrderId")]

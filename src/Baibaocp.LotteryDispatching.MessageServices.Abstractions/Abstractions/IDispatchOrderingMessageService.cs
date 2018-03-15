@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.MessageServices.Abstractions
 {
-    public interface IOrderingMessageService
+    public interface IDispatchOrderingMessageService
     {
         Task PublishAsync(string merchanerId, string ldpOrderId, LvpOrderedMessage message);
 

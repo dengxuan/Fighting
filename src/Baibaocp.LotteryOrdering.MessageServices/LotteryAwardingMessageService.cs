@@ -47,7 +47,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
             {
                 try
                 {
-                    await _orderingApplicationService.RewardedAsync(0, message.BonusAmount, (int)message.AwardingType);
+                    await _orderingApplicationService.WinningAsync(0, message.BonusAmount, (int)message.AwardingType);
 
                     _logger.LogTrace("Received ticketing message: {1} {0}", message.LdpVenderId, message.LdpOrderId);
                     return new Ack();

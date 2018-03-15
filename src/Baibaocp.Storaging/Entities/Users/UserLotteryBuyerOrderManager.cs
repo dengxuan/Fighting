@@ -1,9 +1,12 @@
-﻿using Fighting.Storaging.Repositories.Abstractions;
+﻿using Fighting.DependencyInjection.Builder;
+using Fighting.Storaging.Repositories.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Baibaocp.Storaging.Entities.Users
 {
+
+    [TransientDependency]
     public class UserLotteryBuyerOrderManager
     {
         private readonly IRepository<UserLotteryBuyerOrder, long> _orderRepository;

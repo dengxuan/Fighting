@@ -2,8 +2,11 @@
 {
     public class QueryingExecuteMessage : ExecuteMessage
     {
-        public QueryingExecuteMessage(string ldpOrderId, string ldpVenderId) : base(ldpOrderId, ldpVenderId)
+        public QueryingTypes QueryingType { get; }
+
+        public QueryingExecuteMessage(string ldpOrderId, string ldpVenderId, QueryingTypes queryingType) : base(ldpOrderId, ldpVenderId)
         {
+            QueryingType = queryingType;
         }
     }
 }

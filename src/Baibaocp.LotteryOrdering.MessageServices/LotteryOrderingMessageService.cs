@@ -1,5 +1,7 @@
-﻿using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
+﻿using Baibaocp.ApplicationServices.Abstractions;
+using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
+using Baibaocp.LotteryOrdering.Core.Entities.Merchantes;
 using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Fighting.Abstractions;
@@ -18,15 +20,18 @@ namespace Baibaocp.LotteryOrdering.MessageServices
         private readonly IBusClient _busClient;
         private readonly IIdentityGenerater _identityGenerater;
         private readonly ILogger<LotteryOrderingMessageService> _logger;
-        private readonly IOrderingMessageService _orderingMessageService;
+        private readonly IDispatchOrderingMessageService _orderingMessageService;
         private readonly IOrderingApplicationService _orderingApplicationService;
+        private readonly ILotteryMerchanterApplicationService _lotteryMerchanterApplicationService;
+        private readonly ILotteryTicketingMessageService _lotteryTicketingMessageService;
 
-        public LotteryOrderingMessageService(IBusClient busClient, IIdentityGenerater identityGenerater, IOrderingApplicationService orderingApplicationService, ILogger<LotteryOrderingMessageService> logger, IOrderingMessageService orderingMessageService)
+        public LotteryOrderingMessageService(IBusClient busClient, IIdentityGenerater identityGenerater, IOrderingApplicationService orderingApplicationService, ILotteryMerchanterApplicationService lotteryMerchanterApplicationService, ILogger<LotteryOrderingMessageService> logger, IDispatchOrderingMessageService orderingMessageService)
         {
             _logger = logger;
             _busClient = busClient;
             _identityGenerater = identityGenerater;
             _orderingApplicationService = orderingApplicationService;
+            _lotteryMerchanterApplicationService = lotteryMerchanterApplicationService;
             _orderingMessageService = orderingMessageService;
         }
 
@@ -51,38 +56,24 @@ namespace Baibaocp.LotteryOrdering.MessageServices
         {
             return _busClient.SubscribeAsync<LvpOrderedMessage>(async (message) =>
             {
-                long ldpOrderId = _identityGenerater.Generate();
-                string ldpVenderId = "450022";
                 try
                 {
-                    await _orderingApplicationService.CreateAsync(message.LvpOrderId, message.LvpUserId, message.LvpVenderId, message.LotteryId, message.LotteryPlayId, message.IssueNumber, message.InvestCode, message.InvestType, message.InvestCount, message.InvestTimes, message.InvestAmount);
-                    await _orderingMessageService.PublishAsync(ldpVenderId, ldpOrderId.ToString(), message);
-
-                    _logger.LogTrace("Received ordering executer:{0} VenderId:{1}", ldpOrderId, ldpVenderId);
+                    /* 此处必须保证投注渠道已经开通相应的彩种和出票渠道*/
+                    string ldpVenderId = await _lotteryMerchanterApplicationService.FindLdpVenderId(message.LvpVenderId, message.LotteryId);
+                    if (string.IsNullOrEmpty(ldpVenderId))
+                    {
+                        // Todo: 增加错误日志
+                        _logger.LogError("当前投注渠道{0}不支持该彩种{1}", message.LvpVenderId, message.LotteryId);
+                        return new Nack();
+                    }
+                    LotteryMerchanteOrder lotteryMerchanteOrder = await _orderingApplicationService.CreateAsync(message.LvpOrderId, message.LvpUserId, message.LvpVenderId, message.LotteryId, message.LotteryPlayId, message.IssueNumber, message.InvestCode, message.InvestType, message.InvestCount, message.InvestTimes, message.InvestAmount);
+                    await _orderingMessageService.PublishAsync(ldpVenderId, lotteryMerchanteOrder.Id, message);
                     return new Ack();
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error of the ordering executer:{0} VenderId:{1}", ldpOrderId, ldpVenderId);
+                    _logger.LogError(ex, "Error of the ordering :{0}", message.LvpOrderId);
                 }
-
-                ///* 投注失败 */
-                //await _client.PublishAsync(new LdpTicketedMessage
-                //{
-                //    LvpOrder = message,
-                //    Status = OrderStatus.TicketFailed
-                //}, context => context.UsePublishConfiguration(configuration =>
-                //{
-                //    configuration.OnDeclaredExchange(exchange =>
-                //    {
-                //        exchange.WithName("Baibaocp.LotteryVender")
-                //                .WithDurability(true)
-                //                .WithAutoDelete(false)
-                //                .WithType(ExchangeType.Topic);
-                //    });
-                //    configuration.WithRoutingKey(RoutingkeyConsts.Orders.Completed.Failure);
-                //}));
-
                 return new Nack();
             }, context =>
             {

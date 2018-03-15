@@ -8,8 +8,8 @@ namespace Baibaocp.LotteryDispatching.MessageServices.DependencyInjection
     {
         public static MessageServiceBuilder UseLotteryDispatchingMessageServices(this MessageServiceBuilder messageServiceBuilder)
         {
-            messageServiceBuilder.Services.AddSingleton<IOrderingMessageService, OrderingMessageService>();
-            messageServiceBuilder.Services.AddSingleton<IQueryingMessageService, QueryingMessageService>();
+            messageServiceBuilder.Services.AddSingleton<IDispatchOrderingMessageService, DispatchOrderingMessageService>();
+            messageServiceBuilder.Services.AddSingleton<IDispatchQueryingMessageService, DispatchQueryingMessageService>();
             return messageServiceBuilder;
         }
     }

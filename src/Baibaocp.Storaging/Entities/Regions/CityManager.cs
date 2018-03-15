@@ -1,8 +1,11 @@
-﻿using Fighting.Storaging.Repositories.Abstractions;
+﻿using Fighting.DependencyInjection.Builder;
+using Fighting.Storaging.Repositories.Abstractions;
 using System.Linq;
 
 namespace Baibaocp.Storaging.Entities.Regions
 {
+
+    [TransientDependency]
     public class CityManager
     {
         private readonly IRepository<City, int> _cityRepository;
