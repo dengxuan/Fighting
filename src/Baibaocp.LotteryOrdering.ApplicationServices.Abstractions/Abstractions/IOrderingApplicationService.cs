@@ -1,6 +1,5 @@
 ﻿using Baibaocp.LotteryOrdering.Core.Entities.Merchantes;
 using Fighting.ApplicationServices.Abstractions;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryOrdering.ApplicationServices.Abstractions
@@ -40,7 +39,7 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices.Abstractions
         /// <param name="ldpVenderId">出票渠道编号</param>
         /// <param name="ticketOdds">出票赔率</param>
         /// <returns></returns>
-        Task TicketedAsync(long ldpOrderId, string ldpVenderId, string ticketOdds);
+        Task<LotteryMerchanteOrder> TicketedAsync(long ldpOrderId, string ldpVenderId, string ticketOdds);
 
         /// <summary>
         /// 出票成功
@@ -49,14 +48,14 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices.Abstractions
         /// <param name="ldpOrderId">出票渠道订单号</param>
         /// <param name="ldpVenderId">出票渠道编号</param>
         /// <returns></returns>
-        Task TicketedAsync(string ldpOrderId, string ldpVenderId);
+        Task<LotteryMerchanteOrder> TicketedAsync(string ldpOrderId, string ldpVenderId);
 
         /// <summary>
         /// 投注失败
         /// </summary>
         /// <param name="ldpOrderId">出票渠道订单号</param>
         /// <returns></returns>
-        Task RejectedAsync(long ldpOrderId);
+        Task<LotteryMerchanteOrder> RejectedAsync(long ldpOrderId);
 
         /// <summary>
         /// 中间
@@ -65,13 +64,13 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices.Abstractions
         /// <param name="amount">中军金额</param>
         /// <param name="aftertaxBonusAmount">税后中奖金额</param>
         /// <returns></returns>
-        Task WinningAsync(long ldpOrderId, int amount, int aftertaxBonusAmount);
+        Task<LotteryMerchanteOrder> WinningAsync(long ldpOrderId, int amount, int aftertaxBonusAmount);
 
         /// <summary>
         /// 未中奖
         /// </summary>
         /// <param name="ldpOrderId">出票渠道订单号</param>
         /// <returns></returns>
-        Task LoseingAsync(long ldpOrderId);
+        Task<LotteryMerchanteOrder> LoseingAsync(long ldpOrderId);
     }
 }

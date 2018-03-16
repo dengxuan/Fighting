@@ -11,6 +11,6 @@ namespace Baibaocp.LotteryOrdering.MessageServices.Messages
 
         public string TicketOdds { get; set; }
 
-        public LdpTicketingTypes TicketingType { get; set; }
+        public LotteryTicketingTypes TicketingType { get; set; }
     }
 }

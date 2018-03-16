@@ -51,7 +51,7 @@ namespace Baibaocp.LotteryDispatching.Internal
                             {
                                 return false;
                             }
-                            await _lotteryTicketingMessageService.PublishAsync(new LdpTicketedMessage { LdpOrderId = message.LdpOrderId, LdpVenderId = message.LdpVenderId, TicketingType = LdpTicketingTypes.Failure });
+                            await _lotteryTicketingMessageService.PublishAsync(new LdpTicketedMessage { LdpOrderId = message.LdpOrderId, LdpVenderId = message.LdpVenderId, TicketingType = LotteryTicketingTypes.Failure });
                             return true;
                         }
                     default:

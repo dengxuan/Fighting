@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Baibaocp.LotteryNotifier.Abstractions;
+using System;
 
-namespace Baibaocp.LotteryNotifier.Hongdan
+namespace Baibaocp.LotteryNotifier
 {
     public static class SerializerExtensions
     {

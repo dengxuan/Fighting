@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Baibaocp.LotteryOrdering.MessageServices.Messages
 {
-    public enum LdpAwardingTypes
+    public enum LotteryAwardingTypes
     {
         Winning,
         Loseing,

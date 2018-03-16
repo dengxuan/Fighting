@@ -1,4 +1,4 @@
-﻿namespace Baibaocp.LotteryNotifier.Notifiers
+﻿namespace Baibaocp.LotteryNotifier.MessageServices.Notices
 {
     public class Awarded
     {

@@ -185,40 +185,40 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
             await _orderingReoository.UpdateAsync(order);
         }
 
-        public async Task TicketedAsync(long ldpOrderId, string ldpVenderId, string ticketOdds)
+        public async Task<LotteryMerchanteOrder> TicketedAsync(long ldpOrderId, string ldpVenderId, string ticketOdds)
         {
             var order = await _orderingReoository.FirstOrDefaultAsync(ldpOrderId.ToString());
             order.TicketOdds = ticketOdds;
             order.LdpVenderId = ldpVenderId;
             order.Status = (int)OrderStatus.TicketDrawing;
-            await _orderingReoository.UpdateAsync(order);
+            return await _orderingReoository.UpdateAsync(order);
         }
 
-        public async Task TicketedAsync(string ldpOrderId, string ldpVenderId)
+        public async Task<LotteryMerchanteOrder> TicketedAsync(string ldpOrderId, string ldpVenderId)
         {
             var order = await _orderingReoository.FirstOrDefaultAsync(ldpOrderId.ToString());
             order.LdpVenderId = ldpVenderId;
             order.Status = (int)OrderStatus.TicketDrawing;
-            await _orderingReoository.UpdateAsync(order);
+            return await _orderingReoository.UpdateAsync(order);
         }
 
-        public async Task WinningAsync(long ldpOrderId, int amount, int aftertaxBonusAmount)
+        public async Task<LotteryMerchanteOrder> WinningAsync(long ldpOrderId, int amount, int aftertaxBonusAmount)
         {
             var order = await _orderingReoository.FirstOrDefaultAsync(ldpOrderId.ToString());
             order.BonusAmount = amount;
             order.AftertaxBonusAmount = aftertaxBonusAmount;
             order.Status = (int)OrderStatus.TicketWinning;
-            await _orderingReoository.UpdateAsync(order);
+            return await _orderingReoository.UpdateAsync(order);
         }
 
-        public async Task RejectedAsync(long ldpOrderId)
+        public async Task<LotteryMerchanteOrder> RejectedAsync(long ldpOrderId)
         {
             var order = await _orderingReoository.FirstOrDefaultAsync(ldpOrderId.ToString());
             order.Status = (int)OrderStatus.TicketFailed;
-            await _orderingReoository.UpdateAsync(order);
+            return await _orderingReoository.UpdateAsync(order);
         }
 
-        public Task LoseingAsync(long lvpOrderId)
+        public Task<LotteryMerchanteOrder> LoseingAsync(long lvpOrderId)
         {
             throw new NotImplementedException();
         }
