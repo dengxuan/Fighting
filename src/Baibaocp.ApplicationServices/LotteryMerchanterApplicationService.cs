@@ -17,7 +17,7 @@ namespace Baibaocp.ApplicationServices
 
         private readonly Dictionary<string, Dictionary<int, string>> mappings = new Dictionary<string, Dictionary<int, string>>
         {
-            { "10081000345", new Dictionary<int, string> { { 1, "450022" }, { 2, "450022" }, { 31, "450022" }, { 20201, "800" } }},
+            { "10081000345", new Dictionary<int, string> { { 1, "450022" }, { 2, "450022" }, { 31, "450022" }, { 20201, "800" }, { 20205, "800" } }},
         };
 
         public LotteryMerchanterApplicationService(IIdentityGenerater identityGenerater, MerchanterManager merchanterManager, MerchanterAccountLoggingManager merchanterAccountLoggingManager)
@@ -29,7 +29,7 @@ namespace Baibaocp.ApplicationServices
 
         public Task<string> FindLdpVenderId(string lvpVenderId, int lotteryId)
         {
-            var ldpVenderId = mappings?[lvpVenderId]?[lotteryId];
+            var ldpVenderId = mappings.GetValueOrDefault(lvpVenderId)?.GetValueOrDefault(lotteryId);
             return Task.FromResult(ldpVenderId);
         }
 

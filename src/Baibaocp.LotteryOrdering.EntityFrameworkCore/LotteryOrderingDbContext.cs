@@ -8,7 +8,7 @@ namespace Baibaocp.LotteryOrdering.EntityFrameworkCore
     public class LotteryOrderingDbContext : StorageContext
     {
 
-        public LotteryOrderingDbContext(StorageOptions storageOptions, DbContextOptions options) : base(storageOptions, options)
+        public LotteryOrderingDbContext(StorageOptions storageOptions, DbContextOptions<LotteryOrderingDbContext> options) : base(storageOptions, options)
         {
         }
 
