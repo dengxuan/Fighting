@@ -1,13 +1,8 @@
 ﻿using Baibaocp.LotteryNotifier.Abstractions;
-using Baibaocp.LotteryNotifier.Abstractions.Abstractions;
 using Baibaocp.LotteryNotifier.MessageServices.Abstractions;
-using Baibaocp.LotteryNotifier.Notifiers;
-using Baibaocp.LotteryOrdering.MessageServices.Messages;
-using Baibaocp.Storaging.Entities;
 using Fighting.Hosting;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
-using RawRabbit.Configuration.Exchange;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,20 +16,21 @@ namespace Baibaocp.LotteryNotifier.Internal.Services
 
         private readonly ILogger<LotteryAwardedService> _logger;
 
-        private readonly IAwardingNoticeMessageService _ticketingNoticeMessageService;
+        private readonly IAwardingNoticeMessageService _awardingNoticeMessageService;
 
-        public LotteryAwardedService(IBusClient client, IAwardingNotifier dispatcher, ILogger<LotteryAwardedService> logger, IAwardingNoticeMessageService ticketingNoticeMessageService)
+        public LotteryAwardedService(IBusClient client, IAwardingNotifier dispatcher, ILogger<LotteryAwardedService> logger, IAwardingNoticeMessageService awardingNoticeMessageService)
         {
             _client = client;
             _logger = logger;
             _dispatcher = dispatcher;
+            _awardingNoticeMessageService = awardingNoticeMessageService;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            return _ticketingNoticeMessageService.SubscribeAsync(async (message) =>
+            return _awardingNoticeMessageService.SubscribeAsync(async (message) =>
             {
-                _logger.LogTrace("Received ordering LvpOrderId:{0} LvpVenderId:{1} ", message.OrderId, message.VenderId);
+                _logger.LogTrace("Received ordering LvpOrderId:{0} LvpVenderId:{1} ", message.Content.OrderId, message.VenderId);
                 return await _dispatcher.DispatchAsync(message);
             }, stoppingToken);
         }

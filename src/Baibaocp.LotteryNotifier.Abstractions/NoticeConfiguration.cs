@@ -9,7 +9,9 @@ namespace Baibaocp.LotteryNotifier
     {
         public string LvpVenderId { get; set; }
 
-        public string Url { get; set; }
+        public string TicketedUrl { get; set; }
+
+        public string AwardedUrl { get; set; }
 
         public string SecurityKey { get; set; }
     }

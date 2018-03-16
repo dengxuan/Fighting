@@ -1,10 +1,11 @@
-﻿using Baibaocp.LotteryOrdering.MessageServices.Messages;
+﻿using Baibaocp.LotteryNotifier.MessageServices;
+using Baibaocp.LotteryNotifier.MessageServices.Notices;
 using System.Threading.Tasks;
 
-namespace Baibaocp.LotteryNotifier.Abstractions.Abstractions
+namespace Baibaocp.LotteryNotifier.Abstractions
 {
     public interface IAwardingNotifier
     {
-        Task<bool> DispatchAsync(LvpAwardedMessage message);
+        Task<bool> DispatchAsync(Notice<Awarded> message);
     }
 }

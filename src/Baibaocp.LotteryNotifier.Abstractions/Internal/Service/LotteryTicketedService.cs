@@ -1,12 +1,8 @@
 ﻿using Baibaocp.LotteryNotifier.Abstractions;
 using Baibaocp.LotteryNotifier.MessageServices.Abstractions;
-using Baibaocp.LotteryNotifier.Notifiers;
-using Baibaocp.LotteryOrdering.MessageServices.Messages;
-using Baibaocp.Storaging.Entities;
 using Fighting.Hosting;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
-using RawRabbit.Configuration.Exchange;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,7 +27,7 @@ namespace Baibaocp.LotteryNotifier.Internal.Services
         {
             return _ticketingNoticeMessageService.SubscribeAsync(async (message) =>
             {
-                _logger.LogTrace("Received ordering LvpOrderId:{0} LvpVenderId:{1} LdpOrderId:{2} LdpVenderId:{3}", message.OrderId, message.VenderId);
+                _logger.LogTrace("Received ordering LvpOrderId:{0} LvpVenderId:{1}", message.Content, message.VenderId);
                 return await _dispatcher.DispatchAsync(message);
             }, stoppingToken);
         }

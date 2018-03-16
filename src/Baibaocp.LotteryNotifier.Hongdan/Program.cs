@@ -1,8 +1,5 @@
-﻿using Baibaocp.LotteryNotifier.Abstractions;
-using Baibaocp.LotteryNotifier.DependencyInjection;
-using Baibaocp.LotteryNotifier.Hongdan.Handlers;
+﻿using Baibaocp.LotteryNotifier.DependencyInjection;
 using Baibaocp.LotteryNotifier.Internal.Services;
-using Baibaocp.LotteryNotifier.Notifiers;
 using Fighting.DependencyInjection;
 using Fighting.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RawRabbit.Configuration;
+using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
 using System.Threading.Tasks;
 
@@ -39,25 +37,16 @@ namespace Baibaocp.LotteryNotifier.Hongdan
                     services.AddFighting(fightBuilder =>
                     {
                     });
-                    //services.AddRawRabbit(new RawRabbitOptions
-                    //{
-                    //    ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>(),
-                    //    Plugins = p =>
-                    //    {
-                    //        p.UseMessageContext<MessageContext>();
-                    //    },
-                    //    DependencyInjection = ioc =>
-                    //    {
-                    //    }
-                    //});
+                    services.AddRawRabbit(new RawRabbitOptions
+                    {
+                        ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>()
+                    });
                     services.AddLotteryNotifier(builderAction =>
                     {
                         builderAction.ConfigureOptions(options =>
                         {
                             var noticeConfiguration = hostContext.Configuration.GetSection("NoticeConfiguration").Get<NoticeConfiguration>();
-                            options.Mappings.Add(typeof(INoticeHandler<Ticketed>), typeof(TicketedNoticeHandler));
-                            options.Mappings.Add(typeof(INoticeHandler<Awarded>), typeof(AwardedNoticeHandler));
-                            options.Configures.Add(noticeConfiguration);
+                            builderAction.Services.AddSingleton(noticeConfiguration);
                         });
                     });
 

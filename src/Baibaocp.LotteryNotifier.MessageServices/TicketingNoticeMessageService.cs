@@ -1,4 +1,5 @@
 ﻿using Baibaocp.LotteryNotifier.MessageServices.Abstractions;
+using Baibaocp.LotteryNotifier.MessageServices.Notices;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
@@ -40,22 +41,22 @@ namespace Baibaocp.LotteryNotifier.MessageServices
             });
         }
 
-        public Task SubscribeAsync(Func<LvpTicketedMessage, Task<bool>> subscriber, CancellationToken stoppingToken)
+        public Task SubscribeAsync(Func<Notice<Ticketed>, Task<bool>> subscriber, CancellationToken stoppingToken)
         {
             return _busClient.SubscribeAsync<LvpTicketedMessage>(async (message) =>
             {
                 try
                 {
-                    bool result = await subscriber?.Invoke(message);
-                    //bool result = await _dispatcher.DispatchAsync(new Notifier<Ticketed>(message.VenderId)
-                    //{
-                    //    Notice = new Ticketed
-                    //    {
-                    //        OrderId = message.OrderId,
-                    //        TicketOdds = message.TicketOdds,
-                    //        Status = message.TicketingType == LotteryTicketingTypes.Success ? 10300 : 10301
-                    //    }
-                    //});
+                    var notice = new Notice<Ticketed>(message.VenderId)
+                    {
+                        Content = new Ticketed
+                        {
+                            OrderId = message.OrderId,
+                            TicketOdds = message.TicketOdds,
+                            Status = message.TicketingType == LotteryTicketingTypes.Success ? 10300 : 10301
+                        }
+                    };
+                    bool result = await subscriber?.Invoke(notice);
                     if (result == true)
                     {
                         return new Ack();

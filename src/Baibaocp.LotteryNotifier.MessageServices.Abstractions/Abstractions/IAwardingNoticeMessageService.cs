@@ -1,4 +1,5 @@
-﻿using Baibaocp.LotteryOrdering.MessageServices.Messages;
+﻿using Baibaocp.LotteryNotifier.MessageServices.Notices;
+using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +10,6 @@ namespace Baibaocp.LotteryNotifier.MessageServices.Abstractions
     {
         Task PublishAsync(LvpAwardedMessage message);
 
-        Task SubscribeAsync(Func<LvpAwardedMessage, Task<bool>> subscriber, CancellationToken stoppingToken);
+        Task SubscribeAsync(Func<Notice<Awarded>, Task<bool>> subscriber, CancellationToken stoppingToken);
     }
 }

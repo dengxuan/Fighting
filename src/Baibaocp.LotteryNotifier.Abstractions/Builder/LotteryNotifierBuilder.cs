@@ -19,18 +19,6 @@ namespace Baibaocp.LotteryNotifier.Builder
             Services = services;
         }
 
-        private void AddHandlerDiscovery()
-        {
-            Services.Scan(s =>
-            {
-                s.FromApplicationDependencies()
-                .AddClasses(f => f.AssignableTo(typeof(INoticeHandler<>)), !_discoverySettings.IncludeNonPublic)
-                .UsingRegistrationStrategy(_discoverySettings.RegistrationStrategy)
-                .AsImplementedInterfaces()
-                .WithLifetime(_discoverySettings.DiscoveredHandlersLifetime);
-            });
-        }
-
         public LotteryNotifierBuilder ConfigureOptions(Action<LotteryNoticeOptions> options)
         {
             Services.Configure(options);
@@ -47,7 +35,6 @@ namespace Baibaocp.LotteryNotifier.Builder
         {
             Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<LotteryNoticeOptions>, DefaultLotteryNoticeOptionsSetup>());
             Services.AddSingleton(c => c.GetRequiredService<IOptions<LotteryNoticeOptions>>().Value);
-            AddHandlerDiscovery();
         }
     }
 }

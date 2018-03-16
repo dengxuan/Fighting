@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Baibaocp.LotteryNotifier.Abstractions;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Baibaocp.LotteryNotifier.Hongdan

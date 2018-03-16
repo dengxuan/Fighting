@@ -1,7 +1,8 @@
 ﻿using Baibaocp.LotteryNotifier.Abstractions;
 using Baibaocp.LotteryNotifier.Builder;
-using Baibaocp.LotteryNotifier.Internal;
+using Baibaocp.LotteryNotifier.Internal.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 
 namespace Baibaocp.LotteryNotifier.DependencyInjection
@@ -31,8 +32,10 @@ namespace Baibaocp.LotteryNotifier.DependencyInjection
 
         internal static void AddNoticeServices(IServiceCollection services)
         {
-            services.AddSingleton<ITicketingNotifier, NoticeDispatcher>();
-            services.AddSingleton<INoticeHandlerFactory, NoticeHandlerFactory>();
+            services.AddSingleton<ITicketingNotifier, TicketingNotifier>();
+            services.AddSingleton<IAwardingNotifier, AwardingNotifier>();
+            services.AddSingleton<IHostedService, LotteryAwardedService>();
+            services.AddSingleton<IHostedService, LotteryTicketedService>();
         }
     }
 }
