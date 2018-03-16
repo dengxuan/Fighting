@@ -72,7 +72,7 @@ namespace Baibaocp.LotteryDispatching.MessageServices
                     });
                     configuration.FromDeclaredQueue(queue =>
                     {
-                        queue.WithName($"LotteryDispatcher.{merchanerName}.{queryingType}")
+                        queue.WithName($"LotteryDispatcher.{merchanerName}.Querying")
                              .WithAutoDelete(false)
                              .WithDurability(true);
                     });

@@ -9,7 +9,7 @@ namespace Baibaocp.Storaging.Entities.Merchants
     public class MerchanterLotteryMapping : Entity
     {
         /// <summary>
-        /// 渠道编号
+        /// 投注渠道编号
         /// </summary
         public int MerchanterId { get; set; }
 

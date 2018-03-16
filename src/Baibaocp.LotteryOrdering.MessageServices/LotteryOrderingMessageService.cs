@@ -23,7 +23,6 @@ namespace Baibaocp.LotteryOrdering.MessageServices
         private readonly IDispatchOrderingMessageService _orderingMessageService;
         private readonly IOrderingApplicationService _orderingApplicationService;
         private readonly ILotteryMerchanterApplicationService _lotteryMerchanterApplicationService;
-        private readonly ILotteryTicketingMessageService _lotteryTicketingMessageService;
 
         public LotteryOrderingMessageService(IBusClient busClient, IIdentityGenerater identityGenerater, IOrderingApplicationService orderingApplicationService, ILotteryMerchanterApplicationService lotteryMerchanterApplicationService, ILogger<LotteryOrderingMessageService> logger, IDispatchOrderingMessageService orderingMessageService)
         {
@@ -62,11 +61,11 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                     string ldpVenderId = await _lotteryMerchanterApplicationService.FindLdpVenderId(message.LvpVenderId, message.LotteryId);
                     if (string.IsNullOrEmpty(ldpVenderId))
                     {
-                        // Todo: 增加错误日志
                         _logger.LogError("当前投注渠道{0}不支持该彩种{1}", message.LvpVenderId, message.LotteryId);
                         return new Nack();
                     }
                     LotteryMerchanteOrder lotteryMerchanteOrder = await _orderingApplicationService.CreateAsync(message.LvpOrderId, message.LvpUserId, message.LvpVenderId, message.LotteryId, message.LotteryPlayId, message.IssueNumber, message.InvestCode, message.InvestType, message.InvestCount, message.InvestTimes, message.InvestAmount);
+
                     await _orderingMessageService.PublishAsync(ldpVenderId, lotteryMerchanteOrder.Id, message);
                     return new Ack();
                 }

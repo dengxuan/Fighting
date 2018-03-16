@@ -1,20 +1,28 @@
-﻿using Baibaocp.LotteryDispatcher.Liangcai.DependencyInjection;
+﻿using Baibaocp.ApplicationServices.DependencyInjection;
+using Baibaocp.LotteryDispatcher.Liangcai.DependencyInjection;
 using Baibaocp.LotteryDispatching.DependencyInjection;
+using Baibaocp.LotteryDispatching.MessageServices.DependencyInjection;
+using Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection;
+using Baibaocp.LotteryOrdering.EntityFrameworkCore;
+using Baibaocp.LotteryOrdering.MessageServices.DependencyInjection;
 using Baibaocp.LotteryOrdering.Scheduling.DependencyInjection;
+using Baibaocp.Storaging.EntityFrameworkCore;
+using Fighting.ApplicationServices.DependencyInjection;
 using Fighting.DependencyInjection;
 using Fighting.Hosting;
 using Fighting.MessageServices.DependencyInjection;
 using Fighting.Scheduling;
 using Fighting.Scheduling.DependencyInjection;
 using Fighting.Scheduling.Mysql.DependencyInjection;
+using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RawRabbit.Configuration;
+using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
 using System;
 using System.Threading.Tasks;
-using Baibaocp.LotteryDispatching.MessageServices.DependencyInjection;
-using RawRabbit.DependencyInjection.ServiceCollection;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
 {
@@ -49,6 +57,24 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
                             });
                         });
 
+                        fightBuilder.ConfigureApplicationServices(applicationServiceBuilder => 
+                        {
+                            applicationServiceBuilder.UseBaibaocpApplicationService();
+                            applicationServiceBuilder.UseLotteryOrderingApplicationService();
+                        });
+
+                        fightBuilder.ConfigureStorage(storageBuilder =>
+                        {
+                            storageBuilder.UseEntityFrameworkCore<LotteryOrderingDbContext>(optionsBuilder =>
+                            {
+                                optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
+                            });
+                            storageBuilder.UseEntityFrameworkCore<BaibaocpStorageContext>(optionsBuilder =>
+                            {
+                                optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
+                            });
+                        });
+
                         fightBuilder.ConfigureScheduling(setupAction =>
                         {
                             setupAction.AddLotteryOrderingScheduling();
@@ -59,6 +85,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
                         fightBuilder.ConfigureMessageServices(messageServiceBuilder =>
                         {
                             messageServiceBuilder.UseLotteryDispatchingMessageServices();
+                            messageServiceBuilder.UseLotteryOrderingMessageServices();
                         });
 
                         fightBuilder.ConfigureLotteryDispatcher(dispatchBuilder =>

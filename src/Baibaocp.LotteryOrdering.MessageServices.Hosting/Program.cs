@@ -26,6 +26,13 @@ using System;
 using System.Threading.Tasks;
 using Baibaocp.ApplicationServices.DependencyInjection;
 using Baibaocp.Storaging.EntityFrameworkCore;
+using Fighting.Storaging.EntityFrameworkCore.Repositories;
+using Fighting.Storaging.EntityFrameworkCore.Abstractions;
+using Baibaocp.Storaging.Entities;
+using Fighting.Storaging.Entities.Abstractions;
+using Fighting.Storaging.Repositories.Abstractions;
+using Baibaocp.Storaging.Entities.Merchants;
+using System.Text;
 
 namespace Baibaocp.LotteryOrdering.MessageServices
 {
@@ -88,8 +95,6 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 })
                 .ConfigureLogging(logging => logging.AddConsole());
 
-
-
             var host = builder.Build();
             await host.StartAsync();
             var messageService = host.Services.GetRequiredService<ILotteryOrderingMessageService>();
@@ -106,7 +111,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 IssueNumber = 2018029,
                 LotteryPlayId = 10011071,
                 LvpUserId = 1000,
-                LvpVenderId = "450022"
+                LvpVenderId = "10081000345"
             });
             Console.ReadLine();
             await host.StopAsync();
