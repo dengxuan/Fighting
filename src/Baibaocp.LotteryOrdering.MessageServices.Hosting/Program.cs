@@ -80,7 +80,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                             });
                         });
                     });
-                    services.AddSingleton<IHostedService, LotteryOrderingService>();
+                    services.AddSingleton<IHostedService, LotteryTicketingService>();
                     services.AddRawRabbit(new RawRabbitOptions
                     {
                         ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>(),

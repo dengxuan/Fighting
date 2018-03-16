@@ -20,7 +20,7 @@ namespace Baibaocp.LotteryNotifier.Internal
 
         public INoticeHandler<TNotice> GetHandler<TNotice>(NoticeConfiguration configure) where TNotice : class
         {
-            var handler = _objectFactorys.GetOrAdd(typeof(INotifier<TNotice>), (key) =>
+            var handler = _objectFactorys.GetOrAdd(typeof(INotice<TNotice>), (key) =>
             {
                 //return _iocResolver.GetRequiredService<INoticeHandler<TNotice>>();
                 if (_options.Mappings.TryGetValue(typeof(INoticeHandler<TNotice>), out Type handlerType))

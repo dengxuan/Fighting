@@ -1,13 +1,15 @@
-﻿using Baibaocp.Storaging.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Baibaocp.LotteryOrdering.MessageServices.Messages
 {
-    public class LdpAwardedMessage
+    public class LvpAwardedMessage
     {
 
-        public string LdpOrderId { get; set; }
+        public string OrderId { get; set; }
 
-        public string LdpVenderId { get; set; }
+        public string VenderId { get; set; }
 
         public int BonusAmount { get; set; }
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryNotifier
 {
-    internal class NoticeDispatcher : INoticeDispatcher
+    internal class NoticeDispatcher : ITicketingNotifier
     {
         private readonly ILogger _logger;
 
@@ -29,13 +29,13 @@ namespace Baibaocp.LotteryNotifier
             });
         }
 
-        public async Task<bool> DispatchAsync<TNotice>(INotifier<TNotice> notifier) where TNotice : class
+        public async Task<bool> DispatchAsync<TNotice>(INotice<TNotice> notifier) where TNotice : class
         {
             try
             {
                 bool result = await _policy.ExecuteAsync(async () =>
                 {
-                    NoticeConfiguration configuration = _options.Configures.Where(predicate => predicate.LvpVenderId == notifier.LvpVenderId).SingleOrDefault();
+                    NoticeConfiguration configuration = _options.Configures.Where(predicate => predicate.LvpVenderId == notifier.VenderId).SingleOrDefault();
                     if (configuration == null)
                     {
                         return true;
@@ -44,11 +44,11 @@ namespace Baibaocp.LotteryNotifier
 
                     return await handler.HandleAsync(notifier.Notice);
                 });
-                _logger.LogWarning("Notice {0} result:{1}", notifier.LvpVenderId, result);
+                _logger.LogWarning("Notice {0} result:{1}", notifier.VenderId, result);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Notice error! {0}", notifier.LvpVenderId);
+                _logger.LogError(ex, "Notice error! {0}", notifier.VenderId);
             }
             return true;
         }

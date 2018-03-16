@@ -20,19 +20,19 @@ namespace Baibaocp.LotteryOrdering.MessageServices
         private readonly IBusClient _busClient;
         private readonly IIdentityGenerater _identityGenerater;
         private readonly ILogger<LotteryOrderingMessageService> _logger;
-        private readonly IDispatchOrderingMessageService _orderingMessageService;
+        private readonly IDispatchOrderingMessageService _dispatchOrderingMessageService;
         private readonly IOrderingApplicationService _orderingApplicationService;
         private readonly ILotteryMerchanterApplicationService _lotteryMerchanterApplicationService;
         private readonly ILotteryTicketingMessageService _lotteryTicketingMessageService;
 
-        public LotteryOrderingMessageService(IBusClient busClient, IIdentityGenerater identityGenerater, IOrderingApplicationService orderingApplicationService, ILotteryMerchanterApplicationService lotteryMerchanterApplicationService, ILogger<LotteryOrderingMessageService> logger, IDispatchOrderingMessageService orderingMessageService)
+        public LotteryOrderingMessageService(IBusClient busClient, IIdentityGenerater identityGenerater, IOrderingApplicationService orderingApplicationService, ILotteryMerchanterApplicationService lotteryMerchanterApplicationService, ILogger<LotteryOrderingMessageService> logger, IDispatchOrderingMessageService dispatchOrderingMessageService)
         {
             _logger = logger;
             _busClient = busClient;
             _identityGenerater = identityGenerater;
             _orderingApplicationService = orderingApplicationService;
             _lotteryMerchanterApplicationService = lotteryMerchanterApplicationService;
-            _orderingMessageService = orderingMessageService;
+            _dispatchOrderingMessageService = dispatchOrderingMessageService;
         }
 
         public Task PublishAsync(LvpOrderedMessage orderingMessage)
@@ -67,7 +67,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                         return new Nack();
                     }
                     LotteryMerchanteOrder lotteryMerchanteOrder = await _orderingApplicationService.CreateAsync(message.LvpOrderId, message.LvpUserId, message.LvpVenderId, message.LotteryId, message.LotteryPlayId, message.IssueNumber, message.InvestCode, message.InvestType, message.InvestCount, message.InvestTimes, message.InvestAmount);
-                    await _orderingMessageService.PublishAsync(ldpVenderId, lotteryMerchanteOrder.Id, message);
+                    await _dispatchOrderingMessageService.PublishAsync(ldpVenderId, lotteryMerchanteOrder.Id, message);
                     return new Ack();
                 }
                 catch (Exception ex)

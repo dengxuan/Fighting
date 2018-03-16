@@ -31,7 +31,7 @@ namespace Baibaocp.LotteryNotifier.DependencyInjection
 
         internal static void AddNoticeServices(IServiceCollection services)
         {
-            services.AddSingleton<INoticeDispatcher, NoticeDispatcher>();
+            services.AddSingleton<ITicketingNotifier, NoticeDispatcher>();
             services.AddSingleton<INoticeHandlerFactory, NoticeHandlerFactory>();
         }
     }

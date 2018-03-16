@@ -1,6 +1,9 @@
 ﻿using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
+using Baibaocp.LotteryOrdering.Scheduling;
+using Baibaocp.LotteryOrdering.Scheduling.Abstractions;
+using Fighting.Scheduling.Abstractions;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
 using RawRabbit.Common;
@@ -14,12 +17,14 @@ namespace Baibaocp.LotteryOrdering.MessageServices
     public class LotteryTicketingMessageService : ILotteryTicketingMessageService
     {
         private readonly IBusClient _busClient;
-        private readonly IOrderingApplicationService _orderingApplicationService;
+        private readonly ISchedulerManager _schedulerManager;
         private readonly ILogger<LotteryOrderingMessageService> _logger;
+        private readonly IOrderingApplicationService _orderingApplicationService;
 
-        public LotteryTicketingMessageService(IBusClient busClient, IOrderingApplicationService orderingApplicationService, ILogger<LotteryOrderingMessageService> logger)
+        public LotteryTicketingMessageService(IBusClient busClient, ISchedulerManager schedulerManager, IOrderingApplicationService orderingApplicationService, ILogger<LotteryOrderingMessageService> logger)
         {
             _logger = logger;
+            _schedulerManager = schedulerManager;
             _busClient = busClient;
             _orderingApplicationService = orderingApplicationService;
         }
@@ -36,7 +41,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                                 .WithAutoDelete(false)
                                 .WithType(ExchangeType.Topic);
                     });
-                    configuration.WithRoutingKey($"LotteryOrdering.{message.TicketingType}.{message.LdpVenderId}");
+                    configuration.WithRoutingKey($"LotteryOrdering.Ticketed.{message.LdpVenderId}");
                 });
             });
         }
@@ -47,9 +52,10 @@ namespace Baibaocp.LotteryOrdering.MessageServices
             {
                 try
                 {
-                    if(message.TicketingType == LdpTicketingTypes.Success)
+                    if (message.TicketingType == LotteryTicketingTypes.Success)
                     {
                         await _orderingApplicationService.TicketedAsync(long.Parse(message.LdpOrderId), message.LdpVenderId, message.TicketOdds);
+                        await _schedulerManager.EnqueueAsync<ILotteryAwardingScheduler, AwardingScheduleArgs>(new AwardingScheduleArgs { });
                     }
                     else
                     {
@@ -62,24 +68,6 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 {
                     _logger.LogError(ex, "Received ticketing message: {1} {0}", message.LdpVenderId, message.LdpOrderId);
                 }
-
-                ///* 投注失败 */
-                //await _client.PublishAsync(new LdpTicketedMessage
-                //{
-                //    LvpOrder = message,
-                //    Status = OrderStatus.TicketFailed
-                //}, context => context.UsePublishConfiguration(configuration =>
-                //{
-                //    configuration.OnDeclaredExchange(exchange =>
-                //    {
-                //        exchange.WithName("Baibaocp.LotteryVender")
-                //                .WithDurability(true)
-                //                .WithAutoDelete(false)
-                //                .WithType(ExchangeType.Topic);
-                //    });
-                //    configuration.WithRoutingKey(RoutingkeyConsts.Orders.Completed.Failure);
-                //}));
-
                 return new Nack();
             }, context =>
             {
@@ -94,13 +82,13 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                     });
                     configuration.FromDeclaredQueue(queue =>
                     {
-                        queue.WithName("LotteryOrdering.Orders")
+                        queue.WithName("LotteryOrdering.Tickets")
                              .WithAutoDelete(false)
                              .WithDurability(true);
                     });
                     configuration.Consume(consume =>
                     {
-                        consume.WithRoutingKey("LotteryOrdering.Accepted.#");
+                        consume.WithRoutingKey("LotteryOrdering.Ticketed.#");
                     });
                 });
             }, stoppingToken);
