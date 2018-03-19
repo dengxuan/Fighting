@@ -11,7 +11,7 @@ namespace Baibaocp.LotteryOrdering.Scheduling
 
         public async Task RunAsync(TicketingScheduleArgs args)
         {
-            await _ticketingMessageService.PublishAsync(new LdpTicketedMessage { });
+            await _ticketingMessageService.PublishAsync(new LdpTicketedMessage { LdpOrderId = args.LdpOrderId, LdpVenderId = args.LdpVenderId, TicketingType = LotteryTicketingTypes.Success, });
         }
     }
 }

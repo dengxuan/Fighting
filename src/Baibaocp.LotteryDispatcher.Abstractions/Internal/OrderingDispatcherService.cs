@@ -1,6 +1,7 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Handles;
+using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.Scheduling;
@@ -18,23 +19,23 @@ namespace Baibaocp.LotteryDispatching.Internal
         private readonly DispatcherConfiguration _dispatcherOptions;
         private readonly ILogger<OrderingDispatcherService> _logger;
         private readonly IOrderingDispatcher _orderingDispatcher;
-        private readonly IDispatchOrderingMessageService _dispatchorderingMessageService;
+        private readonly IDispatchOrderingMessageService _dispatchOrderingMessageService;
+        private readonly IDispatchQueryingMessageService _dispatchQueryingMessageService;
         private readonly ILotteryTicketingMessageService _lotteryTicketingMessageService;
-        private readonly ISchedulerManager _schedulerManager;
 
-        public OrderingDispatcherService(DispatcherConfiguration dispatcherOptions, ILogger<OrderingDispatcherService> logger, IOrderingDispatcher orderingDispatcher, IDispatchOrderingMessageService dispatchOrderingMessageService, ILotteryTicketingMessageService lotteryTicketingMessageService, ISchedulerManager schedulerManager)
+        public OrderingDispatcherService(DispatcherConfiguration dispatcherOptions, ILogger<OrderingDispatcherService> logger, IOrderingDispatcher orderingDispatcher, IDispatchOrderingMessageService dispatchOrderingMessageService, ILotteryTicketingMessageService lotteryTicketingMessageService, IDispatchQueryingMessageService dispatchQueryingMessageService)
         {
             _logger = logger;
-            _schedulerManager = schedulerManager;
             _dispatcherOptions = dispatcherOptions;
             _orderingDispatcher = orderingDispatcher;
-            _dispatchorderingMessageService = dispatchOrderingMessageService;
+            _dispatchOrderingMessageService = dispatchOrderingMessageService;
+            _dispatchQueryingMessageService = dispatchQueryingMessageService;
             _lotteryTicketingMessageService = lotteryTicketingMessageService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _dispatchorderingMessageService.SubscribeAsync(_dispatcherOptions.MerchanterName, async (message) =>
+            await _dispatchOrderingMessageService.SubscribeAsync(_dispatcherOptions.MerchanterName, async (message) =>
             {
                 var handle = await _orderingDispatcher.DispatchAsync(message);
                 switch (handle)
@@ -42,7 +43,7 @@ namespace Baibaocp.LotteryDispatching.Internal
                     case AcceptedHandle accepted:
                         {
                             _logger.LogInformation($"投注成功: {message.LdpVenderId}-{message.LvpOrder.LvpOrderId}-{message.LdpOrderId}");
-                            await _schedulerManager.EnqueueAsync<ILotteryTicketingScheduler, TicketingScheduleArgs>(new TicketingScheduleArgs { LdpOrderId = message.LdpOrderId, LdpVenderId = message.LdpVenderId, LvpOrderId = message.LvpOrder.LvpOrderId });
+                            await _dispatchQueryingMessageService.PublishAsync(message.LdpVenderId, message.LdpOrderId, QueryingTypes.Ticketing);
                             return true;
                         }
                     case RejectedHandle rejected:

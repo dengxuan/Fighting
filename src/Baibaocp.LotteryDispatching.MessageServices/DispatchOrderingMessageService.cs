@@ -29,6 +29,7 @@ namespace Baibaocp.LotteryDispatching.MessageServices
 
             return _busClient.PublishAsync(orderingMessage, context =>
             {
+                context.UsePublishAcknowledge(false);
                 context.UsePublishConfiguration(configuration =>
                 {
                     configuration.OnDeclaredExchange(exchange =>

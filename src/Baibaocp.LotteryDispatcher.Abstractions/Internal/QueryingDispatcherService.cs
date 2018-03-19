@@ -3,6 +3,9 @@ using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
+using Baibaocp.LotteryOrdering.MessageServices.Messages;
+using Baibaocp.LotteryOrdering.Scheduling;
+using Baibaocp.LotteryOrdering.Scheduling.Abstractions;
 using Fighting.Hosting;
 using Fighting.Scheduling.Abstractions;
 using Microsoft.Extensions.Logging;
@@ -39,10 +42,13 @@ namespace Baibaocp.LotteryDispatching.Internal
                 {
                     case SuccessHandle success:
                         {
+                            await _lotteryTicketingMessageService.PublishAsync(new LdpTicketedMessage { LdpOrderId = message.LdpOrderId, LdpVenderId = message.LdpVenderId, TicketingType = LotteryTicketingTypes.Success });
+                            await _schedulerManager.EnqueueAsync<ILotteryAwardingScheduler, AwardingScheduleArgs>(new AwardingScheduleArgs { });
                             return true;
                         }
                     case FailureHandle failure:
                         {
+                            await _lotteryTicketingMessageService.PublishAsync(new LdpTicketedMessage { LdpOrderId = message.LdpOrderId, LdpVenderId = message.LdpVenderId, TicketingType = LotteryTicketingTypes.Failure });
                             return true;
                         }
                     case WinningHandle winning:

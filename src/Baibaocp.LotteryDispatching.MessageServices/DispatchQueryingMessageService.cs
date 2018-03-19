@@ -36,12 +36,12 @@ namespace Baibaocp.LotteryDispatching.MessageServices
                                 .WithAutoDelete(false)
                                 .WithType(ExchangeType.Topic);
                     });
-                    configuration.WithRoutingKey($"LotteryDispatcher.Querying.{merchanerId}");
+                    configuration.WithRoutingKey($"LotteryDispatching.Querying.{merchanerId}");
                 });
             });
         }
 
-        public Task SubscribeAsync(string merchanerName, QueryingTypes queryingType, Func<QueryingExecuteMessage, Task<bool>> subscriber, CancellationToken stoppingToken)
+        public Task SubscribeAsync(string merchanerName, Func<QueryingExecuteMessage, Task<bool>> subscriber, CancellationToken stoppingToken)
         {
             return _busClient.SubscribeAsync<QueryingExecuteMessage>(async (message) =>
             {
