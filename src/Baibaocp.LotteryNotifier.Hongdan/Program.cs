@@ -10,6 +10,8 @@ using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
 using System.Threading.Tasks;
+using Fighting.MessageServices.DependencyInjection;
+using Baibaocp.LotteryNotifier.MessageServices.DependencyInjection;
 
 namespace Baibaocp.LotteryNotifier.Hongdan
 {
@@ -36,6 +38,10 @@ namespace Baibaocp.LotteryNotifier.Hongdan
                 {
                     services.AddFighting(fightBuilder =>
                     {
+                        fightBuilder.ConfigureMessageServices(messageServiceBuilder => 
+                        {
+                            messageServiceBuilder.UseLotteryNotifierMessageService();
+                        });
                     });
                     services.AddRawRabbit(new RawRabbitOptions
                     {
@@ -45,13 +51,9 @@ namespace Baibaocp.LotteryNotifier.Hongdan
                     {
                         builderAction.ConfigureOptions(options =>
                         {
-                            var noticeConfiguration = hostContext.Configuration.GetSection("NoticeConfiguration").Get<NoticeConfiguration>();
-                            builderAction.Services.AddSingleton(noticeConfiguration);
+                            options.Configuration = hostContext.Configuration.GetSection("NoticeConfiguration").Get<NoticeConfiguration>();
                         });
                     });
-
-                    services.AddScoped<IHostedService, LotteryAwardedService>();
-                    services.AddScoped<IHostedService, LotteryTicketedService>();
                 });
             await host.RunConsoleAsync();
         }

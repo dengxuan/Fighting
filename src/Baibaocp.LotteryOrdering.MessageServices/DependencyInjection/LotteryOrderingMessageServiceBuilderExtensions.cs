@@ -8,9 +8,9 @@ namespace Baibaocp.LotteryOrdering.MessageServices.DependencyInjection
     {
         public static MessageServiceBuilder UseLotteryOrderingMessageServices(this MessageServiceBuilder messageServiceBuilder)
         {
-            messageServiceBuilder.Services.AddSingleton<ILotteryAwardingMessageService, LotteryAwardingMessageService>();
-            messageServiceBuilder.Services.AddSingleton<ILotteryOrderingMessageService, LotteryOrderingMessageService>();
-            messageServiceBuilder.Services.AddSingleton<ILotteryTicketingMessageService, LotteryTicketingMessageService>();
+            messageServiceBuilder.Services.AddTransient<ILotteryAwardingMessageService, LotteryAwardingMessageService>();
+            messageServiceBuilder.Services.AddTransient<ILotteryOrderingMessageService, LotteryOrderingMessageService>();
+            messageServiceBuilder.Services.AddTransient<ILotteryTicketingMessageService, LotteryTicketingMessageService>();
             return messageServiceBuilder;
         }
     }

@@ -16,21 +16,21 @@ namespace Baibaocp.LotteryNotifier
 
         private readonly RetryPolicy<bool> _policy;
 
-        private readonly NoticeConfiguration _configuration;
+        private readonly LotteryNoticeOptions _options;
 
         private readonly HttpClient _client;
 
         private readonly INoticeSerializer _serializer;
 
-        public TicketingNotifier(NoticeConfiguration configuration, INoticeSerializer serializer, ILogger<TicketingNotifier> logger)
+        public TicketingNotifier(LotteryNoticeOptions options, INoticeSerializer serializer, ILogger<TicketingNotifier> logger)
         {
-            _configuration = configuration;
+            _options = options;
             _serializer = serializer;
             _logger = logger;
 
             _client = new HttpClient
             {
-                BaseAddress = new Uri(_configuration.TicketedUrl)
+                BaseAddress = new Uri(_options.Configuration.TicketedUrl)
             };
 
             _policy = Policy.Handle<Exception>().OrResult(false).WaitAndRetryAsync(2, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
@@ -45,7 +45,7 @@ namespace Baibaocp.LotteryNotifier
             {
                 return await _policy.ExecuteAsync(async () =>
                 {
-                    HttpResponseMessage responseMessage = (await _client.PostAsync(_configuration.TicketedUrl, new ByteArrayContent(_serializer.Serialize(notice.Content)))).EnsureSuccessStatusCode();
+                    HttpResponseMessage responseMessage = (await _client.PostAsync(_options.Configuration.TicketedUrl, new ByteArrayContent(_serializer.Serialize(notice.Content)))).EnsureSuccessStatusCode();
                     byte[] bytes = await responseMessage.Content.ReadAsByteArrayAsync();
                     Handle result = _serializer.Deserialize<Handle>(bytes);
                     _logger.LogWarning("Notice {0} result:{1}", notice.VenderId, result);

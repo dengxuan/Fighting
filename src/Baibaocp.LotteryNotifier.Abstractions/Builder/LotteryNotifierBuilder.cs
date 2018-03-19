@@ -1,6 +1,8 @@
 ﻿using Baibaocp.LotteryNotifier.Abstractions;
+using Baibaocp.LotteryNotifier.Internal.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -10,7 +12,6 @@ namespace Baibaocp.LotteryNotifier.Builder
 {
     public class LotteryNotifierBuilder
     {
-        private readonly DiscoverySettings _discoverySettings = new DiscoverySettings();
 
         public IServiceCollection Services { get; }
 
@@ -25,16 +26,17 @@ namespace Baibaocp.LotteryNotifier.Builder
             return this;
         }
 
-        public LotteryNotifierBuilder AddHandlerDiscovery(Action<DiscoverySettings> discoverySettings)
-        {
-            discoverySettings(_discoverySettings);
-            return this;
-        }
-
         internal void Build()
         {
             Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<LotteryNoticeOptions>, DefaultLotteryNoticeOptionsSetup>());
             Services.AddSingleton(c => c.GetRequiredService<IOptions<LotteryNoticeOptions>>().Value);
+
+            Services.AddSingleton<ITicketingNotifier, TicketingNotifier>();
+            Services.AddSingleton<IAwardingNotifier, AwardingNotifier>();
+            Services.AddSingleton<INoticeSerializer, JsonNoticeSerializer>();
+
+            Services.AddSingleton<IHostedService, LotteryAwardedService>();
+            Services.AddSingleton<IHostedService, LotteryTicketedService>();
         }
     }
 }

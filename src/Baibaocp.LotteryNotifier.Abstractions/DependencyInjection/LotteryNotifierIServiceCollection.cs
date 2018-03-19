@@ -21,21 +21,11 @@ namespace Baibaocp.LotteryNotifier.DependencyInjection
                 throw new ArgumentNullException(nameof(builderAction));
             }
 
-            AddNoticeServices(services);
-
             var builder = new LotteryNotifierBuilder(services);
             builderAction.Invoke(builder);
             builder.Build();
 
             return services;
-        }
-
-        internal static void AddNoticeServices(IServiceCollection services)
-        {
-            services.AddSingleton<ITicketingNotifier, TicketingNotifier>();
-            services.AddSingleton<IAwardingNotifier, AwardingNotifier>();
-            services.AddSingleton<IHostedService, LotteryAwardedService>();
-            services.AddSingleton<IHostedService, LotteryTicketedService>();
         }
     }
 }

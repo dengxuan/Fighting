@@ -2,15 +2,13 @@
 using Baibaocp.LotteryNotifier.MessageServices.Abstractions;
 using Fighting.Hosting;
 using Microsoft.Extensions.Logging;
-using RawRabbit;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryNotifier.Internal.Services
 {
-    public class LotteryAwardedService : BackgroundService
+    internal class LotteryAwardedService : BackgroundService
     {
-        private readonly IBusClient _client;
 
         private readonly IAwardingNotifier _dispatcher;
 
@@ -18,9 +16,8 @@ namespace Baibaocp.LotteryNotifier.Internal.Services
 
         private readonly IAwardingNoticeMessageService _awardingNoticeMessageService;
 
-        public LotteryAwardedService(IBusClient client, IAwardingNotifier dispatcher, ILogger<LotteryAwardedService> logger, IAwardingNoticeMessageService awardingNoticeMessageService)
+        public LotteryAwardedService(IAwardingNotifier dispatcher, ILogger<LotteryAwardedService> logger, IAwardingNoticeMessageService awardingNoticeMessageService)
         {
-            _client = client;
             _logger = logger;
             _dispatcher = dispatcher;
             _awardingNoticeMessageService = awardingNoticeMessageService;

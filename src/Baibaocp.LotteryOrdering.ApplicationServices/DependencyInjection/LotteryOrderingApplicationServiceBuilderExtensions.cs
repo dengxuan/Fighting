@@ -9,7 +9,7 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection
     {
         public static ApplicationServiceBuilder UseLotteryOrderingApplicationService(this ApplicationServiceBuilder applicationServiceBuilder)
         {
-            applicationServiceBuilder.Services.AddSingleton<IOrderingApplicationService, OrderingApplicationService>();
+            applicationServiceBuilder.Services.AddTransient<IOrderingApplicationService, OrderingApplicationService>();
             return applicationServiceBuilder;
         }
     }

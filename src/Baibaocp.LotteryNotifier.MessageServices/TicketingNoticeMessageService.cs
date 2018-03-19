@@ -31,12 +31,12 @@ namespace Baibaocp.LotteryNotifier.MessageServices
                 {
                     configuration.OnDeclaredExchange(exchange =>
                     {
-                        exchange.WithName("Baibaocp.LotteryNotifier")
+                        exchange.WithName("Baibaocp.LotteryOrdering")
                                 .WithDurability(true)
                                 .WithAutoDelete(false)
                                 .WithType(ExchangeType.Topic);
                     });
-                    configuration.WithRoutingKey($"LotteryNotifier.Ticketing.{message.VenderId}");
+                    configuration.WithRoutingKey($"LotteryNoticing.Ticketed.{message.VenderId}");
                 });
             });
         }
@@ -73,20 +73,20 @@ namespace Baibaocp.LotteryNotifier.MessageServices
                 {
                     configuration.OnDeclaredExchange(exchange =>
                     {
-                        exchange.WithName("Baibaocp.LotteryNotifier")
+                        exchange.WithName("Baibaocp.LotteryOrdering")
                                 .WithDurability(true)
                                 .WithAutoDelete(false)
                                 .WithType(ExchangeType.Topic);
                     });
                     configuration.FromDeclaredQueue(queue =>
                     {
-                        queue.WithName("LotteryOrdering.Tickets")
+                        queue.WithName("LotteryNoticing.Tickets")
                              .WithAutoDelete(false)
                              .WithDurability(true);
                     });
                     configuration.Consume(consume =>
                     {
-                        consume.WithRoutingKey("LotteryOrdering.Ticketing.#");
+                        consume.WithRoutingKey("#.Ticketed.#");
                     });
                 });
             }, stoppingToken);

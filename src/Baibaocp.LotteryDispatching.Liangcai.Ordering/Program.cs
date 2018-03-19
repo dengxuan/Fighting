@@ -22,6 +22,7 @@ using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
 using System;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
@@ -30,6 +31,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
     {
         static async Task Main(string[] args)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var host = new HostBuilder()
                 .ConfigureHostConfiguration(configurationBuilder =>
                 {

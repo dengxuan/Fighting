@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Text;
 
-namespace Baibaocp.LotteryNotifier.Hongdan
+namespace Baibaocp.LotteryNotifier
 {
     internal class JsonNoticeSerializer : INoticeSerializer
     {

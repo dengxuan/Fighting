@@ -43,6 +43,7 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
             return await _orderingReoository.InsertAsync(new LotteryMerchanteOrder
             {
                 Id = id,
+                LvpOrderId = lvpOrderId,
                 LotteryBuyerId = 619,
                 LvpUserId = lvpUserId,
                 LvpVenderId = lvpVenderId,

@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Baibaocp.LotteryNotifier.Abstractions\Baibaocp.LotteryNotifier.Abstractions.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryNotifier.MessageServices\Baibaocp.LotteryNotifier.MessageServices.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -65,7 +65,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                         return new Nack();
                     }
                     LotteryMerchanteOrder lotteryMerchanteOrder = await _orderingApplicationService.CreateAsync(message.LvpOrderId, message.LvpUserId, message.LvpVenderId, message.LotteryId, message.LotteryPlayId, message.IssueNumber, message.InvestCode, message.InvestType, message.InvestCount, message.InvestTimes, message.InvestAmount);
-                    await _orderingMessageService.PublishAsync(ldpVenderId, lotteryMerchanteOrder.Id, message);
+                    await _dispatchOrderingMessageService.PublishAsync(ldpVenderId, lotteryMerchanteOrder.Id, message);
                     return new Ack();
                 }
                 catch (Exception ex)

@@ -2,13 +2,12 @@
 using Baibaocp.LotteryNotifier.MessageServices.Abstractions;
 using Fighting.Hosting;
 using Microsoft.Extensions.Logging;
-using RawRabbit;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryNotifier.Internal.Services
 {
-    public class LotteryTicketedService : BackgroundService
+    internal class LotteryTicketedService : BackgroundService
     {
         private readonly ITicketingNoticeMessageService _ticketingNoticeMessageService;
 
