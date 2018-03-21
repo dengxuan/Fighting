@@ -92,7 +92,7 @@ namespace Baibaocp.LotteryDispatcher.Shanghai.Handlers
                         {
                             rateCount = (sbyte)connection.ExecuteScalar("SELECT `RqspfRateCount` FROM `BbcpZcEvents` WHERE `Id` = @Id", new { Id = id });
                         }
-                        string odds = match.Value.Replace('=', '*').Replace(',', '#');
+                        string odds = match.Value.Replace('=', '*').Replace(',', '#').Replace('|','#');
                         sb.Append($"{id}@{rateCount}|{odds}#^");
                     }
                 }
