@@ -58,7 +58,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
 
                         fightBuilder.ConfigureMessageServices(messageServiceBuilder =>
                         {
-                            messageServiceBuilder.UseLotteryDispatchingMessageServices();
+                            messageServiceBuilder.UseLotteryDispatchingMessagePublisher();
                         });
 
 

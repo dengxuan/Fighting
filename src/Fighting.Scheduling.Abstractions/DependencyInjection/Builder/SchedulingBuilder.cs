@@ -21,13 +21,18 @@ namespace Fighting.Scheduling.DependencyInjection.Builder
             FightBuilder = fightBuilder ?? throw new ArgumentNullException(nameof(fightBuilder));
         }
 
+        public SchedulingBuilder AddScheduleServer()
+        {
+            Services.TryAddSingleton<IHostedService, ScheduleHostingService>();
+            return this;
+        }
+
         internal void Build()
         {
             Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<SchedulingOptions>, SchedulingOptionsSetup>());
             Services.AddSingleton(c => c.GetRequiredService<IOptions<SchedulingConfiguration>>().Value);
             Services.TryAddSingleton<IScheduleStore, InMemoryScheduleStore>();
             Services.TryAddSingleton<ISchedulerManager, SchedulerManager>();
-            //Services.TryAddSingleton<IHostedService, ScheduleHostingService>();
         }
     }
 }

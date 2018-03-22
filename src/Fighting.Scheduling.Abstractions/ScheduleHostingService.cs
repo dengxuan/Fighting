@@ -55,7 +55,7 @@ namespace Baibaocp.LotteryOrdering.Hosting
                 var scheduler = _iocResolver.GetService(scheduleType);
                 try
                 {
-                    var schedulerExecuteMethod = scheduler.GetType().GetTypeInfo().GetMethod("Run");
+                    var schedulerExecuteMethod = scheduler.GetType().GetTypeInfo().GetMethod("RunAsync");
                     var argsType = schedulerExecuteMethod.GetParameters()[0].ParameterType;
                     var argsObject = JsonConvert.DeserializeObject(schedule.SchedulerArgs, argsType);
 

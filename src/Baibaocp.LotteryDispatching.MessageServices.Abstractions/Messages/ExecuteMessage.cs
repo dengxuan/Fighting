@@ -3,14 +3,14 @@
     public abstract class ExecuteMessage : IExecuteMessage
     {
 
-        public string LdpOrderId { get; }
+        public long LdpOrderId { get; }
 
-        public string LdpVenderId { get; }
+        public string LdpMerchanerId { get; }
 
-        internal ExecuteMessage(string ldpOrderId, string ldpVenderId)
+        internal ExecuteMessage(long ldpOrderId, string ldpMerchanerId)
         {
-            LdpVenderId = ldpVenderId;
             LdpOrderId = ldpOrderId;
+            LdpMerchanerId = ldpMerchanerId;
         }
     }
 }

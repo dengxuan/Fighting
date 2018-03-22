@@ -2,8 +2,8 @@
 {
     public interface IExecuteMessage
     {
-        string LdpOrderId { get; }
+        long LdpOrderId { get; }
 
-        string LdpVenderId { get; }
+        string LdpMerchanerId { get; }
     }
 }
