@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Baibaocp.LotteryNoticing.MessageServices.Abstractions\Baibaocp.LotteryNoticing.MessageServices.Abstractions.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.MessageServices.Abstractions\Baibaocp.LotteryOrdering.MessageServices.Abstractions.csproj" />
     <ProjectReference Include="..\Fighting.MessageServices.Abstractions\Fighting.MessageServices.Abstractions.csproj" />
     <ProjectReference Include="..\Fighting.Scheduling.Abstractions\Fighting.Scheduling.Abstractions.csproj" />

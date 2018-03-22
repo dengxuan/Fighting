@@ -52,12 +52,12 @@ namespace Baibaocp.LotteryDispatching.Suicai.Abstractions
         {
             string value = BuildRequest(message);
             string CipherText = _crypter.Encrypt(value, _options.SecretKey);
-            string sign = Signature(_command, message.LdpMerchanerId, CipherText, out DateTime timestamp);
+            string sign = Signature(_command, message.LdpVenderId, CipherText, out DateTime timestamp);
             ReqContent reqcon = new ReqContent()
             {
                 version = "1.0",
                 apiCode = _command,
-                partnerId = message.LdpMerchanerId,
+                partnerId = message.LdpVenderId,
                 messageId = timestamp.ToString("yyyyMMddHHmm"),
                 content = CipherText,
                 hmac = sign.ToLower()

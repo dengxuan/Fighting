@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RawRabbit.DependencyInjection.ServiceCollection" Version="2.0.0-rc5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Baibaocp.ApplicationServices\Baibaocp.ApplicationServices.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryDispatching.Liangcai.Abstractions\Baibaocp.LotteryDispatching.Liangcai.Abstractions.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.ApplicationServices\Baibaocp.LotteryOrdering.ApplicationServices.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.EntityFrameworkCore\Baibaocp.LotteryOrdering.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.MessageServices\Baibaocp.LotteryOrdering.MessageServices.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.Scheduling\Baibaocp.LotteryOrdering.Scheduling.csproj" />
+    <ProjectReference Include="..\Baibaocp.Storaging.EntityFrameworkCore\Baibaocp.Storaging.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Fighting.Scheduling.Mysql\Fighting.Scheduling.Mysql.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

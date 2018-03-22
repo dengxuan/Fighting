@@ -2,18 +2,11 @@
 {
     public class QueryingExecuteMessage : ExecuteMessage
     {
-
-        public string LvpOrderId { get; }
-
-        public string LvpMerchanerId { get; }
-
         public QueryingTypes QueryingType { get; }
 
-        public QueryingExecuteMessage(long ldpOrderId, string ldpMerchanerId, string lvpOrderId, string lvpMerchanerId,QueryingTypes queryingType) : base(ldpOrderId, ldpMerchanerId)
+        public QueryingExecuteMessage(string ldpOrderId, string ldpVenderId, QueryingTypes queryingType) : base(ldpOrderId, ldpVenderId)
         {
             QueryingType = queryingType;
-            LvpOrderId = lvpOrderId;
-            LvpMerchanerId = lvpMerchanerId;
         }
     }
 }

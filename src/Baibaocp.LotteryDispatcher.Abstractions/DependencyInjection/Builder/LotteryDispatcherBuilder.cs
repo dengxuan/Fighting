@@ -15,8 +15,8 @@ namespace Baibaocp.LotteryDispatching.DependencyInjection.Builder
 
         internal void Build()
         {
-            Services.AddSingleton<IHostedService, OrderingDispatcherSubscriber>();
-            Services.AddSingleton<IHostedService, QueryingDispatcherSubscriber>();
+            Services.AddSingleton<IHostedService, OrderingDispatcherService>();
+            Services.AddSingleton<IHostedService, QueryingDispatcherService>();
         }
     }
 }

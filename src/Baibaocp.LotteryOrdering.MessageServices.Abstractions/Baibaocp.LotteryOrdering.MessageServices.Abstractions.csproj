@@ -6,7 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Baibaocp.LotteryNoticing.MessageServices.Abstractions\Baibaocp.LotteryNoticing.MessageServices.Abstractions.csproj" />
+    <PackageReference Include="RawRabbit" Version="2.0.0-rc4" />
+    <PackageReference Include="RawRabbit.Operations.Publish" Version="2.0.0-rc4" />
+    <PackageReference Include="RawRabbit.Operations.Subscribe" Version="2.0.0-rc4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Baibaocp.Storaging\Baibaocp.Storaging.csproj" />
     <ProjectReference Include="..\Fighting.MessageServices.Abstractions\Fighting.MessageServices.Abstractions.csproj" />
   </ItemGroup>
