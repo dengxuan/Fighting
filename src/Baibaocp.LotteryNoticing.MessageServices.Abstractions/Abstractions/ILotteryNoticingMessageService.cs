@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryNotifier.MessageServices.Abstractions
 {
-    public interface ILotteryNoticingMessageService
+    public interface IQueryingDispatchMessageService
     {
         Task PublishAsync<TContent>(string routingKey, NoticeMessage<TContent> message) where TContent : class, INoticeContent;
     }

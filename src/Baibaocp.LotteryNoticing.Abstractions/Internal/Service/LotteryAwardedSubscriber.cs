@@ -21,9 +21,9 @@ namespace Baibaocp.LotteryNotifier.Internal.Services
 
         private readonly ILogger<LotteryAwardedSubscriber> _logger;
 
-        private readonly ILotteryNoticingMessageService _awardingNoticeMessageService;
+        private readonly IQueryingDispatchMessageService _awardingNoticeMessageService;
 
-        public LotteryAwardedSubscriber(IBusClient busClient, IAwardingNotifier dispatcher, ILogger<LotteryAwardedSubscriber> logger, ILotteryNoticingMessageService awardingNoticeMessageService)
+        public LotteryAwardedSubscriber(IBusClient busClient, IAwardingNotifier dispatcher, ILogger<LotteryAwardedSubscriber> logger, IQueryingDispatchMessageService awardingNoticeMessageService)
         {
             _logger = logger;
             _busClient = busClient;

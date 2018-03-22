@@ -38,7 +38,13 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                     if (message.Content.TicketingType == LotteryTicketingTypes.Success)
                     {
                         var order = await _orderingApplicationService.TicketedAsync(message.LdpOrderId, message.LdpMerchanerId, message.Content.TicketOdds);
-                        await _schedulerManager.EnqueueAsync<ILotteryAwardingScheduler, AwardingScheduleArgs>(new AwardingScheduleArgs { });
+                        await _schedulerManager.EnqueueAsync<ILotteryAwardingScheduler, AwardingScheduleArgs>(new AwardingScheduleArgs
+                        {
+                            LdpOrderId = message.LdpOrderId,
+                            LdpMerchanerId = message.LdpMerchanerId,
+                            LvpOrderId = message.Content.LvpOrderId,
+                            LvpMerchanerId = message.Content.LvpMerchanerId
+                        }, delay: new TimeSpan(1, 1, 1));
                     }
                     else
                     {

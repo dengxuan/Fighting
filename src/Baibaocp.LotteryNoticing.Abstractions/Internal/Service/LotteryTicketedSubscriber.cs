@@ -16,13 +16,13 @@ namespace Baibaocp.LotteryNotifier.Internal.Services
     {
         private readonly IBusClient _busClient;
 
-        private readonly ILotteryNoticingMessageService _ticketingNoticeMessageService;
+        private readonly IQueryingDispatchMessageService _ticketingNoticeMessageService;
 
         private readonly ITicketingNotifier _dispatcher;
 
         private readonly ILogger<LotteryTicketedSubscriber> _logger;
 
-        public LotteryTicketedSubscriber(IBusClient busClient, ITicketingNotifier dispatcher, ILotteryNoticingMessageService ticketingNoticeMessageService, ILogger<LotteryTicketedSubscriber> logger)
+        public LotteryTicketedSubscriber(IBusClient busClient, ITicketingNotifier dispatcher, IQueryingDispatchMessageService ticketingNoticeMessageService, ILogger<LotteryTicketedSubscriber> logger)
         {
             _busClient = busClient;
             _ticketingNoticeMessageService = ticketingNoticeMessageService;

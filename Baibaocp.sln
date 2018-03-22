@@ -125,6 +125,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.Liangcai.Hosting", "src\Baibaocp.LotteryDispatching.Liangcai.Hosting\Baibaocp.LotteryDispatching.Liangcai.Hosting.csproj", "{1CAB19BF-CD37-495B-AF25-8C8FDBC7ACEC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryOrdering.Scheduling.Hosting", "src\Baibaocp.LotteryOrdering.Scheduling.Hosting\Baibaocp.LotteryOrdering.Scheduling.Hosting.csproj", "{C27234F6-4A3A-4920-9AD3-9852C4100CD1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -343,6 +345,10 @@ Global
 		{1CAB19BF-CD37-495B-AF25-8C8FDBC7ACEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CAB19BF-CD37-495B-AF25-8C8FDBC7ACEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CAB19BF-CD37-495B-AF25-8C8FDBC7ACEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C27234F6-4A3A-4920-9AD3-9852C4100CD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C27234F6-4A3A-4920-9AD3-9852C4100CD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C27234F6-4A3A-4920-9AD3-9852C4100CD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C27234F6-4A3A-4920-9AD3-9852C4100CD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -379,6 +385,7 @@ Global
 		{4F048BED-EBDD-464F-9100-51D8849083E0} = {6F364ECB-76BE-42E0-96D8-36DD069F95ED}
 		{F9E95695-693C-4564-843C-9CC26E784BD9} = {03618F33-C0F4-436D-BA3C-A14EC3894F1F}
 		{1CAB19BF-CD37-495B-AF25-8C8FDBC7ACEC} = {03618F33-C0F4-436D-BA3C-A14EC3894F1F}
+		{C27234F6-4A3A-4920-9AD3-9852C4100CD1} = {AE3C234A-ADA3-4990-B661-C50F493028A3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B9F693E7-6A4E-4EEC-8474-82209B8E4094}

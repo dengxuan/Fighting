@@ -24,9 +24,9 @@ namespace Baibaocp.LotteryDispatching.Internal
         private readonly ILogger<OrderingDispatcherSubscriber> _logger;
         private readonly DispatcherConfiguration _dispatcherConfiguration;
         private readonly IDispatchQueryingMessageService _dispatchQueryingMessageService;
-        private readonly ILotteryNoticingMessageService _awardingNoticeMessageService;
+        private readonly IQueryingDispatchMessageService _awardingNoticeMessageService;
 
-        public QueryingDispatcherSubscriber(IBusClient busClient, DispatcherConfiguration dispatcherConfiguration, ILogger<OrderingDispatcherSubscriber> logger, IQueryingDispatcher queryingDispatcher, IDispatchQueryingMessageService dispatchQueryingMessageService, ILotteryNoticingMessageService awardingNoticeMessageService)
+        public QueryingDispatcherSubscriber(IBusClient busClient, DispatcherConfiguration dispatcherConfiguration, ILogger<OrderingDispatcherSubscriber> logger, IQueryingDispatcher queryingDispatcher, IDispatchQueryingMessageService dispatchQueryingMessageService, IQueryingDispatchMessageService awardingNoticeMessageService)
         {
             _logger = logger;
             _busClient = busClient;

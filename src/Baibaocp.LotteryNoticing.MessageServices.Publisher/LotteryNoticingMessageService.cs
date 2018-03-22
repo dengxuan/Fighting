@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryNotifier.MessageServices
 {
-    public class LotteryNoticingMessageService : ILotteryNoticingMessageService
+    public class LotteryNoticingMessageService : IQueryingDispatchMessageService
     {
         private readonly IBusClient _busClient;
 
