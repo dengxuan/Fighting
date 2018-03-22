@@ -3,7 +3,7 @@ using System;
 
 namespace Fighting.Storaging.Entities.Abstractions
 {
-    public abstract class Entity : Entity<int>
+    public abstract class Entity : Entity<int>, IEntity<int>, IEntity
     {
     }
 

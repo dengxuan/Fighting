@@ -8,8 +8,7 @@ namespace Baibaocp.LotteryOrdering.Scheduling.DependencyInjection
     {
         public static SchedulingBuilder AddLotteryOrderingScheduling(this SchedulingBuilder schedulingBuilder)
         {
-            schedulingBuilder.Services.AddSingleton<ILotteryAwardingScheduler, LotteryAwardingScheduler>();
-            schedulingBuilder.Services.AddSingleton<ILotteryTicketingScheduler, LotteryTicketingScheduler>();
+            schedulingBuilder.Services.AddTransient<ILotteryAwardingScheduler, LotteryAwardingScheduler>();
             return schedulingBuilder;
         }
     }

@@ -18,7 +18,7 @@ namespace Fighting.Storaging.EntityFrameworkCore.DependencyInjection
         public static StorageBuilder UseEntityFrameworkCore<TDbContext>(this StorageBuilder storageBuilder, Action<DbContextOptionsBuilder> optionAction) where TDbContext : StorageContext
         {
             storageBuilder.Services.AddTransient<IDbContextProvider<TDbContext>, SimpleDbContextProvider<TDbContext>>();
-            storageBuilder.Services.AddDbContext<TDbContext>(optionAction);
+            storageBuilder.Services.AddDbContext<TDbContext>(optionAction, ServiceLifetime.Transient, ServiceLifetime.Transient);
             RegisterRepository<TDbContext>(storageBuilder.Services);
             return storageBuilder;
         }

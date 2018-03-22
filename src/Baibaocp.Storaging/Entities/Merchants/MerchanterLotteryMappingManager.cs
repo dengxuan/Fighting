@@ -1,9 +1,12 @@
-﻿using Fighting.Storaging.Repositories.Abstractions;
+﻿using Fighting.DependencyInjection.Builder;
+using Fighting.Storaging.Repositories.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Baibaocp.Storaging.Entities.Merchants
 {
+
+    [TransientDependency]
     public class MerchanterLotteryMappingManager
     {
         private readonly IRepository<MerchanterLotteryMapping, int> _lotteryMerchanterRepository;

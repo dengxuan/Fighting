@@ -1,19 +1,28 @@
-﻿using Baibaocp.LotteryDispatching.DependencyInjection;
+﻿using Baibaocp.ApplicationServices.DependencyInjection;
+using Baibaocp.LotteryDispatcher.Liangcai.DependencyInjection;
+using Baibaocp.LotteryDispatching.DependencyInjection;
 using Baibaocp.LotteryDispatching.MessageServices.DependencyInjection;
-using Baibaocp.LotteryDispatching.MessageServices.Messages;
+using Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection;
+using Baibaocp.LotteryOrdering.EntityFrameworkCore;
+using Baibaocp.LotteryOrdering.MessageServices.DependencyInjection;
 using Baibaocp.LotteryOrdering.Scheduling.DependencyInjection;
+using Baibaocp.Storaging.EntityFrameworkCore;
+using Fighting.ApplicationServices.DependencyInjection;
 using Fighting.DependencyInjection;
 using Fighting.Hosting;
 using Fighting.MessageServices.DependencyInjection;
 using Fighting.Scheduling;
 using Fighting.Scheduling.DependencyInjection;
 using Fighting.Scheduling.Mysql.DependencyInjection;
+using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
 using System;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
@@ -22,6 +31,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
     {
         static async Task Main(string[] args)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var host = new HostBuilder()
                 .ConfigureHostConfiguration(configurationBuilder =>
                 {
@@ -49,6 +59,24 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
                             });
                         });
 
+                        fightBuilder.ConfigureApplicationServices(applicationServiceBuilder => 
+                        {
+                            applicationServiceBuilder.UseBaibaocpApplicationService();
+                            applicationServiceBuilder.UseLotteryOrderingApplicationService();
+                        });
+
+                        fightBuilder.ConfigureStorage(storageBuilder =>
+                        {
+                            storageBuilder.UseEntityFrameworkCore<LotteryOrderingDbContext>(optionsBuilder =>
+                            {
+                                optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
+                            });
+                            storageBuilder.UseEntityFrameworkCore<BaibaocpStorageContext>(optionsBuilder =>
+                            {
+                                optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
+                            });
+                        });
+
                         fightBuilder.ConfigureScheduling(setupAction =>
                         {
                             setupAction.AddLotteryOrderingScheduling();
@@ -58,17 +86,14 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
 
                         fightBuilder.ConfigureMessageServices(messageServiceBuilder =>
                         {
-                            messageServiceBuilder.UseLotteryDispatchingMessageService();
+                            messageServiceBuilder.UseLotteryDispatchingMessageServices();
+                            messageServiceBuilder.UseLotteryOrderingMessageServices();
                         });
 
                         fightBuilder.ConfigureLotteryDispatcher(dispatchBuilder =>
                         {
-                            dispatchBuilder.UseLotteryDispatching<OrderingExecuteMessage>(setupOptions =>
-                            {
-                                IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
-                                setupOptions.SecretKey = dispatchConfiguration.GetValue<string>("SecretKey");
-                                setupOptions.Url = dispatchConfiguration.GetValue<string>("Url");
-                            });
+                            var dispatcherOptions = hostContext.Configuration.GetSection("DispatcherConfiguration").Get<DispatcherConfiguration>();
+                            dispatchBuilder.UseLiangcaiExecuteDispatcher(dispatcherOptions);
                         });
 
                         services.AddRawRabbit(new RawRabbitOptions

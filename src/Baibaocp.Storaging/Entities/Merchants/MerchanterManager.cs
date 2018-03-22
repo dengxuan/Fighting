@@ -1,10 +1,12 @@
-﻿using Fighting.Storaging.Repositories.Abstractions;
-using System.Collections.Generic;
+﻿using Fighting.DependencyInjection.Builder;
+using Fighting.Storaging.Repositories.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Baibaocp.Storaging.Entities.Merchants
 {
+
+    [TransientDependency]
     public class MerchanterManager
     {
         private readonly IRepository<Merchanter> _merchanterRepository;

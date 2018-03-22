@@ -1,9 +1,12 @@
-﻿using Baibaocp.LotteryDispatching.MessageServices.DependencyInjection;
+﻿using Baibaocp.ApplicationServices.DependencyInjection;
+using Baibaocp.LotteryDispatching.MessageServices.DependencyInjection;
+using Baibaocp.LotteryNotifier.MessageServices.DependencyInjection;
 using Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection;
 using Baibaocp.LotteryOrdering.EntityFrameworkCore;
 using Baibaocp.LotteryOrdering.MessageServices.DependencyInjection;
 using Baibaocp.LotteryOrdering.MessagesSevices;
 using Baibaocp.LotteryOrdering.Scheduling.DependencyInjection;
+using Baibaocp.Storaging.EntityFrameworkCore;
 using Fighting.ApplicationServices.DependencyInjection;
 using Fighting.DependencyInjection;
 using Fighting.Hosting;
@@ -20,14 +23,18 @@ using Microsoft.Extensions.Logging;
 using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
-using System;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryOrdering.MessageServices
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
+        {
+            MainAsync(args).GetAwaiter().GetResult();
+        }
+
+        static async Task MainAsync(string[] args)
         {
             var builder = new HostBuilder()
                 .ConfigureAppConfiguration(configurationBuilder =>
@@ -39,10 +46,11 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 {
                     services.AddFighting(fightBuilder =>
                     {
-                        fightBuilder.ConfigureMessageServices(messageServiceBuilder => 
+                        fightBuilder.ConfigureMessageServices(messageServiceBuilder =>
                         {
-                            messageServiceBuilder.UseLotteryOrderingMessageServices();
-                            messageServiceBuilder.UseLotteryDispatchingMessageService();
+                            messageServiceBuilder.UseLotteryOrderingMessagePublisher();
+                            messageServiceBuilder.UseLotteryNoticingMessagePublisher();
+                            messageServiceBuilder.UseLotteryDispatchingMessagePublisher();
                         });
 
                         fightBuilder.ConfigureScheduling(setupAction =>
@@ -51,8 +59,9 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                             SchedulingConfiguration schedulingOptions = hostContext.Configuration.GetSection("SchedulingConfiguration").Get<SchedulingConfiguration>();
                             setupAction.UseMysqlStorage(schedulingOptions);
                         });
-                        fightBuilder.ConfigureApplicationServices(applicationServiceBuilder => 
+                        fightBuilder.ConfigureApplicationServices(applicationServiceBuilder =>
                         {
+                            applicationServiceBuilder.UseBaibaocpApplicationService();
                             applicationServiceBuilder.UseLotteryOrderingApplicationService();
                         });
                         fightBuilder.ConfigureCacheing(cacheBuilder =>
@@ -69,26 +78,23 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                             {
                                 optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
                             });
+                            storageBuilder.UseEntityFrameworkCore<BaibaocpStorageContext>(optionsBuilder =>
+                            {
+                                optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
+                            });
                         });
                     });
-                    services.AddSingleton<IHostedService, LotteryOrderingService>();
+                    services.AddSingleton<IHostedService, LotteryAwardingMessageSubscriber>();
+                    services.AddSingleton<IHostedService, LotteryOrderingMessageSubscriber>();
+                    services.AddSingleton<IHostedService, LotteryTicketingMessageSubscriber>();
                     services.AddRawRabbit(new RawRabbitOptions
                     {
                         ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>(),
-                        //Plugins = p =>
-                        //{
-                        //    p.UseMessageContext<MessageContext>();
-                        //}
                     });
                 })
                 .ConfigureLogging(logging => logging.AddConsole());
 
-
-
-            var host = builder.Build();
-            await host.StartAsync();
-            Console.ReadLine();
-            await host.StopAsync();
+            await builder.RunConsoleAsync();
         }
     }
 }

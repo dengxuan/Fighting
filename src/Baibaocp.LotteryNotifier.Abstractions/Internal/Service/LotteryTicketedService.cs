@@ -1,69 +1,34 @@
 ﻿using Baibaocp.LotteryNotifier.Abstractions;
-using Baibaocp.LotteryNotifier.Notifiers;
-using Baibaocp.LotteryOrdering.MessageServices.Messages;
-using Baibaocp.Storaging.Entities;
+using Baibaocp.LotteryNotifier.MessageServices.Abstractions;
 using Fighting.Hosting;
 using Microsoft.Extensions.Logging;
-using RawRabbit;
-using RawRabbit.Configuration.Exchange;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryNotifier.Internal.Services
 {
-    public class LotteryTicketedService : BackgroundService
+    internal class LotteryTicketedService : BackgroundService
     {
-        private readonly IBusClient _client;
+        private readonly ITicketingNoticeMessageService _ticketingNoticeMessageService;
 
-        private readonly INoticeDispatcher _dispatcher;
+        private readonly ITicketingNotifier _dispatcher;
 
         private readonly ILogger<LotteryTicketedService> _logger;
 
-        public LotteryTicketedService(IBusClient client, INoticeDispatcher dispatcher, ILogger<LotteryTicketedService> logger)
+        public LotteryTicketedService(ITicketingNotifier dispatcher, ITicketingNoticeMessageService ticketingNoticeMessageService, ILogger<LotteryTicketedService> logger)
         {
-            _client = client;
+            _ticketingNoticeMessageService = ticketingNoticeMessageService;
             _logger = logger;
             _dispatcher = dispatcher;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            return _client.SubscribeAsync<LdpTicketedMessage>((message) =>
+            return _ticketingNoticeMessageService.SubscribeAsync(async (message) =>
             {
-                _logger.LogTrace("Received ordering LvpOrderId:{0} LvpVenderId:{1} LdpOrderId:{2} LdpVenderId:{3}", message.LvpOrder.LvpOrderId, message.LvpOrder.LvpVenderId, message.LdpOrderId, message.LdpVenderId);
-                _dispatcher.DispatchAsync(new Notifier<Ticketed>(message.LvpOrder.LvpVenderId)
-                {
-                    Notice = new Ticketed
-                    {
-                        OrderId = message.LvpOrder.LvpOrderId,
-                        TicketOdds = message.TicketOdds,
-                        Status = message.Status == OrderStatus.TicketDrawing ? 10300 : 10301
-                    }
-                });
-                return Task.CompletedTask;
-            },context => 
-            {
-                context.UseSubscribeConfiguration(configuration =>
-                {
-                    configuration.OnDeclaredExchange(exchange =>
-                    {
-                        exchange.WithName("Baibaocp.LotteryVender")
-                                .WithDurability(true)
-                                .WithAutoDelete(false)
-                                .WithType(ExchangeType.Topic);
-                    });
-                    configuration.FromDeclaredQueue(queue =>
-                    {
-                        queue.WithName("Tickets.Noticing")
-                             .WithAutoDelete(false)
-                             .WithDurability(true);
-                    });
-                    configuration.Consume(consume =>
-                    {
-                        consume.WithRoutingKey("Tickets.Completed.#");
-                    });
-                });
-            });
+                _logger.LogTrace("Received ordering LvpOrderId:{0} LvpVenderId:{1}", message.Content, message.VenderId);
+                return await _dispatcher.DispatchAsync(message);
+            }, stoppingToken);
         }
     }
 }

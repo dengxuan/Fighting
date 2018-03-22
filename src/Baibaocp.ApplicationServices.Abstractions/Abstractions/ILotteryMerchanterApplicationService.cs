@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using Fighting.ApplicationServices.Abstractions;
+using System.Threading.Tasks;
 
 namespace Baibaocp.ApplicationServices.Abstractions
 {
-    public interface ILotteryMerchanterApplicationService
+    public interface ILotteryMerchanterApplicationService : IApplicationService
     {
 
         /// <summary>
@@ -28,5 +29,13 @@ namespace Baibaocp.ApplicationServices.Abstractions
         /// <param name="amount">返奖金额</param>
         /// <returns></returns>
         Task Rewarding(int merchanterId, long orderId, int amount);
+
+        /// <summary>
+        /// 根据投注渠道商编号和彩种查询出票渠道商编号
+        /// </summary>
+        /// <param name="lvpVenderId">投注渠道商编号</param>
+        /// <param name="lotteryId">彩种编号</param>
+        /// <returns></returns>
+        Task<string> FindLdpVenderId(string lvpVenderId, int lotteryId);
     }
 }

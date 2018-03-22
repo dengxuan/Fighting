@@ -1,8 +1,6 @@
-﻿using Baibaocp.LotteryDispatching.Abstractions;
+﻿using Baibaocp.LotteryDispatching.Internal;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
-using System;
+using Microsoft.Extensions.Hosting;
 
 namespace Baibaocp.LotteryDispatching.DependencyInjection.Builder
 {
@@ -15,28 +13,10 @@ namespace Baibaocp.LotteryDispatching.DependencyInjection.Builder
             Services = services;
         }
 
-        private void AddHandlerDiscovery()
-        {
-            Services.Scan(scanner => 
-            {
-                scanner.FromApplicationDependencies()
-                       .AddClasses(filter => filter.AssignableTo(typeof(IExecuteHandler<>)))
-                       .AsSelf()
-                       .WithTransientLifetime();
-            });
-        }
-
-        //public LotteryDispatcherBuilder ConfigureOptions(Action<LotteryDispatcherOptions> options)
-        //{
-        //    Services.Configure(options);
-        //    return this;
-        //}
-
         internal void Build()
         {
-            Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<DispatcherOptions>, LotteryDispatcherOptionsSetup>());
-            Services.AddSingleton(c => c.GetRequiredService<IOptions<DispatcherOptions>>().Value);
-            AddHandlerDiscovery();
+            Services.AddSingleton<IHostedService, OrderingDispatcherService>();
+            Services.AddSingleton<IHostedService, QueryingDispatcherService>();
         }
     }
 }

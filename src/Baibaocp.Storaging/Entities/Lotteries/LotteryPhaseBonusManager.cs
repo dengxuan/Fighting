@@ -1,9 +1,11 @@
-﻿using Fighting.Storaging.Repositories.Abstractions;
+﻿using Fighting.DependencyInjection.Builder;
+using Fighting.Storaging.Repositories.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Baibaocp.Storaging.Entities.Lotteries
 {
+    [TransientDependency]
     public class LotteryPhaseBonusManager
     {
         private readonly IRepository<LotteryPhaseBonus, int> _lotteryIssueBonusesRepository;

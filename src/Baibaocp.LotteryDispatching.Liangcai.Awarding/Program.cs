@@ -1,4 +1,5 @@
-﻿using Baibaocp.LotteryDispatching.DependencyInjection;
+﻿using Baibaocp.LotteryDispatcher.Liangcai.DependencyInjection;
+using Baibaocp.LotteryDispatching.DependencyInjection;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Fighting.DependencyInjection;
 using Fighting.Hosting;
@@ -45,12 +46,8 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Awarding
 
                         fightBuilder.ConfigureLotteryDispatcher(dispatchBuilder =>
                         {
-                            dispatchBuilder.UseLotteryDispatching<QueryingExecuteMessage>(setupOptions =>
-                            {
-                                IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
-                                setupOptions.SecretKey = dispatchConfiguration.GetValue<string>("SecretKey");
-                                setupOptions.Url = dispatchConfiguration.GetValue<string>("Url");
-                            });
+                            var dispatcherOptions = hostContext.Configuration.Get<DispatcherConfiguration>();
+                            dispatchBuilder.UseLiangcaiExecuteDispatcher(dispatcherOptions);
                         });
 
                         services.AddRawRabbit(new RawRabbitOptions

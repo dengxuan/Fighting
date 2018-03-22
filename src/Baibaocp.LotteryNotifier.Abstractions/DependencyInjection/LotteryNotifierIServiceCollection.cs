@@ -1,7 +1,8 @@
 ﻿using Baibaocp.LotteryNotifier.Abstractions;
 using Baibaocp.LotteryNotifier.Builder;
-using Baibaocp.LotteryNotifier.Internal;
+using Baibaocp.LotteryNotifier.Internal.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 
 namespace Baibaocp.LotteryNotifier.DependencyInjection
@@ -20,19 +21,11 @@ namespace Baibaocp.LotteryNotifier.DependencyInjection
                 throw new ArgumentNullException(nameof(builderAction));
             }
 
-            AddNoticeServices(services);
-
             var builder = new LotteryNotifierBuilder(services);
             builderAction.Invoke(builder);
             builder.Build();
 
             return services;
-        }
-
-        internal static void AddNoticeServices(IServiceCollection services)
-        {
-            services.AddSingleton<INoticeDispatcher, NoticeDispatcher>();
-            services.AddSingleton<INoticeHandlerFactory, NoticeHandlerFactory>();
         }
     }
 }

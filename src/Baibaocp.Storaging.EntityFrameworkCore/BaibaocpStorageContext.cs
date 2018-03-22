@@ -10,7 +10,7 @@ namespace Baibaocp.Storaging.EntityFrameworkCore
 {
     public class BaibaocpStorageContext : StorageContext
     {
-        public BaibaocpStorageContext(StorageOptions storageOptions, DbContextOptions options) : base(storageOptions, options)
+        public BaibaocpStorageContext(StorageOptions storageOptions, DbContextOptions<BaibaocpStorageContext> options) : base(storageOptions, options)
         {
         }
 
@@ -92,7 +92,12 @@ namespace Baibaocp.Storaging.EntityFrameworkCore
         /// <summary>
         /// 商户彩种开通的彩种
         /// </summary>
-        public virtual DbSet<MerchanterLotteryMapping> LotteryMerchanterMappsings { get; set; }
+        public virtual DbSet<MerchanterLotteryMapping> LotteryMerchanterMappings { get; set; }
+
+        /// <summary>
+        /// 商户账户交易记录
+        /// </summary>
+        public virtual DbSet<MerchanterAccountLogging> MerchanterAccountLoggings { get; set; }
 
         /// <summary>
         /// 彩民
