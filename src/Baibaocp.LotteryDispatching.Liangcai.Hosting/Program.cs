@@ -1,6 +1,7 @@
 ﻿using Baibaocp.LotteryDispatcher.Liangcai.DependencyInjection;
 using Baibaocp.LotteryDispatching.DependencyInjection;
 using Baibaocp.LotteryDispatching.MessageServices.DependencyInjection;
+using Baibaocp.LotteryNotifier.MessageServices.DependencyInjection;
 using Fighting.DependencyInjection;
 using Fighting.Hosting;
 using Fighting.MessageServices.DependencyInjection;
@@ -10,18 +11,16 @@ using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
 using System;
+using System.Text;
 using System.Threading.Tasks;
-using Fighting.Scheduling.DependencyInjection;
-using Baibaocp.LotteryOrdering.Scheduling.DependencyInjection;
-using Fighting.Scheduling;
-using Fighting.Scheduling.Mysql.DependencyInjection;
 
-namespace Baibaocp.LotteryDispatching.Suicai.Ordering
+namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
 {
     class Program
     {
         static async Task Main(string[] args)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var host = new HostBuilder()
                 .ConfigureHostConfiguration(configurationBuilder =>
                 {
@@ -49,33 +48,28 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
                             });
                         });
 
-                        fightBuilder.ConfigureScheduling(setupAction =>
-                        {
-                            setupAction.AddLotteryOrderingScheduling();
-                            SchedulingConfiguration schedulingOptions = hostContext.Configuration.GetSection("SchedulingConfiguration").Get<SchedulingConfiguration>();
-                            setupAction.UseMysqlStorage(schedulingOptions);
-                        });
-
                         fightBuilder.ConfigureMessageServices(messageServiceBuilder =>
                         {
                             messageServiceBuilder.UseLotteryDispatchingMessagePublisher();
+                            messageServiceBuilder.UseLotteryNoticingMessagePublisher();
                         });
-
 
                         fightBuilder.ConfigureLotteryDispatcher(dispatchBuilder =>
                         {
                             var dispatcherOptions = hostContext.Configuration.GetSection("DispatcherConfiguration").Get<DispatcherConfiguration>();
-                            dispatchBuilder.UseSuicaiExecuteDispatcher(dispatcherOptions);
+                            dispatchBuilder.UseLiangcaiExecuteDispatcher(dispatcherOptions);
                         });
 
-                        RawRabbitOptions Options = new RawRabbitOptions { ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>() };
-
-                        services.AddRawRabbit(Options);
+                        services.AddRawRabbit(new RawRabbitOptions
+                        {
+                            ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>()
+                        });
 
                     });
                 });
 
             Console.WriteLine("Starting...");
+
             await host.RunConsoleAsync();
         }
     }
