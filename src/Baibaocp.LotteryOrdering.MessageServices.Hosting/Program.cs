@@ -1,11 +1,12 @@
-﻿using Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection;
-using Baibaocp.LotteryOrdering.EntityFrameworkCore;
-using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
-using Baibaocp.LotteryOrdering.MessageServices.DependencyInjection;
+﻿using Baibaocp.ApplicationServices.DependencyInjection;
 using Baibaocp.LotteryDispatching.MessageServices.DependencyInjection;
+using Baibaocp.LotteryNotifier.MessageServices.DependencyInjection;
+using Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection;
+using Baibaocp.LotteryOrdering.EntityFrameworkCore;
+using Baibaocp.LotteryOrdering.MessageServices.DependencyInjection;
 using Baibaocp.LotteryOrdering.MessagesSevices;
 using Baibaocp.LotteryOrdering.Scheduling.DependencyInjection;
-using Fighting.Abstractions;
+using Baibaocp.Storaging.EntityFrameworkCore;
 using Fighting.ApplicationServices.DependencyInjection;
 using Fighting.DependencyInjection;
 using Fighting.Hosting;
@@ -22,23 +23,18 @@ using Microsoft.Extensions.Logging;
 using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
-using System;
 using System.Threading.Tasks;
-using Baibaocp.ApplicationServices.DependencyInjection;
-using Baibaocp.Storaging.EntityFrameworkCore;
-using Fighting.Storaging.EntityFrameworkCore.Repositories;
-using Fighting.Storaging.EntityFrameworkCore.Abstractions;
-using Baibaocp.Storaging.Entities;
-using Fighting.Storaging.Entities.Abstractions;
-using Fighting.Storaging.Repositories.Abstractions;
-using Baibaocp.Storaging.Entities.Merchants;
-using System.Text;
 
 namespace Baibaocp.LotteryOrdering.MessageServices
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
+        {
+            MainAsync(args).GetAwaiter().GetResult();
+        }
+
+        static async Task MainAsync(string[] args)
         {
             var builder = new HostBuilder()
                 .ConfigureAppConfiguration(configurationBuilder =>
@@ -52,8 +48,9 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                     {
                         fightBuilder.ConfigureMessageServices(messageServiceBuilder =>
                         {
-                            messageServiceBuilder.UseLotteryOrderingMessageServices();
-                            messageServiceBuilder.UseLotteryDispatchingMessageServices();
+                            messageServiceBuilder.UseLotteryOrderingMessagePublisher();
+                            messageServiceBuilder.UseLotteryNoticingMessagePublisher();
+                            messageServiceBuilder.UseLotteryDispatchingMessagePublisher();
                         });
 
                         fightBuilder.ConfigureScheduling(setupAction =>
@@ -87,8 +84,9 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                             });
                         });
                     });
-                    services.AddSingleton<IHostedService, LotteryTicketingService>();
-                    services.AddSingleton<IHostedService, LotteryOrderingService>();
+                    services.AddSingleton<IHostedService, LotteryAwardingMessageSubscriber>();
+                    services.AddSingleton<IHostedService, LotteryOrderingMessageSubscriber>();
+                    services.AddSingleton<IHostedService, LotteryTicketingMessageSubscriber>();
                     services.AddRawRabbit(new RawRabbitOptions
                     {
                         ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>(),
@@ -96,29 +94,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 })
                 .ConfigureLogging(logging => logging.AddConsole());
 
-            var host = builder.Build();
-            await host.StartAsync();
-            var messageService = host.Services.GetRequiredService<ILotteryOrderingMessageService>();
-            var identityGenerater = host.Services.GetRequiredService<IIdentityGenerater>();
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    await messageService.PublishAsync(new Messages.LvpOrderedMessage
-            //    {
-            //        LvpOrderId = identityGenerater.Generate().ToString(),
-            //        InvestAmount = 200,
-            //        InvestCode = "01,02,03,04,05,06*01",
-            //        InvestCount = 1,
-            //        InvestTimes = 1,
-            //        InvestType = false,
-            //        LotteryId = 1,
-            //        IssueNumber = 2018029,
-            //        LotteryPlayId = 10011071,
-            //        LvpUserId = 1000,
-            //        LvpVenderId = "10081000345"
-            //    });
-            //}
-            Console.ReadLine();
-            await host.StopAsync();
+            await builder.RunConsoleAsync();
         }
     }
 }

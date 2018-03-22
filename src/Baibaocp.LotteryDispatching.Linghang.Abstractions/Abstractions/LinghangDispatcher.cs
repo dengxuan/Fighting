@@ -48,10 +48,10 @@ namespace Baibaocp.LotteryDispatching.Linghang.Abstractions.Abstractions
         protected async Task<string> Send(TExecuteMessage message)
         {
             string value = BuildRequest(message);
-            string sign = Signature(_command, message.LdpVenderId, value, out DateTime timestamp);
+            string sign = Signature(_command, message.LdpMerchanerId, value, out DateTime timestamp);
             Head head = new Head {
                 cmd = _command,
-                userId = message.LdpVenderId,
+                userId = message.LdpMerchanerId,
                 timeStamp = timestamp.ToString("yyyy-MM-dd HH:mm:ss"),
                 version = "1.0",
                 sign = sign,

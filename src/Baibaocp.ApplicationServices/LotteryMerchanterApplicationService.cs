@@ -15,9 +15,9 @@ namespace Baibaocp.ApplicationServices
 
         private readonly MerchanterAccountLoggingManager _merchanterAccountLoggingManager;
 
-        private readonly Dictionary<string, Dictionary<int, string>> mappings = new Dictionary<string, Dictionary<int, string>>
+        private readonly Dictionary<string, Dictionary<int, string>> _merchanterMappings = new Dictionary<string, Dictionary<int, string>>
         {
-            { "10081000345", new Dictionary<int, string> { { 1, "450022" }, { 2, "450022" }, { 31, "450022" }, { 20201, "800" }, { 20205, "800" } }},
+            { "10081000345", new Dictionary<int, string> { { 1, "450022" }, { 2, "450022" }, { 31, "450022" }, { 20201, "800" }, { 20205, "800" }, { 20206, "800"} }},
         };
 
         public LotteryMerchanterApplicationService(IIdentityGenerater identityGenerater, MerchanterManager merchanterManager, MerchanterAccountLoggingManager merchanterAccountLoggingManager)
@@ -29,8 +29,14 @@ namespace Baibaocp.ApplicationServices
 
         public Task<string> FindLdpVenderId(string lvpVenderId, int lotteryId)
         {
-            var ldpVenderId = mappings.GetValueOrDefault(lvpVenderId)?.GetValueOrDefault(lotteryId);
-            return Task.FromResult(ldpVenderId);
+            if (_merchanterMappings.TryGetValue(lvpVenderId, out Dictionary<int, string> lotteryMappings))
+            {
+                if (lotteryMappings.TryGetValue(lotteryId, out string ldpVenderId))
+                {
+                    return Task.FromResult(ldpVenderId);
+                }
+            }
+            return Task.FromResult(string.Empty);
         }
 
         public async Task Recharging(int merchanterId, long orderId, int amount)

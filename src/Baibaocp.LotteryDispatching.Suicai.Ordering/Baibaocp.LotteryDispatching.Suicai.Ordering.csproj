@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Baibaocp.LotteryDispatching.MessageServices\Baibaocp.LotteryDispatching.MessageServices.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryDispatching.Suicai.Abstractions\Baibaocp.LotteryDispatching.Suicai.Abstractions.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.Scheduling\Baibaocp.LotteryOrdering.Scheduling.csproj" />
     <ProjectReference Include="..\Fighting.Scheduling.Mysql\Fighting.Scheduling.Mysql.csproj" />
