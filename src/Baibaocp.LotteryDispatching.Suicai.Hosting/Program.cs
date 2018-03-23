@@ -1,7 +1,12 @@
-﻿using Baibaocp.LotteryDispatching.DependencyInjection;
-using Baibaocp.LotteryDispatching.MessageServices.Messages;
+﻿using Baibaocp.LotteryDispatcher.Liangcai.DependencyInjection;
+using Baibaocp.LotteryDispatching.DependencyInjection;
+using Baibaocp.LotteryDispatching.MessageServices.DependencyInjection;
+using Baibaocp.LotteryNotifier.MessageServices.DependencyInjection;
 using Fighting.DependencyInjection;
 using Fighting.Hosting;
+using Fighting.MessageServices.DependencyInjection;
+using Fighting.Scheduling;
+using Fighting.Scheduling.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RawRabbit.Configuration;
@@ -10,7 +15,7 @@ using RawRabbit.Instantiation;
 using System;
 using System.Threading.Tasks;
 
-namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
+namespace Baibaocp.LotteryDispatching.Suicai.Ordering
 {
     class Program
     {
@@ -43,26 +48,25 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
                             });
                         });
 
-                        fightBuilder.ConfigureLotteryDispatcher(dispatchBuilder =>
+                        fightBuilder.ConfigureMessageServices(messageServiceBuilder =>
                         {
-                            dispatchBuilder.UseLotteryDispatching<TicketingExecuteHandler, QueryingDispatchMessage>(setupOptions =>
-                            {
-                                IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
-                                setupOptions.MerchanterId = dispatchConfiguration.GetValue<string>("LdpVenderId");
-                                setupOptions.SecretKey = dispatchConfiguration.GetValue<string>("SecretKey");
-                                setupOptions.Url = dispatchConfiguration.GetValue<string>("Url");
-                            });
+                            messageServiceBuilder.UseLotteryDispatchingMessagePublisher();
+                            messageServiceBuilder.UseLotteryNoticingMessagePublisher();
                         });
 
-                        services.AddRawRabbit(new RawRabbitOptions
+
+                        fightBuilder.ConfigureLotteryDispatcher(dispatchBuilder =>
                         {
-                            ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>()
+                            var dispatcherOptions = hostContext.Configuration.GetSection("DispatcherConfiguration").Get<DispatcherConfiguration>();
+                            dispatchBuilder.UseSuicaiExecuteDispatcher(dispatcherOptions);
                         });
+
+                        RawRabbitOptions Options = new RawRabbitOptions { ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>() };
+
+                        services.AddRawRabbit(Options);
 
                     });
                 });
-
-            Console.WriteLine("Starting...");
 
             await host.RunConsoleAsync();
         }

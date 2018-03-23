@@ -35,7 +35,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
             ordersend.orderList = new List<order>();
             order order = new order()
             {
-                orderId = executer.LdpOrderId,
+                orderId = executer.LdpOrderId.ToString(),
                 timeStamp = ((DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000).ToString(),
                 ticketMoney = (executer.LvpOrder.InvestAmount / 100).ToString(),
                 betCount = "1",

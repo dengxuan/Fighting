@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
 {
-    public class AwardingExecuteDispatcher : SuicaiLotteryDispatcher<QueryingDispatchMessage>, IAwardingDispatcher
+    public class AwardingExecuteDispatcher : SuicaiLotteryDispatcher<QueryingDispatchMessage>, IQueryingDispatcher
     {
 
         private readonly ILogger<AwardingExecuteDispatcher> _logger;
@@ -26,7 +26,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
         {
             OrderTicket Ticket = new OrderTicket();
             Ticket.orderList = new List<Ticket>();
-            Ticket tc = new Ticket() { orderId = executer.LdpOrderId };
+            Ticket tc = new Ticket() { orderId = executer.LdpOrderId.ToString() };
             return JsonExtensions.ToJsonString(Ticket);
         }
 

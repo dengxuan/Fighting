@@ -14,14 +14,14 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
 {
-    public class TicketingExecuteDispatcher : SuicaiLotteryDispatcher<QueryingDispatchMessage>, ITicketingDispatcher
+    public class QueryingExecuteDispatcher : SuicaiLotteryDispatcher<QueryingDispatchMessage>, IQueryingDispatcher
     {
 
         private readonly StorageOptions _storageOptions;
 
-        private readonly ILogger<TicketingExecuteDispatcher> _logger;
+        private readonly ILogger<QueryingExecuteDispatcher> _logger;
 
-        public TicketingExecuteDispatcher(DispatcherConfiguration options, StorageOptions storageOptions, ILogger<TicketingExecuteDispatcher> logger) : base(options, logger, "200009")
+        public QueryingExecuteDispatcher(DispatcherConfiguration options, StorageOptions storageOptions, ILogger<QueryingExecuteDispatcher> logger) : base(options, logger, "200009")
         {
             _logger = logger;
             _storageOptions = storageOptions;
@@ -31,7 +31,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
         {
             OrderTicket Ticket = new OrderTicket();
             Ticket.orderList = new List<Ticket>();
-            Ticket tc = new Ticket() { orderId = executer.LdpOrderId };
+            Ticket tc = new Ticket() { orderId = executer.LdpOrderId.ToString() };
             return JsonExtensions.ToJsonString(Ticket);
         }
 
@@ -65,7 +65,8 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
                         }
                     }
                 }
-                else {
+                else
+                {
                     return new FailureHandle();
                 }
             }
