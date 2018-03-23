@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Baibaocp.LotteryCalculating</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.ApplicationServices.Abstractions\Baibaocp.LotteryOrdering.ApplicationServices.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
