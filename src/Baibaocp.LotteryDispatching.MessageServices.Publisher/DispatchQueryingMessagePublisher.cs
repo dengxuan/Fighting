@@ -21,7 +21,7 @@ namespace Baibaocp.LotteryDispatching.MessageServices
 
         public Task PublishAsync(long ldpOrderId, string ldpMerchanerId, string lvpOrderId, string lvpMerchanerId,QueryingTypes queryingType)
         {
-            QueryingExecuteMessage queryingMessage = new QueryingExecuteMessage(ldpOrderId, ldpMerchanerId, lvpOrderId, lvpMerchanerId, queryingType);
+            QueryingDispatchMessage queryingMessage = new QueryingDispatchMessage(ldpOrderId, ldpMerchanerId, lvpOrderId, lvpMerchanerId, queryingType);
             return _busClient.PublishAsync(queryingMessage, context =>
             {
                 context.UsePublishConfiguration(configuration =>

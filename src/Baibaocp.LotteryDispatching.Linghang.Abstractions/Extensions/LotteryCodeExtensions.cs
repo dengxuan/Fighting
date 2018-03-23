@@ -6,7 +6,7 @@ namespace Baibaocp.LotteryDispatching.Linghang.Abstractions.Extensions
 {
     public static class LotteryCodeExtensions
     {
-        public static string ToLinghangcode(this string code, OrderingExecuteMessage entity)
+        public static string ToLinghangcode(this string code, OrderingDispatchMessage entity)
         {
             string castcode = string.Empty;
             switch (entity.LvpOrder.LotteryPlayId)

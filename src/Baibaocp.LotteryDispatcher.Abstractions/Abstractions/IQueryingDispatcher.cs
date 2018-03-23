@@ -6,6 +6,6 @@ namespace Baibaocp.LotteryDispatching.Abstractions
 {
     public interface IQueryingDispatcher
     {
-        Task<IQueryingHandle> DispatchAsync(QueryingExecuteMessage message);
+        Task<IQueryingHandle> DispatchAsync(QueryingDispatchMessage message);
     }
 }

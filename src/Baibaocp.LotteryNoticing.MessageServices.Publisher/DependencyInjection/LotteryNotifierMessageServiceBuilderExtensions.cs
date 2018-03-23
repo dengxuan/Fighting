@@ -8,7 +8,7 @@ namespace Baibaocp.LotteryNotifier.MessageServices.DependencyInjection
     {
         public static MessageServiceBuilder UseLotteryNoticingMessagePublisher(this MessageServiceBuilder messageServiceBuilder)
         {
-            messageServiceBuilder.Services.AddTransient<IQueryingDispatchMessageService, LotteryNoticingMessageService>();
+            messageServiceBuilder.Services.AddTransient<ILotteryNoticingMessagePublisher, LotteryNoticingMessageService>();
             return messageServiceBuilder;
         }
     }

@@ -45,7 +45,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ticketing
 
                         fightBuilder.ConfigureLotteryDispatcher(dispatchBuilder =>
                         {
-                            dispatchBuilder.UseLotteryDispatching<TicketingExecuteHandler, QueryingExecuteMessage>(setupOptions =>
+                            dispatchBuilder.UseLotteryDispatching<TicketingExecuteHandler, QueryingDispatchMessage>(setupOptions =>
                             {
                                 IConfiguration dispatchConfiguration = hostContext.Configuration.GetSection("DispatchConfiguration");
                                 setupOptions.MerchanterId = dispatchConfiguration.GetValue<string>("LdpVenderId");

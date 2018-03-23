@@ -1,6 +1,6 @@
 ﻿namespace Baibaocp.LotteryDispatching.MessageServices.Messages
 {
-    public interface IExecuteMessage
+    public interface IDispatchMessage
     {
         long LdpOrderId { get; }
 

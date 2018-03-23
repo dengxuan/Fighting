@@ -13,7 +13,7 @@ using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Linghang.Abstractions.Dispatchers
 {
-    public class OrderingExecuteDispatcher : LinghangDispatcher<OrderingExecuteMessage>, IOrderingDispatcher
+    public class OrderingExecuteDispatcher : LinghangDispatcher<OrderingDispatchMessage>, IOrderingDispatcher
     {
 
         private readonly ILogger<OrderingExecuteDispatcher> _logger;
@@ -23,7 +23,7 @@ namespace Baibaocp.LotteryDispatching.Linghang.Abstractions.Dispatchers
             _logger = logger;
         }
 
-        protected override string BuildRequest(OrderingExecuteMessage message)
+        protected override string BuildRequest(OrderingDispatchMessage message)
         {
             OrderSending ordersend = new OrderSending();
             ordersend.gameId = executer.LvpOrder.LotteryId.ToSuicaiLottery();
@@ -41,7 +41,7 @@ namespace Baibaocp.LotteryDispatching.Linghang.Abstractions.Dispatchers
             return JsonExtensions.ToJsonString(ordersend);
         }
 
-        public Task<IOrderingHandle> DispatchAsync(OrderingExecuteMessage message)
+        public Task<IOrderingHandle> DispatchAsync(OrderingDispatchMessage message)
         {
             throw new NotImplementedException();
         }

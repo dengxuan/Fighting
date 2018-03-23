@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Baibaocp.LotteryDispatching.MessageServices.Messages;
 
 namespace Baibaocp.LotteryOrdering.Scheduling
 {
-    public class AwardingScheduleArgs
+    public class QueryingScheduleArgs
     {
         public long LdpOrderId { get; set; }
 
@@ -13,5 +11,7 @@ namespace Baibaocp.LotteryOrdering.Scheduling
         public string LvpOrderId { get; set; }
 
         public string LvpMerchanerId { get; set; }
+
+        public QueryingTypes QueryingType { get; set; }
     }
 }

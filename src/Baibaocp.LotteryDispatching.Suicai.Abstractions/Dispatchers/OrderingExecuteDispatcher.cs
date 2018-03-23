@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
 {
-    public class OrderingExecuteDispatcher : SuicaiLotteryDispatcher<OrderingExecuteMessage>, IOrderingDispatcher
+    public class OrderingExecuteDispatcher : SuicaiLotteryDispatcher<OrderingDispatchMessage>, IOrderingDispatcher
     {
         private readonly IBusClient _publisher;
 
@@ -27,7 +27,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
             _publisher = publisher;
         }
 
-        protected override string BuildRequest(OrderingExecuteMessage executer)
+        protected override string BuildRequest(OrderingDispatchMessage executer)
         {
             OrderSending ordersend = new OrderSending();
             ordersend.gameId = executer.LvpOrder.LotteryId.ToSuicaiLottery();
@@ -45,7 +45,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
             return JsonExtensions.ToJsonString(ordersend);
         }
 
-        public async Task<IOrderingHandle> DispatchAsync(OrderingExecuteMessage executer)
+        public async Task<IOrderingHandle> DispatchAsync(OrderingDispatchMessage executer)
         {
             try
             {

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
 {
-    public class AwardingExecuteDispatcher : SuicaiLotteryDispatcher<QueryingExecuteMessage>, IAwardingDispatcher
+    public class AwardingExecuteDispatcher : SuicaiLotteryDispatcher<QueryingDispatchMessage>, IAwardingDispatcher
     {
 
         private readonly ILogger<AwardingExecuteDispatcher> _logger;
@@ -22,7 +22,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
             _logger = logger;
         }
 
-        protected override string BuildRequest(QueryingExecuteMessage executer)
+        protected override string BuildRequest(QueryingDispatchMessage executer)
         {
             OrderTicket Ticket = new OrderTicket();
             Ticket.orderList = new List<Ticket>();
@@ -30,7 +30,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
             return JsonExtensions.ToJsonString(Ticket);
         }
 
-        public async Task<IQueryingHandle> DispatchAsync(QueryingExecuteMessage executer)
+        public async Task<IQueryingHandle> DispatchAsync(QueryingDispatchMessage executer)
         {
             try
             {

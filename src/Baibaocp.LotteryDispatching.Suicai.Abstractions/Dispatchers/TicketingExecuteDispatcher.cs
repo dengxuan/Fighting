@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
 {
-    public class TicketingExecuteDispatcher : SuicaiLotteryDispatcher<QueryingExecuteMessage>, ITicketingDispatcher
+    public class TicketingExecuteDispatcher : SuicaiLotteryDispatcher<QueryingDispatchMessage>, ITicketingDispatcher
     {
 
         private readonly StorageOptions _storageOptions;
@@ -27,7 +27,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
             _storageOptions = storageOptions;
         }
 
-        protected override string BuildRequest(QueryingExecuteMessage executer)
+        protected override string BuildRequest(QueryingDispatchMessage executer)
         {
             OrderTicket Ticket = new OrderTicket();
             Ticket.orderList = new List<Ticket>();
@@ -36,7 +36,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
         }
 
 
-        public async Task<IQueryingHandle> DispatchAsync(QueryingExecuteMessage executer)
+        public async Task<IQueryingHandle> DispatchAsync(QueryingDispatchMessage executer)
         {
             try
             {

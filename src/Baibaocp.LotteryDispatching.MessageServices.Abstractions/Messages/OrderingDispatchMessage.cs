@@ -2,12 +2,12 @@
 
 namespace Baibaocp.LotteryDispatching.MessageServices.Messages
 {
-    public class OrderingExecuteMessage : ExecuteMessage
+    public class OrderingDispatchMessage : DispatchMessage
     {
 
         public LvpOrderMessage LvpOrder { get; }
 
-        public OrderingExecuteMessage(long ldpOrderId, string ldpMerchanerId, LvpOrderMessage lvpOrder) : base(ldpOrderId, ldpMerchanerId)
+        public OrderingDispatchMessage(long ldpOrderId, string ldpMerchanerId, LvpOrderMessage lvpOrder) : base(ldpOrderId, ldpMerchanerId)
         {
             LvpOrder = lvpOrder;
         }

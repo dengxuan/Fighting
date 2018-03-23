@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Linghang.Abstractions.Abstractions
 {
-    public abstract class LinghangDispatcher<TExecuteMessage> where TExecuteMessage : IExecuteMessage
+    public abstract class LinghangDispatcher<TExecuteMessage> where TExecuteMessage : IDispatchMessage
     {
         private readonly string _command;
 

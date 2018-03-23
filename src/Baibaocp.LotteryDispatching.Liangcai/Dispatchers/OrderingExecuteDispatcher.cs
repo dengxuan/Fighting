@@ -13,7 +13,7 @@ using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Dispatchers
 {
-    public class OrderingExecuteDispatcher : LiangcaiDispatcher<OrderingExecuteMessage>, IOrderingDispatcher
+    public class OrderingExecuteDispatcher : LiangcaiDispatcher<OrderingDispatchMessage>, IOrderingDispatcher
     {
 
         private readonly ILogger<OrderingExecuteDispatcher> _logger;
@@ -23,7 +23,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Dispatchers
             _logger = logger;
         }
 
-        protected override string BuildRequest(OrderingExecuteMessage executer)
+        protected override string BuildRequest(OrderingDispatchMessage executer)
         {
             /*
              
@@ -46,7 +46,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Dispatchers
             return string.Join("_", values);
         }
 
-        public async Task<IOrderingHandle> DispatchAsync(OrderingExecuteMessage executer)
+        public async Task<IOrderingHandle> DispatchAsync(OrderingDispatchMessage executer)
         {
             try
             {

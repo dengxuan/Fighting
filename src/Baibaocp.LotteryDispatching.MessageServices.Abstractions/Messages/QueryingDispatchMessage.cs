@@ -1,6 +1,6 @@
 ﻿namespace Baibaocp.LotteryDispatching.MessageServices.Messages
 {
-    public class QueryingExecuteMessage : ExecuteMessage
+    public class QueryingDispatchMessage : DispatchMessage
     {
 
         public string LvpOrderId { get; }
@@ -9,7 +9,7 @@
 
         public QueryingTypes QueryingType { get; }
 
-        public QueryingExecuteMessage(long ldpOrderId, string ldpMerchanerId, string lvpOrderId, string lvpMerchanerId,QueryingTypes queryingType) : base(ldpOrderId, ldpMerchanerId)
+        public QueryingDispatchMessage(long ldpOrderId, string ldpMerchanerId, string lvpOrderId, string lvpMerchanerId,QueryingTypes queryingType) : base(ldpOrderId, ldpMerchanerId)
         {
             QueryingType = queryingType;
             LvpOrderId = lvpOrderId;

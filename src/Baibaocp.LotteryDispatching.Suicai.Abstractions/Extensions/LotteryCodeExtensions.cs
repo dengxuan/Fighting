@@ -6,7 +6,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Abstractions.Extensions
 {
     public static class LotteryCodeExtensions
     {
-        public static string ToSuicaicode(this string code, OrderingExecuteMessage entity)
+        public static string ToSuicaicode(this string code, OrderingDispatchMessage entity)
         {
             string castcode = string.Empty;
             switch (entity.LvpOrder.LotteryPlayId)
