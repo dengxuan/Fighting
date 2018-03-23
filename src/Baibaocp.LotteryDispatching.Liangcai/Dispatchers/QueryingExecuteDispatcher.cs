@@ -1,4 +1,5 @@
-﻿using Baibaocp.LotteryDispatching.Abstractions;
+﻿using Baibaocp.LotteryDispatcher.Liangcai;
+using Baibaocp.LotteryDispatching.Abstractions;
 using Baibaocp.LotteryDispatching.Liangcai.Liangcai;
 using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Handles;
@@ -15,7 +16,11 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
 {
     public class QueryingExecuteDispatcher : LiangcaiDispatcher<QueryingDispatchMessage>, IQueryingDispatcher
     {
-
+        private readonly Dictionary<QueryingTypes, string> _commands = new Dictionary<QueryingTypes, string>
+        {
+            { QueryingTypes.Ticketing, "102" },
+            { QueryingTypes.Awarding, "111" }
+        };
         private readonly ILogger<QueryingExecuteDispatcher> _logger;
 
         public QueryingExecuteDispatcher(DispatcherConfiguration options, ILogger<QueryingExecuteDispatcher> logger) : base(options, "102", logger)
@@ -95,30 +100,35 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             return string.Empty;
         }
 
-        public async Task<IQueryingHandle> DispatchAsync(QueryingDispatchMessage executer)
+        public async Task<IQueryingHandle> DispatchAsync(QueryingDispatchMessage message)
         {
-            string xml = await Send(executer);
-            XDocument document = XDocument.Parse(xml);
+            if (_commands.TryGetValue(message.QueryingType, out string command))
+            {
+                string xml = await Send(message, command);
+                XDocument document = XDocument.Parse(xml);
 
-            string Status = document.Element("ActionResult").Element("xCode").Value;
-            string value = document.Element("ActionResult").Element("xValue").Value;
-            if (Status.Equals("0"))
-            {
-                string[] values = value.Split('_');
-                return new WinningHandle((int)(Convert.ToDecimal(values[2]) * 100), (int)(Convert.ToDecimal(values[2]) * 100));
+                string Status = document.Element("ActionResult").Element("xCode").Value;
+                string value = document.Element("ActionResult").Element("xValue").Value;
+
+                if (Status.Equals("0") && message.QueryingType == QueryingTypes.Awarding)
+                {
+                    string[] values = value.Split('_');
+                    return new WinningHandle((int)(Convert.ToDecimal(values[1]) * 100), (int)(Convert.ToDecimal(values[2]) * 100));
+                }
+                if (Status.Equals("1") && message.QueryingType == QueryingTypes.Ticketing)
+                {
+                    string odds = document.Element("ActionResult").Element("xValue").Value.Split('_')[3];
+                    string oddsXml = DeflateDecompress(odds);
+                    Dictionary<string, string> oddsValues = new Dictionary<string, string>();
+                    return new SuccessHandle(string.Empty, GetOdds(oddsXml, 1));
+                }
+                else if (Status.Equals("2003"))
+                {
+                    return new FailureHandle();
+                }
+                return new WaitingHandle();
             }
-            if (Status.Equals("1"))
-            {
-                string odds = document.Element("ActionResult").Element("xValue").Value.Split('_')[3];
-                string oddsXml = DeflateDecompress(odds);
-                Dictionary<string, string> oddsValues = new Dictionary<string, string>();
-                return new SuccessHandle(string.Empty, GetOdds(oddsXml, 1));
-            }
-            else if (Status.Equals("2003"))
-            {
-                return new FailureHandle();
-            }
-            return new WaitingHandle();
+            throw new ArgumentException("No command found");
         }
     }
 }

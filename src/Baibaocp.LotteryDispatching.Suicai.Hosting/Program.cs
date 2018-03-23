@@ -5,14 +5,11 @@ using Baibaocp.LotteryNotifier.MessageServices.DependencyInjection;
 using Fighting.DependencyInjection;
 using Fighting.Hosting;
 using Fighting.MessageServices.DependencyInjection;
-using Fighting.Scheduling;
-using Fighting.Scheduling.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
-using System;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Suicai.Ordering

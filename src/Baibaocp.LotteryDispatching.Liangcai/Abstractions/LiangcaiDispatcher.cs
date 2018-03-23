@@ -5,30 +5,28 @@ using Fighting.Security.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Liangcai
 {
-    public abstract class LiangcaiDispatcher<TExecuteMessage> where TExecuteMessage : IDispatchMessage
+    public abstract class LiangcaiDispatcher<TDispatchMessage> where TDispatchMessage : IDispatchMessage
     {
-        private readonly string _command;
-
-        private readonly ILogger<LiangcaiDispatcher<TExecuteMessage>> _logger;
+        private readonly ILogger<LiangcaiDispatcher<TDispatchMessage>> _logger;
 
         private readonly HttpClient _httpClient;
 
         private readonly DispatcherConfiguration _options;
 
-        public LiangcaiDispatcher(DispatcherConfiguration options, string command, ILogger<LiangcaiDispatcher<TExecuteMessage>> logger)
+        public LiangcaiDispatcher(DispatcherConfiguration options, string command, ILogger<LiangcaiDispatcher<TDispatchMessage>> logger)
         {
             _options = options;
-            _command = command;
             _logger = logger;
             HttpClientHandler handler = new HttpClientHandler()
             {
-                AutomaticDecompression = System.Net.DecompressionMethods.Deflate
+                AutomaticDecompression = DecompressionMethods.Deflate
             };
             _httpClient = new HttpClient(handler)
             {
@@ -43,14 +41,14 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Liangcai
             return text.ToMd5();
         }
 
-        protected async Task<string> Send(TExecuteMessage message)
+        protected async Task<string> Send(TDispatchMessage message, string command)
         {
             string value = BuildRequest(message);
-            string sign = Signature(_command, message.LdpMerchanerId, value, out DateTime timestamp);
+            string sign = Signature(command, message.LdpMerchanerId, value, out DateTime timestamp);
             FormUrlEncodedContent content = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("wAgent", message.LdpMerchanerId),
-                new KeyValuePair<string, string>("wAction",_command),
+                new KeyValuePair<string, string>("wAction", command),
                 new KeyValuePair<string, string>("wMsgID", timestamp.ToString("yyyyMMddHHmm")),
                 new KeyValuePair<string, string>("wSign",sign.ToLower()),
                 new KeyValuePair<string, string>("wParam",value),
@@ -61,6 +59,6 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Liangcai
             return msg;
         }
 
-        protected abstract string BuildRequest(TExecuteMessage message);
+        protected abstract string BuildRequest(TDispatchMessage message);
     }
 }
