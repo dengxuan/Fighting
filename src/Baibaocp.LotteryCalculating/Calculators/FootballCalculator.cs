@@ -12,7 +12,7 @@ namespace Baibaocp.LotteryCalculating.Calculators
     {
         const string GAME_CANCLE = "-1";
 
-        public FootballCalculator(ISportsMatchApplicationService sportsMatchApplicationService, LotteryMerchanteOrder lotteryMerchanteOrder) : base(sportsMatchApplicationService, lotteryMerchanteOrder)
+        public FootballCalculator(ILotterySportsMatchApplicationService sportsMatchApplicationService, LotteryMerchanteOrder lotteryMerchanteOrder) : base(sportsMatchApplicationService, lotteryMerchanteOrder)
         {
         }
 
@@ -56,7 +56,7 @@ namespace Baibaocp.LotteryCalculating.Calculators
 
         public override async Task<Handle> CalculateAsync()
         {
-            string[] investMatches = LotteryMerchanteOrder.InvestCode.Split('^');
+            string[] investMatches = LotteryMerchanteOrder.InvestCode.Trim('^').Split('^');
 
             int minWinnerCount = int.Parse($"N{LotteryMerchanteOrder.LotteryPlayId}".ToJingcaiLottery());
             Stack<decimal> winnerOdds = new Stack<decimal>();
@@ -65,7 +65,7 @@ namespace Baibaocp.LotteryCalculating.Calculators
             {
                 string[] codes = investMatches[i].Split('|');
                 string matchId = string.Join("", codes[0], codes[1], codes[2]);
-                var matchResult = await GetMatchResultAsync(int.Parse(matchId));
+                var matchResult = await GetMatchResultAsync(long.Parse(matchId));
                 if (matchResult == null)
                 {
                     return Handle.Waiting;

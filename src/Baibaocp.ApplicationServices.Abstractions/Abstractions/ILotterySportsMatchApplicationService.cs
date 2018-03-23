@@ -3,13 +3,11 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.ApplicationServices.Abstractions
 {
-    public interface ISportsMatchApplicationService
+    public interface ILotterySportsMatchApplicationService
     {
         Task CreateMatchAsync(LotterySportsMatch match);
 
-        Task<LotterySportsMatch> FindMatchAsync(int matchId);
-
-        Task<LotterySportsMatch> FindMatchScoreAsync(int matchId);
+        Task<LotterySportsMatch> FindMatchAsync(long matchId);
 
         Task UpdateMatchAsync(LotterySportsMatch match);
     }

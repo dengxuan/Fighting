@@ -9,6 +9,7 @@ namespace Baibaocp.ApplicationServices.DependencyInjection
         public static ApplicationServiceBuilder UseBaibaocpApplicationService(this ApplicationServiceBuilder applicationServiceBuilder)
         {
             applicationServiceBuilder.Services.AddSingleton<ILotteryMerchanterApplicationService, LotteryMerchanterApplicationService>();
+            applicationServiceBuilder.Services.AddSingleton<ILotterySportsMatchApplicationService, LotterySportsMatchApplicationService>();
             return applicationServiceBuilder;
         }
     }

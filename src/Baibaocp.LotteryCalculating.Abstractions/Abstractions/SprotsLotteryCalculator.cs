@@ -8,18 +8,18 @@ namespace Baibaocp.LotteryCalculating.Abstractions
 {
     public abstract class SprotsLotteryCalculator : LotteryCalculator
     {
-        private readonly ISportsMatchApplicationService _sportsMatchApplicationService;
+        private readonly ILotterySportsMatchApplicationService _sportsMatchApplicationService;
 
         private readonly IDictionary<int, (int home, int guest)?> _results = new Dictionary<int, (int home, int guest)?>();
 
-        public SprotsLotteryCalculator(ISportsMatchApplicationService sportsMatchApplicationService, LotteryMerchanteOrder lotteryMerchanteOrder) : base(lotteryMerchanteOrder)
+        public SprotsLotteryCalculator(ILotterySportsMatchApplicationService sportsMatchApplicationService, LotteryMerchanteOrder lotteryMerchanteOrder) : base(lotteryMerchanteOrder)
         {
             _sportsMatchApplicationService = sportsMatchApplicationService;
         }
 
-        protected async Task<SportsMatchResult> GetMatchResultAsync(int matchId)
+        protected async Task<SportsMatchResult> GetMatchResultAsync(long matchId)
         {
-            var lotterySportsMatch = await _sportsMatchApplicationService.FindMatchScoreAsync(matchId);
+            var lotterySportsMatch = await _sportsMatchApplicationService.FindMatchAsync(matchId);
             if (string.IsNullOrEmpty(lotterySportsMatch.HalfScore) || string.IsNullOrEmpty(lotterySportsMatch.Score))
             {
                 return null;

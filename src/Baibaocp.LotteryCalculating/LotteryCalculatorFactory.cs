@@ -33,8 +33,9 @@ namespace Baibaocp.LotteryCalculating
 
         private readonly IOrderingApplicationService _orderingApplicationService;
 
-        public LotteryCalculatorFactory(IOrderingApplicationService orderingApplicationService)
+        public LotteryCalculatorFactory(IServiceProvider iocResolver, IOrderingApplicationService orderingApplicationService)
         {
+            _iocResolver = iocResolver;
             _orderingApplicationService = orderingApplicationService;
         }
 
