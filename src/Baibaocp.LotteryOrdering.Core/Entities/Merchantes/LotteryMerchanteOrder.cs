@@ -86,7 +86,6 @@ namespace Baibaocp.LotteryOrdering.Core.Entities.Merchantes
         [Required]
         public int InvestAmount { get; set; }
 
-
         /// <summary>
         /// 出票编号
         /// </summary>
@@ -104,6 +103,11 @@ namespace Baibaocp.LotteryOrdering.Core.Entities.Merchantes
         /// </summary>
         [Column("TicketOdds")]
         public string TicketedOdds { get; set; }
+
+        /// <summary>
+        /// 预计返奖时间
+        /// </summary>
+        public DateTime ExpectedBonusTime { get; set; }
 
         /// <summary>
         /// 返奖金额

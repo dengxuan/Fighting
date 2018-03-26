@@ -72,7 +72,7 @@ namespace Baibaocp.Storaging.Entities.Lotteries
         public DateTime StartTime { get; set; }
 
         /// <summary>
-        /// 结赛时间
+        /// 截止销售时间
         /// </summary>
         [Required]
         public DateTime EndTime { get; set; }

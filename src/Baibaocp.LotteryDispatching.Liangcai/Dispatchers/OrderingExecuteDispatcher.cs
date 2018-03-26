@@ -1,11 +1,11 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.Extensions;
 using Baibaocp.LotteryDispatching.Liangcai.Liangcai;
 using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.Liangcai.Extensions;
 using Baibaocp.Storaging.Entities.Extensions;
+using Fighting.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;

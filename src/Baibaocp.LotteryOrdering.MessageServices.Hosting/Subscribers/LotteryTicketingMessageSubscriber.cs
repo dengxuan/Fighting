@@ -29,6 +29,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
             _schedulerManager = schedulerManager;
             _orderingApplicationService = orderingApplicationService;
         }
+
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             return _busClient.SubscribeAsync<NoticeMessage<LotteryTicketed>>(async (message) =>
@@ -44,7 +45,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                             LdpMerchanerId = message.LdpMerchanerId,
                             LvpOrderId = message.Content.LvpOrderId,
                             LvpMerchanerId = message.Content.LvpMerchanerId
-                        }, delay: new TimeSpan(1, 1, 1));
+                        }, delay: order.ExpectedBonusTime - DateTime.Now);
                     }
                     else
                     {

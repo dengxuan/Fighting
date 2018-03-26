@@ -1,6 +1,4 @@
-﻿using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
-using Baibaocp.LotteryDispatching.MessageServices.Messages;
+﻿using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Fighting.Security.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
