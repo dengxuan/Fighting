@@ -98,7 +98,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                 string ticketedNumber = bill.Attribute("id").Value;
                 DateTime? ticketedTime = null;
                 string ticketedOdds = sb.ToString();
-                if (DateTime.TryParse(bill.Attribute("Billtime").Value, out DateTime time))
+                if (DateTime.TryParse(bill.Attribute("billtime").Value, out DateTime time))
                 {
                     ticketedTime = time;
                 }

@@ -97,7 +97,7 @@ namespace Baibaocp.LotteryOrdering.Core.Entities.Merchantes
         /// 出票时间
         /// </summary>
         [Column("TicketTime")]
-        public DateTime TicketedTime { get; set; }
+        public DateTime? TicketedTime { get; set; }
 
         /// <summary>
         /// 出票赔率

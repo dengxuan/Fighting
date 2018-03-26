@@ -24,7 +24,7 @@ namespace Baibaocp.LotteryCalculating.Abstractions
             {
                 return null;
             }
-            return new SportsMatchResult(lotterySportsMatch.HalfScore, lotterySportsMatch.Score, (sbyte)lotterySportsMatch.RqspfRateCount);
+            return new SportsMatchResult(lotterySportsMatch.HalfScore, lotterySportsMatch.Score);
         }
     }
 }

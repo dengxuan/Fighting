@@ -2,6 +2,7 @@
 using Baibaocp.LotteryCalculating.Abstractions;
 using Baibaocp.LotteryOrdering.Core.Entities.Merchantes;
 using Baibaocp.Storaging.Entities.Extensions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace Baibaocp.LotteryCalculating.Calculators
         {
         }
 
-        private string CalculateGameResult(int lotteryId, SportsMatchResult matchResult)
+        private string CalculateGameResult(int lotteryId, sbyte letBallCount, SportsMatchResult matchResult)
         {
             if (matchResult.FinalScore.Home == -1 && matchResult.FinalScore.Guest == -1)
             {
@@ -27,7 +28,7 @@ namespace Baibaocp.LotteryCalculating.Calculators
                 case 20201:
                 case 20206:
                     {
-                        int homeScore = matchResult.FinalScore.Home + matchResult.LetBallNumber;
+                        int homeScore = matchResult.FinalScore.Home + letBallCount;
                         int guestScore = matchResult.FinalScore.Guest;
                         if (homeScore > guestScore)
                         {
@@ -54,23 +55,161 @@ namespace Baibaocp.LotteryCalculating.Calculators
             return null;
         }
 
+        protected string ResolveMatchId(string investMatch)
+        {
+            int index = investMatch.IndexOfAny(new char[] { '-', '@' });
+            return investMatch.Substring(0, index);
+        }
+
+        protected int? ResolveLotteryId(string investMatch)
+        {
+            int startIndex = investMatch.IndexOf('-');
+            if (startIndex == -1)
+            {
+                return null;
+            }
+            int endIndex = investMatch.IndexOf('@');
+            return int.Parse(investMatch.Substring(startIndex + 1, endIndex - startIndex - 1));
+        }
+
+        protected sbyte ResolveLetBallCount(string investMatch)
+        {
+            int startIndex = investMatch.IndexOf('@');
+            int endIndex = investMatch.IndexOf('|');
+            return sbyte.Parse(investMatch.Substring(startIndex + 1, endIndex - startIndex - 1));
+        }
+
+        protected string[] ResolveInvestCodes(string investMatch)
+        {
+            int index = investMatch.IndexOf('|');
+            string codes = investMatch.Substring(index + 1);
+            return codes.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        /// <summary>
+        /// 混合投注
+        /// </summary>
+        /// <param name="investCode"></param>
+        /// <returns></returns>
+        protected string ResolveMixedInvested(string investCode, SportsMatchResult matchResult)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// 胜平负
+        /// </summary>
+        /// <param name="investCode"></param>
+        /// <returns></returns>
+        protected string ResolveVictoryLevels(string investCode, SportsMatchResult matchResult)
+        {
+            int homeScore = matchResult.FinalScore.Home;
+            int guestScore = matchResult.FinalScore.Guest;
+            if (homeScore > guestScore)
+            {
+                return "3";
+            }
+            else if (homeScore == guestScore)
+            {
+                return "1";
+            }
+            else
+            {
+                return "0";
+            }
+        }
+
+        /// <summary>
+        /// 让球胜平负
+        /// </summary>
+        /// <param name="investCode"></param>
+        /// <returns></returns>
+        protected string ResolveLetBallVictoryLevels(sbyte letBallCount, string investCode, SportsMatchResult matchResult)
+        {
+            int homeScore = matchResult.FinalScore.Home + letBallCount;
+            int guestScore = matchResult.FinalScore.Guest;
+            if (homeScore > guestScore)
+            {
+                return "3";
+            }
+            else if (homeScore == guestScore)
+            {
+                return "1";
+            }
+            else
+            {
+                return "0";
+            }
+        }
+
+
+        /// <summary>
+        /// 比分
+        /// </summary>
+        /// <param name="investCode"></param>
+        /// <returns></returns>
+        protected string ResolveScoreInvested(string investCode, SportsMatchResult matchResult)
+        {
+            string home = matchResult.FinalScore.Home.ToString();
+            string guest = matchResult.FinalScore.Guest.ToString();
+            return string.Join("", matchResult.FinalScore.Home > 5 ? "9" : home, matchResult.FinalScore.Guest > 5 ? "9" : guest);
+        }
+
+        /// <summary>
+        /// 半全场
+        /// </summary>
+        /// <param name="investCode"></param>
+        /// <returns></returns>
+        protected string ResolveDoubleResultInvested(string investCode, SportsMatchResult matchResult)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// 总进球
+        /// </summary>
+        /// <param name="investCode"></param>
+        /// <returns></returns>
+        protected string ResolveGoalsInvested(string investCode, SportsMatchResult matchResult)
+        {
+            return null;
+        }
+
         public override async Task<Handle> CalculateAsync()
         {
-            string[] investMatches = LotteryMerchanteOrder.InvestCode.Trim('^').Split('^');
+            string[] investMatches = LotteryMerchanteOrder.TicketedOdds.Split(new string[] { "#^" }, StringSplitOptions.RemoveEmptyEntries);
 
             int minWinnerCount = int.Parse($"N{LotteryMerchanteOrder.LotteryPlayId}".ToJingcaiLottery());
             Stack<decimal> winnerOdds = new Stack<decimal>();
             int completedCount = 0;
             for (int i = 0; i < investMatches.Length; i++)
             {
-                string[] codes = investMatches[i].Split('|');
-                string matchId = string.Join("", codes[0], codes[1], codes[2]);
+                string investMatch = investMatches[i];
+                string matchId = ResolveMatchId(investMatch);
                 var matchResult = await GetMatchResultAsync(long.Parse(matchId));
                 if (matchResult == null)
                 {
                     return Handle.Waiting;
                 }
-                string result = CalculateGameResult(LotteryMerchanteOrder.LotteryId == 20205 ? int.Parse(codes[3]) : LotteryMerchanteOrder.LotteryId, matchResult);
+                int lotteryId = ResolveLotteryId(investMatch) ?? LotteryMerchanteOrder.LotteryId;
+                string result = null;
+                switch (lotteryId)
+                {
+                    case 20201:
+                        {
+                            result = matchResult.FinalScore.VictoryLevels(); break;
+                        }
+                    case 20206:
+                        {
+                            sbyte letBallCount = ResolveLetBallCount(investMatch);
+                            result = matchResult.FinalScore.VictoryLevels(letBallCount); break;
+                        }
+                    case 20202:
+                        {
+                            result = matchResult.FinalScore.Score(); break;
+                        }
+                    default: break;
+                }
                 if (result == null)
                 {
                     return Handle.Waiting;
@@ -81,9 +220,7 @@ namespace Baibaocp.LotteryCalculating.Calculators
                     winnerOdds.Push(1);
                     continue;
                 }
-                //201803073003@0|3*1.47#1*3.95#0*5.10#^201803073006@0|3*2.65#1*3.00#0*2.40#^201803073009@0|3*2.37#1*3.10#0*2.60#^201803073012@0|3*1.35#1*4.50#0*6.00#^201803073011@0|3*2.20#1*3.15#0*2.80#
-                //201803235004-20201@0|3*2.90#1*3.22#0*2.11#^201803235003-20201@0|3*1.80#1*3.35#0*3.63#^201803235002-20206@-1|3*2.53#1*3.15#0*2.40#
-                string[] investCodes = codes[4].Trim('#').Split('#');
+                string[] investCodes = ResolveInvestCodes(investMatch);
 
                 for (int j = 0; j < investCodes.Length; j++)
                 {

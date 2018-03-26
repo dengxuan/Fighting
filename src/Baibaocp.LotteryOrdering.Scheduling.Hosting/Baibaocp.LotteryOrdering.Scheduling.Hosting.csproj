@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Baibaocp.ApplicationServices\Baibaocp.ApplicationServices.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryDispatching.MessageServices.Publisher\Baibaocp.LotteryDispatching.MessageServices.Publisher.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryNoticing.MessageServices.Publisher\Baibaocp.LotteryNoticing.MessageServices.Publisher.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.ApplicationServices\Baibaocp.LotteryOrdering.ApplicationServices.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.Scheduling\Baibaocp.LotteryOrdering.Scheduling.csproj" />
     <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />

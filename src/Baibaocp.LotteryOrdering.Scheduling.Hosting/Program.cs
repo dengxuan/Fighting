@@ -1,28 +1,27 @@
-﻿using Fighting.Hosting;
-using System;
-using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
+﻿using Baibaocp.ApplicationServices.DependencyInjection;
+using Baibaocp.LotteryCalculating.DependencyInjection;
+using Baibaocp.LotteryDispatching.MessageServices.DependencyInjection;
+using Baibaocp.LotteryNotifier.MessageServices.DependencyInjection;
+using Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection;
+using Baibaocp.LotteryOrdering.EntityFrameworkCore;
+using Baibaocp.LotteryOrdering.Scheduling.DependencyInjection;
+using Baibaocp.Storaging.EntityFrameworkCore;
 using Fighting.ApplicationServices.DependencyInjection;
 using Fighting.DependencyInjection;
-using Fighting.Scheduling.DependencyInjection;
-using Baibaocp.LotteryDispatching.MessageServices.DependencyInjection;
-using Baibaocp.LotteryCalculating.DependencyInjection;
+using Fighting.Hosting;
 using Fighting.MessageServices.DependencyInjection;
-using System.Threading.Tasks;
-using RawRabbit.DependencyInjection.ServiceCollection;
-using RawRabbit.Instantiation;
+using Fighting.Scheduling;
+using Fighting.Scheduling.DependencyInjection;
+using Fighting.Scheduling.Mysql.DependencyInjection;
+using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RawRabbit.Configuration;
-using Microsoft.Extensions.Configuration;
-using Baibaocp.LotteryOrdering.Scheduling.DependencyInjection;
-using Fighting.Scheduling;
-using Baibaocp.ApplicationServices.DependencyInjection;
-using Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection;
-using Fighting.Scheduling.Mysql.DependencyInjection;
-using Baibaocp.LotteryOrdering.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using Baibaocp.Storaging.EntityFrameworkCore;
-using Baibaocp.LotteryCalculating.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
+using RawRabbit.DependencyInjection.ServiceCollection;
+using RawRabbit.Instantiation;
+using System;
+using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryOrdering.Scheduling.Hosting
 {
@@ -48,6 +47,7 @@ namespace Baibaocp.LotteryOrdering.Scheduling.Hosting
                         fightBuilder.ConfigureMessageServices(messageServiceBuilder =>
                         {
                             messageServiceBuilder.UseLotteryDispatchingMessagePublisher();
+                            messageServiceBuilder.UseLotteryNoticingMessagePublisher();
                         });
 
                         fightBuilder.ConfigureApplicationServices(applicationServiceBuilder =>
