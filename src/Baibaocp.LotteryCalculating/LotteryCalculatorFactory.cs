@@ -26,7 +26,9 @@ namespace Baibaocp.LotteryCalculating
             { 20203 , typeof(FootballCalculator) },
             { 20204 , typeof(FootballCalculator) },
             { 20205 , typeof(FootballCalculator) },
-            { 20206 , typeof(FootballCalculator) }
+            { 20206 , typeof(FootballCalculator) },
+            { 2,typeof(DltCalculator)},
+            { 1,typeof(SsqCalculator)}
         };
 
         private readonly IServiceProvider _iocResolver;
