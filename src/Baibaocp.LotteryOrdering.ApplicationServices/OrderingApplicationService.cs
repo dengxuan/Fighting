@@ -186,18 +186,12 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
             await _orderingReoository.UpdateAsync(order);
         }
 
-        public async Task<LotteryMerchanteOrder> TicketedAsync(long ldpOrderId, string ldpVenderId, string ticketOdds)
+        public async Task<LotteryMerchanteOrder> TicketedAsync(long ldpOrderId, string ldpVenderId, string ticketedNumber, DateTime ticketedTime, string ticketOdds = default(string))
         {
             var order = await _orderingReoository.FirstOrDefaultAsync(ldpOrderId.ToString());
-            order.TicketOdds = ticketOdds;
-            order.LdpVenderId = ldpVenderId;
-            order.Status = (int)OrderStatus.TicketDrawing;
-            return await _orderingReoository.UpdateAsync(order);
-        }
-
-        public async Task<LotteryMerchanteOrder> TicketedAsync(string ldpOrderId, string ldpVenderId)
-        {
-            var order = await _orderingReoository.FirstOrDefaultAsync(ldpOrderId.ToString());
+            order.TicketedNumber = ticketedNumber;
+            order.TicketedTime = ticketedTime;
+            order.TicketedOdds = ticketOdds;
             order.LdpVenderId = ldpVenderId;
             order.Status = (int)OrderStatus.TicketDrawing;
             return await _orderingReoository.UpdateAsync(order);

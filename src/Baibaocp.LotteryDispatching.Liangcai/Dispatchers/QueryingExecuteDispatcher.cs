@@ -4,9 +4,11 @@ using Baibaocp.LotteryDispatching.Liangcai.Liangcai;
 using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
+using Baibaocp.Storaging.Entities.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,41 +65,46 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             return string.Join("_", values);
         }
 
-        protected string GetOdds(string xml, int lotteryId)
+        protected IList<(string Id, DateTime? Time, string Odds)> ResolveTicketResults(int lotteryId, string xml)
         {
-            //using (MySqlConnection connection = new MySqlConnection(_storageOptions.DefaultNameOrConnectionString))
-            //{
-            //    XElement element = XElement.Parse(xml);
-            //    IEnumerable<XElement> bills = element.Elements("bill");
-            //    StringBuilder sb = new StringBuilder();
-            //    foreach (var bill in bills)
-            //    {
-            //        IEnumerable<XElement> matches = bill.Elements("match");
-            //        foreach (var match in matches)
-            //        {
-            //            string attr = $"20{match.Attribute("id").Value}";
-            //            DateTime date = DateTime.ParseExact(attr.Substring(0, 8), "yyyyMMdd", CultureInfo.CurrentCulture);
-            //            string @event = attr.Substring(8);
-            //            string id = $"{date.ToString("yyyyMMdd")}{(date.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)date.DayOfWeek)}{@event}";
-            //            int rateCount = 0;
-            //            int lotid = lotteryId;
+            XElement element = XElement.Parse(xml);
+            IEnumerable<XElement> bills = element.Elements("bill");
+            List<(string Id, DateTime? Time, string Odds)> results = new List<(string Id, DateTime? Time, string Odds)>();
+            foreach (var bill in bills)
+            {
+                StringBuilder sb = new StringBuilder();
+                IEnumerable<XElement> matches = bill.Elements("match");
+                foreach (var match in matches)
+                {
+                    string attr = $"20{match.Attribute("id").Value}";
+                    DateTime date = DateTime.ParseExact(attr.Substring(0, 8), "yyyyMMdd", CultureInfo.CurrentCulture);
+                    string @event = attr.Substring(8);
+                    string id = $"{date.ToString("yyyyMMdd")}{(date.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)date.DayOfWeek)}{@event}";
+                    int rateCount = 0;
+                    int playId = lotteryId;
 
-            //            if (lotid == 20205)
-            //            {
-            //                lotid = match.Attribute("playid").Value.ToBaibaoLottery();
-            //                id = id + "-" + lotid.ToString();
-            //            }
-            //            if (lotid == 20206)
-            //            {
-            //                rateCount = (sbyte)connection.ExecuteScalar("SELECT `RqspfRateCount` FROM `BbcpZcEvents` WHERE `Id` = @Id", new { Id = id });
-            //            }
-            //            string odds = match.Value.Replace('=', '*').Replace(',', '#');
-            //            sb.Append($"{id}@{rateCount}|{odds}#^");
-            //        }
-            //    }
-            //    return sb.ToString();
-            //}
-            return string.Empty;
+                    if (lotteryId == 20205)
+                    {
+                        playId = match.Attribute("playid").Value.ToBaibaoLottery();
+                        id = id + "-" + playId.ToString();
+                    }
+                    if (playId == 20206)
+                    {
+                        rateCount = int.Parse(match.Attribute("rq").Value);
+                    }
+                    string odds = match.Value.Replace('=', '*').Replace('|', '#');
+                    sb.Append($"{id}@{rateCount}|{odds}#^");
+                }
+                string ticketedNumber = bill.Attribute("id").Value;
+                DateTime? ticketedTime = null;
+                string ticketedOdds = sb.ToString();
+                if (DateTime.TryParse(bill.Attribute("Billtime").Value, out DateTime time))
+                {
+                    ticketedTime = time;
+                }
+                results.Add((ticketedNumber, ticketedTime, sb.ToString()));
+            }
+            return results;
         }
 
         public async Task<IQueryingHandle> DispatchAsync(QueryingDispatchMessage message)
@@ -119,8 +126,8 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                 {
                     string odds = document.Element("ActionResult").Element("xValue").Value.Split('_')[3];
                     string oddsXml = DeflateDecompress(odds);
-                    Dictionary<string, string> oddsValues = new Dictionary<string, string>();
-                    return new SuccessHandle(string.Empty, GetOdds(oddsXml, 1));
+                    IList<(string Id, DateTime? Time, string Odds)> results = ResolveTicketResults(message.LotteryId, oddsXml);
+                    return new SuccessHandle(results[0].Id, results[0].Time, results[0].Odds);
                 }
                 else if (Status.Equals("2003"))
                 {

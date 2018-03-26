@@ -54,7 +54,9 @@ namespace Baibaocp.LotteryDispatching.Internal
                                     LvpMerchanerId = message.LvpMerchanerId,
                                     LvpOrderId = message.LvpOrderId,
                                     TicketingType = LotteryTicketingTypes.Success,
-                                    TicketOdds = success.TicketOdds,
+                                    TicketedNumber = success.TicketedNumber,
+                                    TicketedTime =success.TicketedTime,
+                                    TicketedOdds = success.TicketedOdds,
                                 }));
                                 return new Ack();
                             }

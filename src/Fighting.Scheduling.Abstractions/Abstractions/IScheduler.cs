@@ -12,6 +12,6 @@ namespace Fighting.Scheduling.Abstractions
         /// Executes the scheduler with the <see cref="args"/>.
         /// </summary>
         /// <param name="args">Scheduler arguments.</param>
-        Task RunAsync(TArgs args);
+        Task<bool> RunAsync(TArgs args);
     }
 }

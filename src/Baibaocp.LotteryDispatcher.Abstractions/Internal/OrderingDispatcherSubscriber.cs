@@ -50,7 +50,7 @@ namespace Baibaocp.LotteryDispatching.Internal
                         case AcceptedHandle accepted:
                             {
                                 _logger.LogInformation($"Ordering Success: {message.LdpOrderId}-{message.LdpMerchanerId}-{message.LvpOrder.LvpOrderId}-{message.LvpOrder.LvpVenderId}-{message.LvpOrder.LotteryId}-{message.LvpOrder.LotteryPlayId}-{message.LvpOrder.InvestCode}");
-                                await _dispatchQueryingMessageService.PublishAsync(message.LdpOrderId, message.LdpMerchanerId, message.LvpOrder.LvpOrderId, message.LvpOrder.LvpVenderId, QueryingTypes.Ticketing);
+                                await _dispatchQueryingMessageService.PublishAsync(message.LdpOrderId, message.LdpMerchanerId, message.LvpOrder.LvpOrderId, message.LvpOrder.LvpVenderId, message.LvpOrder.LotteryId, QueryingTypes.Ticketing);
                                 return new Ack();
                             }
                         case RejectedHandle rejected:

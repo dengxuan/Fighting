@@ -2,7 +2,7 @@
 
 namespace Baibaocp.LotteryOrdering.Scheduling
 {
-    public class QueryingScheduleArgs
+    public class AwardingScheduleArgs
     {
         public long LdpOrderId { get; set; }
 
@@ -12,6 +12,6 @@ namespace Baibaocp.LotteryOrdering.Scheduling
 
         public string LvpMerchanerId { get; set; }
 
-        public QueryingTypes QueryingType { get; set; }
+        public int LotteryId { get; set; }
     }
 }

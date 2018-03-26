@@ -1,5 +1,6 @@
 ﻿using Baibaocp.LotteryOrdering.Core.Entities.Merchantes;
 using Fighting.ApplicationServices.Abstractions;
+using System;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryOrdering.ApplicationServices.Abstractions
@@ -37,18 +38,11 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices.Abstractions
         /// </summary>
         /// <param name="ldpOrderId">出票渠道订单号</param>
         /// <param name="ldpVenderId">出票渠道编号</param>
-        /// <param name="ticketOdds">出票赔率</param>
+        /// <param name="ticketedNumber">出票票号</param>
+        /// <param name="ticketedTime">出票时间</param>
+        /// <param name="ticketedOdds">出票赔率</param>
         /// <returns></returns>
-        Task<LotteryMerchanteOrder> TicketedAsync(long ldpOrderId, string ldpVenderId, string ticketOdds);
-
-        /// <summary>
-        /// 出票成功
-        /// </summary>
-        /// <param name="ldpOrderId">出票渠道订单号</param>
-        /// <param name="ldpOrderId">出票渠道订单号</param>
-        /// <param name="ldpVenderId">出票渠道编号</param>
-        /// <returns></returns>
-        Task<LotteryMerchanteOrder> TicketedAsync(string ldpOrderId, string ldpVenderId);
+        Task<LotteryMerchanteOrder> TicketedAsync(long ldpOrderId, string ldpVenderId, string ticketedNumber, DateTime ticketedTime, string ticketedOdds = null);
 
         /// <summary>
         /// 投注失败
