@@ -1,13 +1,16 @@
 ﻿using Baibaocp.ApplicationServices.Abstractions;
 using Baibaocp.Storaging.Entities.Merchants;
 using Fighting.Abstractions;
+using Fighting.ApplicationServices.Abstractions;
+using Fighting.Caching.Abstractions;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Baibaocp.ApplicationServices
 {
-    public class LotteryMerchanterApplicationService : ILotteryMerchanterApplicationService
+    public class LotteryMerchanterApplicationService : ApplicationService, ILotteryMerchanterApplicationService
     {
         private readonly IIdentityGenerater _identityGenerater;
 
@@ -20,11 +23,20 @@ namespace Baibaocp.ApplicationServices
             { "10081000345", new Dictionary<int, string> { { 1, "450022" }, { 2, "450022" }, { 31, "450022" }, { 20201, "800" }, { 20205, "800" }, { 20206, "800"} }},
         };
 
-        public LotteryMerchanterApplicationService(IIdentityGenerater identityGenerater, MerchanterManager merchanterManager, MerchanterAccountLoggingManager merchanterAccountLoggingManager)
+        public LotteryMerchanterApplicationService(ICacheManager cacheManager, IIdentityGenerater identityGenerater, MerchanterManager merchanterManager, MerchanterAccountLoggingManager merchanterAccountLoggingManager) : base(cacheManager)
         {
             _identityGenerater = identityGenerater;
             _merchanterManager = merchanterManager;
             _merchanterAccountLoggingManager = merchanterAccountLoggingManager;
+        }
+
+        public async Task<Merchanter> FindMerchanter(string merchanterId)
+        {
+            ICache cacher = CacheManager.GetCache("LotteryMerchanters");
+            return await cacher.GetAsync(merchanterId, (key) =>
+            {
+                return _merchanterManager.Merchanters.FirstOrDefault(predicate => predicate.Id == merchanterId);
+            });
         }
 
         public Task<string> FindLdpVenderId(string lvpVenderId, int lotteryId)
@@ -39,7 +51,7 @@ namespace Baibaocp.ApplicationServices
             return Task.FromResult(string.Empty);
         }
 
-        public async Task Recharging(int merchanterId, long orderId, int amount)
+        public async Task Recharging(string merchanterId, long orderId, int amount)
         {
             Merchanter merchanter = _merchanterManager.Merchanters.Where(predicate => predicate.Id == merchanterId).First();
             await _merchanterManager.IncreaseBalance(merchanter, amount);
@@ -55,7 +67,7 @@ namespace Baibaocp.ApplicationServices
             await _merchanterAccountLoggingManager.CreateAccountLogging(merchanterAccountLogging);
         }
 
-        public async Task Rewarding(int merchanterId, long orderId, int amount)
+        public async Task Rewarding(string merchanterId, long orderId, int amount)
         {
             Merchanter merchanter = _merchanterManager.Merchanters.Where(predicate => predicate.Id == merchanterId).First();
             await _merchanterManager.IncreaseAwardedAmount(merchanter, amount);
@@ -71,7 +83,7 @@ namespace Baibaocp.ApplicationServices
             await _merchanterAccountLoggingManager.CreateAccountLogging(merchanterAccountLogging);
         }
 
-        public async Task Ticketing(int merchanterId, long orderId, int amount)
+        public async Task Ticketing(string merchanterId, long orderId, int amount)
         {
             Merchanter merchanter = _merchanterManager.Merchanters.Where(predicate => predicate.Id == merchanterId).First();
             await _merchanterManager.IncreaseTicketedAmount(merchanter, amount);

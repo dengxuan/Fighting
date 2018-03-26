@@ -11,7 +11,7 @@ namespace Baibaocp.Storaging.Entities.Merchants
         /// <summary>
         /// 投注渠道编号
         /// </summary
-        public int MerchanterId { get; set; }
+        public string MerchanterId { get; set; }
 
         /// <summary>
         /// 渠道 <see cref="Merchants.Merchanter"/>

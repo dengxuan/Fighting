@@ -10,7 +10,7 @@ namespace Baibaocp.Storaging.Entities.Merchants
         /// <summary>
         /// 渠道编号
         /// </summary>
-        public int MerchanterId { get; set; }
+        public string MerchanterId { get; set; }
 
 
         /// <summary>

@@ -1,10 +1,17 @@
-﻿using Fighting.ApplicationServices.Abstractions;
+﻿using Baibaocp.Storaging.Entities.Merchants;
+using Fighting.ApplicationServices.Abstractions;
 using System.Threading.Tasks;
 
 namespace Baibaocp.ApplicationServices.Abstractions
 {
     public interface ILotteryMerchanterApplicationService : IApplicationService
     {
+        /// <summary>
+        /// 查询渠道商
+        /// </summary>
+        /// <param name="merchanterId"></param>
+        /// <returns></returns>
+        Task<Merchanter> FindMerchanter(string merchanterId);
 
         /// <summary>
         /// 充值
@@ -12,7 +19,7 @@ namespace Baibaocp.ApplicationServices.Abstractions
         /// <param name="merchanterId">渠道编号</param>
         /// <param name="amount">充值金额</param>
         /// <returns></returns>
-        Task Recharging(int merchanterId, long orderId, int amount);
+        Task Recharging(string merchanterId, long orderId, int amount);
 
         /// <summary>
         /// 出票
@@ -20,7 +27,7 @@ namespace Baibaocp.ApplicationServices.Abstractions
         /// <param name="merchanterId">渠道编号</param>
         /// <param name="amount">出票金额</param>
         /// <returns></returns>
-        Task Ticketing(int merchanterId, long orderId, int amount);
+        Task Ticketing(string merchanterId, long orderId, int amount);
 
         /// <summary>
         /// 返奖
@@ -28,7 +35,7 @@ namespace Baibaocp.ApplicationServices.Abstractions
         /// <param name="merchanterId">渠道编号</param>
         /// <param name="amount">返奖金额</param>
         /// <returns></returns>
-        Task Rewarding(int merchanterId, long orderId, int amount);
+        Task Rewarding(string merchanterId, long orderId, int amount);
 
         /// <summary>
         /// 根据投注渠道商编号和彩种查询出票渠道商编号

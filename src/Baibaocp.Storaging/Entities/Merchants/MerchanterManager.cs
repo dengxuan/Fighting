@@ -9,11 +9,11 @@ namespace Baibaocp.Storaging.Entities.Merchants
     [TransientDependency]
     public class MerchanterManager
     {
-        private readonly IRepository<Merchanter> _merchanterRepository;
+        private readonly IRepository<Merchanter,string> _merchanterRepository;
 
         public virtual IQueryable<Merchanter> Merchanters { get { return _merchanterRepository.GetAll(); } }
 
-        public MerchanterManager(IRepository<Merchanter> merchanterRepository)
+        public MerchanterManager(IRepository<Merchanter, string> merchanterRepository)
         {
             _merchanterRepository = merchanterRepository;
         }

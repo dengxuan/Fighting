@@ -1,31 +1,31 @@
-﻿using Baibaocp.LotteryNotifier.MessageServices.Abstractions;
+﻿using Baibaocp.ApplicationServices.Abstractions;
+using Baibaocp.LotteryNotifier.MessageServices.Abstractions;
+using Baibaocp.LotteryNotifier.MessageServices.Messages;
+using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
+using Baibaocp.LotteryOrdering.MessageServices.Messages;
+using Fighting.Security.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Fighting.Security.Cryptography;
-using Fighting.Security.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Baibaocp.LotteryNotifier.MessageServices.Messages;
-using Baibaocp.LotteryOrdering.MessageServices.Messages;
-using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.WebApi.Middlewares
 {
     public class LiangcaiReceivingMiddleware
     {
         private RequestDelegate _next;
-        private readonly string SecretKey = "ourpartner";
         private readonly ILogger<LiangcaiReceivingMiddleware> _logger;
         private readonly ILotteryNoticingMessagePublisher _lotteryNoticingMessagePublisher;
         private readonly IOrderingApplicationService _orderingApplicationService;
+        private readonly ILotteryMerchanterApplicationService _lotteryMerchanterApplicationService;
 
-        public LiangcaiReceivingMiddleware(RequestDelegate next, ILogger<LiangcaiReceivingMiddleware> logger, ILotteryNoticingMessagePublisher lotteryNoticingMessagePublisher)
+        public LiangcaiReceivingMiddleware(RequestDelegate next, ILogger<LiangcaiReceivingMiddleware> logger, ILotteryNoticingMessagePublisher lotteryNoticingMessagePublisher, IOrderingApplicationService orderingApplicationService, ILotteryMerchanterApplicationService lotteryMerchanterApplicationService)
         {
             _next = next;
             _logger = logger;
             _lotteryNoticingMessagePublisher = lotteryNoticingMessagePublisher;
+            _orderingApplicationService = orderingApplicationService;
+            _lotteryMerchanterApplicationService = lotteryMerchanterApplicationService;
         }
 
         /// <summary>
@@ -35,29 +35,40 @@ namespace Baibaocp.LotteryDispatching.Liangcai.WebApi.Middlewares
         /// <returns></returns>
         public async Task Invoke(HttpContext httpContext)
         {
-            var merchanerId = httpContext.Request.Query["xAgent"];
-            var command = httpContext.Request.Query["xAction"];
-            var xSign = httpContext.Request.Query["xSign"];
-            var xValue = httpContext.Request.Query["xValue"].ToString();
-            string str = string.Format($"{0}{1}{2}{3}", merchanerId, command, xValue, SecretKey);
-            if (str.VerifyMd5(xSign))
+            try
             {
-                string[] items = xValue.Split(",");
-                foreach (var item in items)
+                var xAgent = httpContext.Request.Query["xAgent"].ToString();
+                var xAction = httpContext.Request.Query["xAction"].ToString();
+                var xSign = httpContext.Request.Query["xSign"];
+                var xValue = httpContext.Request.Query["xValue"].ToString();
+                var merchanter = await _lotteryMerchanterApplicationService.FindMerchanter(xAgent);
+                string str = string.Format($"{0}{1}{2}{3}", xAgent, xAction, xValue, merchanter.SecretKey);
+                if (str.VerifyMd5(xSign))
                 {
-                    string[] values = item.Split("_");
-                    var order = await _orderingApplicationService.FindOrderAsync(values[0]);
-                    LotteryTicketingTypes lotteryTicketingType = values[1] == "1" ? LotteryTicketingTypes.Success : LotteryTicketingTypes.Failure;
-                    await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Ticketed.{merchanerId}", new NoticeMessage<LotteryTicketed>(long.Parse(values[0]), merchanerId, new LotteryTicketed
+                    string[] items = xValue.Split(",");
+                    foreach (var item in items)
                     {
-                        LvpMerchanerId = order.LdpVenderId,
-                        LvpOrderId = order.LvpOrderId,
-                        TicketingType = lotteryTicketingType,
-                    }));
+                        string[] values = item.Split("_");
+                        var order = await _orderingApplicationService.FindOrderAsync(values[0]);
+                        if(order.Status == 2000)
+                        {
+                            LotteryTicketingTypes lotteryTicketingType = values[1] == "1" ? LotteryTicketingTypes.Success : LotteryTicketingTypes.Failure;
+                            await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Ticketed.{xAgent}", new NoticeMessage<LotteryTicketed>(long.Parse(values[0]), xAgent, new LotteryTicketed
+                            {
+                                LvpMerchanerId = order.LdpVenderId,
+                                LvpOrderId = order.LvpOrderId,
+                                TicketingType = lotteryTicketingType,
+                            }));
+                        }
+                    }
+                    await httpContext.Response.WriteAsync("1");
                 }
-                await httpContext.Response.WriteAsync("1");
             }
-            await _next(httpContext);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            await httpContext.Response.WriteAsync("0");
         }
     }
 }
