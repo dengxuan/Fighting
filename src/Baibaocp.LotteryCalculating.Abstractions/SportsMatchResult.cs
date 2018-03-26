@@ -33,17 +33,17 @@
             }
         }
 
-        public string Score()
+        public string ScoreResult()
         {
-            if (Home > 5 && Guest > 5)
-            {
-                return "99";
-            }
-            else if (Home > 5 && Guest <= 5)
+            if (Home > 5 && Guest > 2)
             {
                 return "90";
             }
-            else if (Home <= 5 && Guest > 5)
+            else if (Home == Guest && Home > 3)
+            {
+                return "99";
+            }
+            else if (Home > 2 && Guest > 5)
             {
                 return "09";
             }
@@ -51,6 +51,12 @@
             {
                 return string.Join("", Home, Guest);
             }
+        }
+
+        public string TotalGoals()
+        {
+            int count = Home + Guest;
+            return string.Format("{0}", count > 7 ? 7 : count);
         }
     }
 
