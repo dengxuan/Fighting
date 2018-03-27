@@ -5,6 +5,7 @@ using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryDispatching.Suicai.Abstractions;
 using Baibaocp.LotteryDispatching.Suicai.Abstractions.Extensions;
+using Fighting.Extensions;
 using Fighting.Json;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;

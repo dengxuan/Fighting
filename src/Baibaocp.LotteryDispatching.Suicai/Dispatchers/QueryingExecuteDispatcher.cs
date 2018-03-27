@@ -1,9 +1,9 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.Extensions;
 using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryDispatching.Suicai.Abstractions;
+using Fighting.Extensions;
 using Fighting.Json;
 using Fighting.Storaging;
 using Microsoft.Extensions.Logging;
@@ -48,7 +48,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
                     JObject jarr = JObject.Parse(content);
                     if (jarr.HasValues)
                     {
-                        var json = jarr["orderList"][0];
+                        var json = jarr["resultList"].First;
 
                         string Status = json["status"].ToString();
                         if (Status.IsIn("0", "1"))
@@ -57,7 +57,9 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
                         }
                         else if (Status.Equals("2"))
                         {
-                            return new SuccessHandle("1", "2");
+                            string ticketId = json["tickSn"].ToString();
+                            DateTime tickettime = DateTime.Now;
+                            return new SuccessHandle(ticketId, tickettime, "");
                         }
                         else
                         {
