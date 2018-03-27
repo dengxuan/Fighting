@@ -3,6 +3,7 @@ using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryDispatching.Suicai.Abstractions;
+using Baibaocp.Storaging.Entities;
 using Fighting.Json;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
@@ -38,47 +39,44 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
                 JObject jarr = JObject.Parse(jsoncontent);
                 if (jarr.HasValues)
                 {
-                    var json = jarr["orderList"][0];
+                    var json = jarr["resultList"].First;
 
                     string Status = json["status"].ToString();
-                    if (Status.Equals("0"))
+                    if (Status.Equals("2"))
                     {
-                        return new WaitingHandle();
-                    }
-                    else if (Status.Equals("1"))
-                    {
-                        return new LoseingHandle();
-                    }
-                    else if (Status.Equals("2"))
-                    {
-                        //if (executer.LvpOrder.LotteryId == (int)LotteryTypes.GxSyxw)
-                        //{
-                        //    //LdpAwardedMessage awardedMessage = new LdpAwardedMessage
-                        //    //{
-                        //    //    LvpOrder = executer.LvpOrder,
-                        //    //    LdpOrderId = executer.LdpOrderId,
-                        //    //    LdpVenderId = executer.LdpVenderId,
-                        //    //    Status = OrderStatus.TicketWinning,
-                        //    //    BonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100)
-                        //    //};
-                        //    return new Winning((int)(Convert.ToDecimal(json["totalPrize"]) * 100), (int)(Convert.ToDecimal(json["totalPrize"]) * 100));
-                        //}
-                    }
-                    else if (Status.Equals("3"))
-                    {
-                        //LdpAwardedMessage awardedMessage = new LdpAwardedMessage
-                        //{
-                        //    LvpOrder = executer.LvpOrder,
-                        //    LdpOrderId = executer.LdpOrderId,
-                        //    LdpVenderId = executer.LdpVenderId,
-                        //    Status = OrderStatus.TicketWinning,
-                        //    BonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100)
-                        //};
-                        return new WinningHandle((int)(Convert.ToDecimal(json["totalPrize"]) * 100), (int)(Convert.ToDecimal(json["totalPrize"]) * 100));
-                    }
-                    else
-                    {
-                        return new WaitingHandle();
+                        string awardStatus = json["awardStatus"].ToString();
+                        if (awardStatus.Equals("0"))
+                        {
+                            return new WaitingHandle();
+                        }
+                        else if (awardStatus.Equals("1"))
+                        {
+                            return new LoseingHandle();
+                        }
+                        else if (awardStatus.Equals("2"))
+                        {
+                            if (executer.LotteryId == (int)LotteryTypes.GxSyxw)
+                            {
+                                int bonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100);
+                                int totalTax = (int)(Convert.ToDecimal(json["totalPrize"]) * 100);
+                                int aftertaxBonusAmount = bonusAmount - totalTax;
+                                return new WinningHandle(bonusAmount, aftertaxBonusAmount);
+                            }
+                        }
+                        else if (Status.Equals("3"))
+                        {
+                            if (executer.LotteryId != (int)LotteryTypes.GxSyxw)
+                            {
+                                int bonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100);
+                                int totalTax = (int)(Convert.ToDecimal(json["totalPrize"]) * 100);
+                                int aftertaxBonusAmount = bonusAmount - totalTax;
+                                return new WinningHandle(bonusAmount, aftertaxBonusAmount);
+                            }
+                        }
+                        else
+                        {
+                            return new WaitingHandle();
+                        }
                     }
                 }
             }
