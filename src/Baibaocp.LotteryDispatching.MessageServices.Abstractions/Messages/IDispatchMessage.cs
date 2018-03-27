@@ -2,7 +2,7 @@
 {
     public interface IDispatchMessage
     {
-        long LdpOrderId { get; }
+        string LdpOrderId { get; }
 
         string LdpMerchanerId { get; }
     }

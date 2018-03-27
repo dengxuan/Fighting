@@ -5,19 +5,32 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Baibaocp.Storaging.Entities.Merchants
 {
-    [Table("BbcpLotteryMerchanterMappings")]
+    [Table("BbcpChannelLotteryMappings")]
     public class MerchanterLotteryMapping : Entity
     {
         /// <summary>
         /// 投注渠道编号
         /// </summary
-        public string MerchanterId { get; set; }
+        [Column("ChannelId")]
+        public string LvpMerchanterId { get; set; }
 
         /// <summary>
-        /// 渠道 <see cref="Merchants.Merchanter"/>
+        /// 出票渠道 <see cref="Merchants.Merchanter"/>
         /// </summary>
-        [ForeignKey("MerchanterId")]
-        public virtual Merchanter Merchanter { get; set; }
+        [ForeignKey("LvpMerchanterId")]
+        public virtual Merchanter LvpMerchanter { get; set; }
+
+        /// <summary>
+        /// 出票渠道编号
+        /// </summary
+        [Column("LdpVenderId")]
+        public string LdpMerchanterId { get; set; }
+
+        /// <summary>
+        /// 出票渠道 <see cref="Merchants.Merchanter"/>
+        /// </summary>
+        [ForeignKey("LdpMerchanterId")]
+        public virtual Merchanter LdpMerchanter { get; set; }
 
         /// <summary>
         /// 彩种编号
@@ -32,13 +45,15 @@ namespace Baibaocp.Storaging.Entities.Merchants
         public virtual Lottery Lottery { get; set; }
 
         /// <summary>
-        /// 佣金比例
+        /// 是否启用
         /// </summary>
-        public decimal CommissionRate { get; set; }
+        [NotMapped]
+        public bool IsEnabled { get; set; }
 
         /// <summary>
-        /// 通知地址
+        /// 是否独占
         /// </summary>
-        public string NoticeAddress { get; set; }
+        [NotMapped]
+        public bool IsMonopolized { get; set; }
     }
 }

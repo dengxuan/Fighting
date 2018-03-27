@@ -4,7 +4,7 @@ namespace Baibaocp.LotteryOrdering.Scheduling
 {
     public class AwardingScheduleArgs
     {
-        public long LdpOrderId { get; set; }
+        public string LdpOrderId { get; set; }
 
         public string LdpMerchanerId { get; set; }
 

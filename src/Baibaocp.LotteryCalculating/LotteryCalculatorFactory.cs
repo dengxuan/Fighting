@@ -41,9 +41,9 @@ namespace Baibaocp.LotteryCalculating
             _orderingApplicationService = orderingApplicationService;
         }
 
-        public async Task<ILotteryCalculator> GetLotteryCalculatorAsync(long lotteryOrderId)
+        public async Task<ILotteryCalculator> GetLotteryCalculatorAsync(string orderId)
         {
-            var lotteryMerchanteOrder = await _orderingApplicationService.FindOrderAsync(lotteryOrderId.ToString());
+            var lotteryMerchanteOrder = await _orderingApplicationService.FindOrderAsync(orderId);
 
             ObjectFactory objectFactory = _objectFactories.GetOrAdd(lotteryMerchanteOrder.LotteryId, (lotteryId) =>
             {

@@ -60,7 +60,5 @@ namespace Baibaocp.Storaging.Entities.Merchants
         /// </summary>
         [Column("RewardMoney")]
         public int TotalAwardedAmount { get; set; }
-
-        //public string TenantId { get; set; }
     }
 }

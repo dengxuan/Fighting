@@ -99,9 +99,9 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
             await _orderingReoository.UpdateAsync(order);
         }
 
-        public async Task<LotteryMerchanteOrder> TicketedAsync(long ldpOrderId, string ldpVenderId, string ticketedNumber, DateTime ticketedTime, string ticketOdds = default(string))
+        public async Task<LotteryMerchanteOrder> TicketedAsync(string oderId, string ldpVenderId, string ticketedNumber, DateTime ticketedTime, string ticketOdds = default(string))
         {
-            var order = await _orderingReoository.FirstOrDefaultAsync(ldpOrderId.ToString());
+            var order = await _orderingReoository.FirstOrDefaultAsync(oderId);
             order.TicketedNumber = ticketedNumber;
             order.TicketedTime = ticketedTime;
             order.TicketedOdds = ticketOdds;
@@ -110,23 +110,23 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
             return await _orderingReoository.UpdateAsync(order);
         }
 
-        public async Task<LotteryMerchanteOrder> WinningAsync(long ldpOrderId, int amount, int aftertaxBonusAmount)
+        public async Task<LotteryMerchanteOrder> WinningAsync(string orderId, int amount, int aftertaxBonusAmount)
         {
-            var order = await _orderingReoository.FirstOrDefaultAsync(ldpOrderId.ToString());
+            var order = await _orderingReoository.FirstOrDefaultAsync(orderId);
             order.BonusAmount = amount;
             order.AftertaxBonusAmount = aftertaxBonusAmount;
             order.Status = (int)OrderStatus.TicketWinning;
             return await _orderingReoository.UpdateAsync(order);
         }
 
-        public async Task<LotteryMerchanteOrder> RejectedAsync(long ldpOrderId)
+        public async Task<LotteryMerchanteOrder> RejectedAsync(string orderId)
         {
-            var order = await _orderingReoository.FirstOrDefaultAsync(ldpOrderId.ToString());
+            var order = await _orderingReoository.FirstOrDefaultAsync(orderId);
             order.Status = (int)OrderStatus.TicketFailed;
             return await _orderingReoository.UpdateAsync(order);
         }
 
-        public Task<LotteryMerchanteOrder> LoseingAsync(long lvpOrderId)
+        public Task<LotteryMerchanteOrder> LoseingAsync(string orderId)
         {
             throw new NotImplementedException();
         }

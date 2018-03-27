@@ -3,11 +3,11 @@
     public abstract class DispatchMessage : IDispatchMessage
     {
 
-        public long LdpOrderId { get; }
+        public string LdpOrderId { get; }
 
         public string LdpMerchanerId { get; }
 
-        internal DispatchMessage(long ldpOrderId, string ldpMerchanerId)
+        internal DispatchMessage(string ldpOrderId, string ldpMerchanerId)
         {
             LdpOrderId = ldpOrderId;
             LdpMerchanerId = ldpMerchanerId;

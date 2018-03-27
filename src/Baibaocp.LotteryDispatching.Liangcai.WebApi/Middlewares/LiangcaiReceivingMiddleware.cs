@@ -55,7 +55,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.WebApi.Middlewares
                         {
                             LotteryTicketingTypes lotteryTicketingType = values[1] == "1" ? LotteryTicketingTypes.Success : LotteryTicketingTypes.Failure;
                             _logger.LogTrace($"{order.Id} Ticketed: {lotteryTicketingType}");
-                            await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Ticketed.{xAgent}", new NoticeMessage<LotteryTicketed>(long.Parse(values[0]), xAgent, new LotteryTicketed
+                            await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Ticketed.{xAgent}", new NoticeMessage<LotteryTicketed>(values[0], xAgent, new LotteryTicketed
                             {
                                 LvpMerchanerId = order.LdpVenderId,
                                 LvpOrderId = order.LvpOrderId,

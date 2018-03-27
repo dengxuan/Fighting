@@ -36,35 +36,35 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices.Abstractions
         /// <summary>
         /// 出票成功
         /// </summary>
-        /// <param name="ldpOrderId">出票渠道订单号</param>
+        /// <param name="id">出票渠道订单号</param>
         /// <param name="ldpVenderId">出票渠道编号</param>
         /// <param name="ticketedNumber">出票票号</param>
         /// <param name="ticketedTime">出票时间</param>
         /// <param name="ticketedOdds">出票赔率</param>
         /// <returns></returns>
-        Task<LotteryMerchanteOrder> TicketedAsync(long ldpOrderId, string ldpVenderId, string ticketedNumber, DateTime ticketedTime, string ticketedOdds = null);
+        Task<LotteryMerchanteOrder> TicketedAsync(string id, string ldpVenderId, string ticketedNumber, DateTime ticketedTime, string ticketedOdds = null);
 
         /// <summary>
         /// 投注失败
         /// </summary>
-        /// <param name="ldpOrderId">出票渠道订单号</param>
+        /// <param name="id">出票渠道订单号</param>
         /// <returns></returns>
-        Task<LotteryMerchanteOrder> RejectedAsync(long ldpOrderId);
+        Task<LotteryMerchanteOrder> RejectedAsync(string id);
 
         /// <summary>
         /// 中间
         /// </summary>
-        /// <param name="ldpOrderId">出票渠道订单号</param>
+        /// <param name="id">出票渠道订单号</param>
         /// <param name="amount">中军金额</param>
         /// <param name="aftertaxBonusAmount">税后中奖金额</param>
         /// <returns></returns>
-        Task<LotteryMerchanteOrder> WinningAsync(long ldpOrderId, int amount, int aftertaxBonusAmount);
+        Task<LotteryMerchanteOrder> WinningAsync(string id, int amount, int aftertaxBonusAmount);
 
         /// <summary>
         /// 未中奖
         /// </summary>
-        /// <param name="ldpOrderId">出票渠道订单号</param>
+        /// <param name="id">出票渠道订单号</param>
         /// <returns></returns>
-        Task<LotteryMerchanteOrder> LoseingAsync(long ldpOrderId);
+        Task<LotteryMerchanteOrder> LoseingAsync(string id);
     }
 }

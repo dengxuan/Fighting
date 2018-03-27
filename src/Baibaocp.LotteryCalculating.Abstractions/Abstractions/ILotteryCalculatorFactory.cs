@@ -4,6 +4,6 @@ namespace Baibaocp.LotteryCalculating.Abstractions
 {
     public interface ILotteryCalculatorFactory
     {
-        Task<ILotteryCalculator> GetLotteryCalculatorAsync(long lotteryOrderId);
+        Task<ILotteryCalculator> GetLotteryCalculatorAsync(string orderId);
     }
 }
