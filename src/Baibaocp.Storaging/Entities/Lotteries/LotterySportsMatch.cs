@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Baibaocp.Storaging.Entities.Lotteries
 {
-    [Table("BbcpLotterySportsMatches")]
-    public class LotterySportsMatch : Entity
+    [Table("BbcpZcEvents")]
+    public class LotterySportsMatch : Entity<long>
     {
 
         /// <summary>
@@ -31,12 +31,14 @@ namespace Baibaocp.Storaging.Entities.Lotteries
         /// 彩种
         /// </summary>
         [Required]
+        [NotMapped()]
         public int LotteryId { get; set; }
 
         /// <summary>
         /// 彩种
         /// </summary>
         [ForeignKey("LotteryId")]
+        [NotMapped()]
         public virtual Lottery Lottery { get; set; }
 
         /// <summary>
@@ -70,7 +72,7 @@ namespace Baibaocp.Storaging.Entities.Lotteries
         public DateTime StartTime { get; set; }
 
         /// <summary>
-        /// 结赛时间
+        /// 截止销售时间
         /// </summary>
         [Required]
         public DateTime EndTime { get; set; }

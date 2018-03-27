@@ -10,7 +10,8 @@ namespace Baibaocp.Storaging.Entities.Merchants
         /// <summary>
         /// 渠道编号
         /// </summary>
-        public int MerchanterId { get; set; }
+        [Column("ChannelId")]
+        public string MerchanterId { get; set; }
 
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace Baibaocp.Storaging.Entities.Merchants
         /// <summary>
         /// 订单号
         /// </summary>
-        public long OrderId { get; set; }
+        public string OrderId { get; set; }
 
         /// <summary>
         /// 操作类型

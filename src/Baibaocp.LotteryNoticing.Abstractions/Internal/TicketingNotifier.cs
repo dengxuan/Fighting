@@ -44,10 +44,10 @@ namespace Baibaocp.LotteryNotifier
             {
                 return await _policy.ExecuteAsync(async () =>
                 {
-                    HttpResponseMessage responseMessage = (await _client.PostAsync(_options.Configuration.TicketedUrl, new ByteArrayContent(_serializer.Serialize(new { OrderId = message.LvpOrderId, message.TicketOdds, Status = (int)message.TicketingType })))).EnsureSuccessStatusCode();
+                    HttpResponseMessage responseMessage = (await _client.PostAsync(_options.Configuration.TicketedUrl, new ByteArrayContent(_serializer.Serialize(new { OrderId = message.LvpOrderId, TicketOdds = message.TicketedOdds, Status = (int)message.TicketingType })))).EnsureSuccessStatusCode();
                     byte[] bytes = await responseMessage.Content.ReadAsByteArrayAsync();
                     Handle result = _serializer.Deserialize<Handle>(bytes);
-                    _logger.LogWarning("Notice {0} result:{1}", message.LvpOrderId, result);
+                    _logger.LogInformation("Notice {0} result:{1}", message.LvpOrderId, result);
                     return result.Code == 0;
                 });
             }

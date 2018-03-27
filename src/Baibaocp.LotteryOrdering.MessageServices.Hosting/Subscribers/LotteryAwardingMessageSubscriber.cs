@@ -1,8 +1,10 @@
-﻿using Baibaocp.LotteryNotifier.MessageServices.Messages;
+﻿using Baibaocp.ApplicationServices.Abstractions;
+using Baibaocp.LotteryNotifier.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Fighting.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
 using RawRabbit.Common;
@@ -16,14 +18,14 @@ namespace Baibaocp.LotteryOrdering.MessageServices
     public class LotteryAwardingMessageSubscriber : BackgroundService
     {
         private readonly IBusClient _busClient;
-        private readonly IOrderingApplicationService _orderingApplicationService;
+        private readonly IServiceProvider _iocResolver;
         private readonly ILogger<LotteryOrderingMessageSubscriber> _logger;
 
-        public LotteryAwardingMessageSubscriber(IBusClient busClient, IOrderingApplicationService orderingApplicationService, ILogger<LotteryOrderingMessageSubscriber> logger)
+        public LotteryAwardingMessageSubscriber(IBusClient busClient, IServiceProvider iocResolver, ILogger<LotteryOrderingMessageSubscriber> logger)
         {
             _logger = logger;
             _busClient = busClient;
-            _orderingApplicationService = orderingApplicationService;
+            _iocResolver = iocResolver;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -32,14 +34,18 @@ namespace Baibaocp.LotteryOrdering.MessageServices
             {
                 try
                 {
-                    await _orderingApplicationService.WinningAsync(message.LdpOrderId, message.Content.BonusAmount, message.Content.AftertaxBonusAmount);
+                    _logger.LogInformation("Received ticketing message: {1} {0}", message.LdpMerchanerId, message.LdpOrderId);
+                    IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
+                    ILotteryMerchanterApplicationService lotteryMerchanterApplicationService = _iocResolver.GetRequiredService<ILotteryMerchanterApplicationService>();
 
-                    _logger.LogTrace("Received ticketing message: {1} {0}", message.LdpMerchanerId, message.LdpOrderId);
+                    var order = await orderingApplicationService.WinningAsync(message.LdpOrderId, message.Content.BonusAmount, message.Content.AftertaxBonusAmount);
+                    await lotteryMerchanterApplicationService.Rewarding(order.Id, order.LdpVenderId, order.LotteryId, order.InvestAmount);
+                    await lotteryMerchanterApplicationService.Rewarding(order.LvpOrderId, order.LvpVenderId, order.LotteryId, order.InvestAmount);
                     return new Ack();
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogTrace(ex, "Received ticketing message: {1} {0}", message.LdpMerchanerId, message.LdpOrderId);
+                    _logger.LogError(ex, "Received ticketing message: {1} {0}", message.LdpMerchanerId, message.LdpOrderId);
                 }
 
                 return new Nack();

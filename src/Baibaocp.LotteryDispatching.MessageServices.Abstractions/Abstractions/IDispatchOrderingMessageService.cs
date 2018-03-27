@@ -5,6 +5,6 @@ namespace Baibaocp.LotteryDispatching.MessageServices.Abstractions
 {
     public interface IDispatchOrderingMessageService
     {
-        Task PublishAsync(long ldpOrderId, string ldpMerchanerId, LvpOrderMessage message);
+        Task PublishAsync(string ldpOrderId, string ldpMerchanerId, LvpOrderMessage message);
     }
 }

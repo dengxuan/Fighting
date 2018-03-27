@@ -1,11 +1,11 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.Extensions;
 using Baibaocp.LotteryDispatching.Liangcai.Liangcai;
 using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.Liangcai.Extensions;
 using Baibaocp.Storaging.Entities.Extensions;
+using Fighting.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -13,9 +13,8 @@ using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.Dispatchers
 {
-    public class OrderingExecuteDispatcher : LiangcaiDispatcher<OrderingExecuteMessage>, IOrderingDispatcher
+    public class OrderingExecuteDispatcher : LiangcaiDispatcher<OrderingDispatchMessage>, IOrderingDispatcher
     {
-
         private readonly ILogger<OrderingExecuteDispatcher> _logger;
 
         public OrderingExecuteDispatcher(DispatcherConfiguration options, ILogger<OrderingExecuteDispatcher> logger) : base(options, "101", logger)
@@ -23,7 +22,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Dispatchers
             _logger = logger;
         }
 
-        protected override string BuildRequest(OrderingExecuteMessage executer)
+        protected override string BuildRequest(OrderingDispatchMessage message)
         {
             /*
              
@@ -34,23 +33,23 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Dispatchers
              */
             string[] values = new string[]
             {
-                string.Format("OrderID={0}", executer.LdpOrderId),
-                string.Format("LotID={0}", executer.LvpOrder.LotteryId.ToLottery()),
-                string.Format("LotIssue={0}", executer.LvpOrder.IssueNumber ?? 0),
-                string.Format("LotMoney={0}", executer.LvpOrder.InvestAmount / 100),
-                string.Format("LotCode={0}", ShanghaiJcCode.ReturnShanghaiCode(executer.LvpOrder.InvestCode, executer.LvpOrder.LotteryId, executer.LvpOrder.LotteryPlayId)),
-                string.Format("LotMulti={0}", executer.LvpOrder.InvestTimes),
+                string.Format("OrderID={0}", message.LdpOrderId),
+                string.Format("LotID={0}", message.LvpOrder.LotteryId.ToLottery()),
+                string.Format("LotIssue={0}", message.LvpOrder.IssueNumber ?? 0),
+                string.Format("LotMoney={0}", message.LvpOrder.InvestAmount / 100),
+                string.Format("LotCode={0}", ShanghaiJcCode.ReturnShanghaiCode(message.LvpOrder.InvestCode, message.LvpOrder.LotteryId, message.LvpOrder.LotteryPlayId)),
+                string.Format("LotMulti={0}", message.LvpOrder.InvestTimes),
                 string.Format("Attach={0}", ""),
-                string.Format("OneMoney={0}", executer.LvpOrder.InvestType ? "3":"2")
+                string.Format("OneMoney={0}", message.LvpOrder.InvestType ? "3":"2")
             };
             return string.Join("_", values);
         }
 
-        public async Task<IOrderingHandle> DispatchAsync(OrderingExecuteMessage executer)
+        public async Task<IOrderingHandle> DispatchAsync(OrderingDispatchMessage message)
         {
             try
             {
-                string xml = await Send(executer);
+                string xml = await Send(message, "101");
                 XDocument document = XDocument.Parse(xml);
 
                 string Status = document.Element("ActionResult").Element("xCode").Value;

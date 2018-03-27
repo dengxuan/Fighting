@@ -59,9 +59,21 @@ namespace Baibaocp.LotteryOrdering.Hosting
                     var argsType = schedulerExecuteMethod.GetParameters()[0].ParameterType;
                     var argsObject = JsonConvert.DeserializeObject(schedule.SchedulerArgs, argsType);
 
-                    schedulerExecuteMethod.Invoke(scheduler, new[] { argsObject });
+                    bool result = await (schedulerExecuteMethod.Invoke(scheduler, new[] { argsObject }) as Task<bool>);
 
-                    await _store.DeleteAsync(schedule);
+                    if(result == false)
+                    {
+                        var nextTryTime = schedule.CalculateNextTryTime();
+                        if (nextTryTime.HasValue)
+                        {
+                            schedule.NextTryTime = nextTryTime.Value;
+                        }
+                        await TryUpdate(schedule);
+                    }
+                    else
+                    {
+                        await _store.DeleteAsync(schedule);
+                    }
                 }
                 catch (Exception ex)
                 {

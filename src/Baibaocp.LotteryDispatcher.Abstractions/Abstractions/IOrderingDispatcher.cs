@@ -7,6 +7,6 @@ namespace Baibaocp.LotteryDispatching.Abstractions
     public interface IOrderingDispatcher
     {
 
-        Task<IOrderingHandle> DispatchAsync(OrderingExecuteMessage message);
+        Task<IOrderingHandle> DispatchAsync(OrderingDispatchMessage message);
     }
 }

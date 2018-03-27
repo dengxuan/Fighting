@@ -19,9 +19,13 @@ namespace Baibaocp.ApplicationServices
             _lotteryIssueRepository = lotteryIssueRepository;
         }
 
-        public Task<LotteryPhase> FindLotteryPhase(int issueNumber)
+        public Task<LotteryPhase> FindLotteryPhase(int lotteryId, int issueNumber)
         {
-            return _lotteryIssueRepository.FirstOrDefaultAsync(predicate => predicate.IssueNumber == issueNumber);
+            ICache cache = CacheManager.GetCache("LotteryPhases");
+            return cache.GetAsync($"{lotteryId}-{issueNumber}", (key) =>
+            {
+                return _lotteryIssueRepository.FirstOrDefault(predicate => predicate.IssueNumber == issueNumber);
+            });
         }
 
         public Task<List<LotteryPhase>> FindLotteryPhases(int lotteryId, int skip = 0, int limit = 10)

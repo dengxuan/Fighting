@@ -8,7 +8,7 @@ namespace Baibaocp.ApplicationServices.Abstractions
     {
         Task<List<LotteryPhase>> FindLotteryPhases(int lotteryId, int skip = 0, int limit = 10);
 
-        Task<LotteryPhase> FindLotteryPhase(int issueNumber);
+        Task<LotteryPhase> FindLotteryPhase(int lotteryId, int issueNumber);
 
         Task UpdateLotteryPhase(LotteryPhase lotteryPhase);
 

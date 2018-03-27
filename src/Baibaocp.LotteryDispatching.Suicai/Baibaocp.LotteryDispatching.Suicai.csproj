@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Baibaocp.LotteryDispatcher.Abstractions\Baibaocp.LotteryDispatching.Abstractions.csproj" />
+    <ProjectReference Include="..\Fighting.Caching.Redis\Fighting.Caching.Redis.csproj" />
+    <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
+  </ItemGroup>
+
+</Project>

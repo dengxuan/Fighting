@@ -4,7 +4,6 @@ using Baibaocp.LotteryDispatching.DependencyInjection.Builder;
 using Baibaocp.LotteryDispatching.Liangcai.Dispatchers;
 using Baibaocp.LotteryDispatching.Liangcai.Handlers;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace Baibaocp.LotteryDispatcher.Liangcai.DependencyInjection
 {

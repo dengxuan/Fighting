@@ -1,4 +1,5 @@
 ﻿using Fighting.Storaging.Entities.Abstractions;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -62,11 +63,6 @@ namespace Baibaocp.LotteryOrdering.Core.Entities.Merchantes
         public string InvestCode { get; set; }
 
         /// <summary>
-        /// 出票赔率
-        /// </summary>
-        public string TicketOdds { get; set; }
-
-        /// <summary>
         /// 投注类型
         /// </summary>
         [Required]
@@ -89,6 +85,29 @@ namespace Baibaocp.LotteryOrdering.Core.Entities.Merchantes
         /// </summary>
         [Required]
         public int InvestAmount { get; set; }
+
+        /// <summary>
+        /// 出票编号
+        /// </summary>
+        [Column("TicketId")]
+        public string TicketedNumber { get; set; }
+
+        /// <summary>
+        /// 出票时间
+        /// </summary>
+        [Column("TicketTime")]
+        public DateTime? TicketedTime { get; set; }
+
+        /// <summary>
+        /// 出票赔率
+        /// </summary>
+        [Column("TicketOdds")]
+        public string TicketedOdds { get; set; }
+
+        /// <summary>
+        /// 预计返奖时间
+        /// </summary>
+        public DateTime ExpectedBonusTime { get; set; }
 
         /// <summary>
         /// 返奖金额

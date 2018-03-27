@@ -21,9 +21,9 @@ namespace Baibaocp.LotteryNotifier.Internal.Services
 
         private readonly ILogger<LotteryAwardedSubscriber> _logger;
 
-        private readonly IQueryingDispatchMessageService _awardingNoticeMessageService;
+        private readonly ILotteryNoticingMessagePublisher _awardingNoticeMessageService;
 
-        public LotteryAwardedSubscriber(IBusClient busClient, IAwardingNotifier dispatcher, ILogger<LotteryAwardedSubscriber> logger, IQueryingDispatchMessageService awardingNoticeMessageService)
+        public LotteryAwardedSubscriber(IBusClient busClient, IAwardingNotifier dispatcher, ILogger<LotteryAwardedSubscriber> logger, ILotteryNoticingMessagePublisher awardingNoticeMessageService)
         {
             _logger = logger;
             _busClient = busClient;
@@ -37,7 +37,7 @@ namespace Baibaocp.LotteryNotifier.Internal.Services
             {
                 try
                 {
-                    _logger.LogTrace("Received ordering LvpOrderId:{0} LvpVenderId:{1}", message.LdpOrderId, message.LdpMerchanerId);
+                    _logger.LogInformation("Received awarded LdpOrderId:{0} LdpVenderId:{1}", message.LdpOrderId, message.LdpMerchanerId);
                     var result = await _dispatcher.DispatchAsync(message.Content);
                     if (result == true)
                     {

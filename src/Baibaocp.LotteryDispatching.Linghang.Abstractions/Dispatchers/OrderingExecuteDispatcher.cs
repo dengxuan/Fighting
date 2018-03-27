@@ -1,11 +1,12 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.Extensions;
 using Baibaocp.LotteryDispatching.Linghang.Abstractions.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
+using Baibaocp.LotteryDispatching.Suicai.Abstractions.Extensions;
 using Baibaocp.LotteryOrdering.Linghang.Extensions;
 using Baibaocp.Storaging.Entities.Extensions;
+using Fighting.Json;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Linghang.Abstractions.Dispatchers
 {
-    public class OrderingExecuteDispatcher : LinghangDispatcher<OrderingExecuteMessage>, IOrderingDispatcher
+    public class OrderingExecuteDispatcher : LinghangDispatcher<OrderingDispatchMessage>, IOrderingDispatcher
     {
 
         private readonly ILogger<OrderingExecuteDispatcher> _logger;
@@ -23,7 +24,7 @@ namespace Baibaocp.LotteryDispatching.Linghang.Abstractions.Dispatchers
             _logger = logger;
         }
 
-        protected override string BuildRequest(OrderingExecuteMessage message)
+        protected override string BuildRequest(OrderingDispatchMessage executer)
         {
             OrderSending ordersend = new OrderSending();
             ordersend.gameId = executer.LvpOrder.LotteryId.ToSuicaiLottery();
@@ -41,7 +42,7 @@ namespace Baibaocp.LotteryDispatching.Linghang.Abstractions.Dispatchers
             return JsonExtensions.ToJsonString(ordersend);
         }
 
-        public Task<IOrderingHandle> DispatchAsync(OrderingExecuteMessage message)
+        public Task<IOrderingHandle> DispatchAsync(OrderingDispatchMessage message)
         {
             throw new NotImplementedException();
         }

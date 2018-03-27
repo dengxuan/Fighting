@@ -19,9 +19,9 @@ namespace Baibaocp.LotteryDispatching.MessageServices
             _busClient = busClient;
         }
 
-        public Task PublishAsync(long ldpOrderId, string ldpMerchanerId, string lvpOrderId, string lvpMerchanerId,QueryingTypes queryingType)
+        public Task PublishAsync(string ldpOrderId, string ldpMerchanerId, string lvpOrderId, string lvpMerchanerId, int lotteryId, QueryingTypes queryingType)
         {
-            QueryingExecuteMessage queryingMessage = new QueryingExecuteMessage(ldpOrderId, ldpMerchanerId, lvpOrderId, lvpMerchanerId, queryingType);
+            QueryingDispatchMessage queryingMessage = new QueryingDispatchMessage(ldpOrderId, ldpMerchanerId, lvpOrderId, lvpMerchanerId, lotteryId, queryingType);
             return _busClient.PublishAsync(queryingMessage, context =>
             {
                 context.UsePublishConfiguration(configuration =>

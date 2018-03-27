@@ -24,9 +24,9 @@ namespace Baibaocp.LotteryDispatching.Internal
         private readonly IOrderingDispatcher _orderingDispatcher;
         private readonly IDispatchOrderingMessageService _dispatchOrderingMessageService;
         private readonly IDispatchQueryingMessageService _dispatchQueryingMessageService;
-        private readonly IQueryingDispatchMessageService _lotteryNoticingMessageService;
+        private readonly ILotteryNoticingMessagePublisher _lotteryNoticingMessagePublisher;
 
-        public OrderingDispatcherSubscriber(IBusClient busClient, DispatcherConfiguration dispatcherOptions, ILogger<OrderingDispatcherSubscriber> logger, IOrderingDispatcher orderingDispatcher, IDispatchOrderingMessageService dispatchOrderingMessageService, IQueryingDispatchMessageService lotteryNoticingMessageService, IDispatchQueryingMessageService dispatchQueryingMessageService)
+        public OrderingDispatcherSubscriber(IBusClient busClient, DispatcherConfiguration dispatcherOptions, ILogger<OrderingDispatcherSubscriber> logger, IOrderingDispatcher orderingDispatcher, IDispatchOrderingMessageService dispatchOrderingMessageService, ILotteryNoticingMessagePublisher lotteryNoticingMessagePublisher, IDispatchQueryingMessageService dispatchQueryingMessageService)
         {
             _logger = logger;
             _busClient = busClient;
@@ -34,12 +34,12 @@ namespace Baibaocp.LotteryDispatching.Internal
             _orderingDispatcher = orderingDispatcher;
             _dispatchOrderingMessageService = dispatchOrderingMessageService;
             _dispatchQueryingMessageService = dispatchQueryingMessageService;
-            _lotteryNoticingMessageService = lotteryNoticingMessageService;
+            _lotteryNoticingMessagePublisher = lotteryNoticingMessagePublisher;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _busClient.SubscribeAsync<OrderingExecuteMessage>(async (message) =>
+            await _busClient.SubscribeAsync<OrderingDispatchMessage>(async (message) =>
             {
                 try
                 {
@@ -50,26 +50,22 @@ namespace Baibaocp.LotteryDispatching.Internal
                         case AcceptedHandle accepted:
                             {
                                 _logger.LogInformation($"Ordering Success: {message.LdpOrderId}-{message.LdpMerchanerId}-{message.LvpOrder.LvpOrderId}-{message.LvpOrder.LvpVenderId}-{message.LvpOrder.LotteryId}-{message.LvpOrder.LotteryPlayId}-{message.LvpOrder.InvestCode}");
-                                await _dispatchQueryingMessageService.PublishAsync(message.LdpOrderId, message.LdpMerchanerId, message.LvpOrder.LvpOrderId, message.LvpOrder.LvpVenderId, QueryingTypes.Ticketing);
+                                await _dispatchQueryingMessageService.PublishAsync(message.LdpOrderId, message.LdpMerchanerId, message.LvpOrder.LvpOrderId, message.LvpOrder.LvpVenderId, message.LvpOrder.LotteryId, QueryingTypes.Ticketing);
                                 return new Ack();
                             }
                         case RejectedHandle rejected:
                             {
-                                _logger.LogInformation($"Ordering Rejected: {message.LdpMerchanerId}-{message.LvpOrder.LvpOrderId}-{message.LdpOrderId}");
                                 if (rejected.Reorder)
                                 {
                                     return new Nack();
                                 }
-                                await _lotteryNoticingMessageService.PublishAsync($"LotteryOrdering.Noticing.Ticketed.{message.LdpMerchanerId}", new NoticeMessage<LotteryTicketed>(message.LdpOrderId, message.LdpMerchanerId, new LotteryTicketed
+                                _logger.LogInformation($"Ordering Rejected: {message.LdpMerchanerId}-{message.LvpOrder.LvpOrderId}-{message.LdpOrderId}");
+                                await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Noticing.Ticketed.{message.LdpMerchanerId}", new NoticeMessage<LotteryTicketed>(message.LdpOrderId, message.LdpMerchanerId, new LotteryTicketed
                                 {
                                     LvpOrderId = message.LvpOrder.LvpOrderId,
                                     LvpMerchanerId = message.LvpOrder.LvpVenderId,
                                     TicketingType = LotteryTicketingTypes.Failure
                                 }));
-                                return new Ack();
-                            }
-                        default:
-                            {
                                 return new Ack();
                             }
                     }

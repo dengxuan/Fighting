@@ -25,7 +25,7 @@ namespace Baibaocp.Storaging.Entities.Users
         /// 销售渠道编号
         /// </summary>
         [Required]
-        public int LotteryResellerId { get; set; }
+        public string LotteryResellerId { get; set; }
 
         [ForeignKey("LotteryResellerId")]
         public virtual Merchanter LotteryReseller { get; set; }
@@ -33,7 +33,7 @@ namespace Baibaocp.Storaging.Entities.Users
         /// <summary> 
         /// 出票渠道编号
         /// </summary>
-        public int LotterySupplierId { get; set; }
+        public string LotterySupplierId { get; set; }
 
         [ForeignKey("LotterySupplierId")]
         public virtual Merchanter LotterySupplier { get; set; }

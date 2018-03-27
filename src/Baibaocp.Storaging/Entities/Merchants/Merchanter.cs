@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Baibaocp.Storaging.Entities.Merchants
 {
-    [Table("BbcpMerchants")]
-    public class Merchanter : Entity
+    [Table("BbcpChannels")]
+    public class Merchanter : Entity<string>
     {
         /// <summary>
         /// 渠道名称<see cref="Name"/>的最大长度
@@ -18,16 +18,10 @@ namespace Baibaocp.Storaging.Entities.Merchants
         public const int MaxSecretKeyLength = 24;
 
         /// <summary>
-        /// 渠道code
-        /// </summary>
-        [Required]
-        [StringLength(MaxChannelNameLength)]
-        public override int Id { get; set; }
-
-        /// <summary>
         /// 渠道名称
         /// </summary>
         [Required]
+        [Column("ChannelName")]
         [StringLength(MaxChannelNameLength)]
         public string Name { get; set; }
 
@@ -35,6 +29,7 @@ namespace Baibaocp.Storaging.Entities.Merchants
         /// 渠道类型
         /// </summary>
         [Required]
+        [Column("ChannelTypeId")]
         public short MerchanterTypeId { get; set; }
 
 
@@ -65,7 +60,5 @@ namespace Baibaocp.Storaging.Entities.Merchants
         /// </summary>
         [Column("RewardMoney")]
         public int TotalAwardedAmount { get; set; }
-
-        //public string TenantId { get; set; }
     }
 }

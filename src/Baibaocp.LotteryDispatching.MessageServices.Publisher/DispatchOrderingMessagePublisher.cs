@@ -20,9 +20,9 @@ namespace Baibaocp.LotteryDispatching.MessageServices
             _busClient = busClient;
         }
 
-        public Task PublishAsync(long ldpOrderId, string ldpMerchanerId,LvpOrderMessage message)
+        public Task PublishAsync(string ldpOrderId, string ldpMerchanerId,LvpOrderMessage message)
         {
-            OrderingExecuteMessage orderingMessage = new OrderingExecuteMessage(ldpOrderId, ldpMerchanerId, message);
+            OrderingDispatchMessage orderingMessage = new OrderingDispatchMessage(ldpOrderId, ldpMerchanerId, message);
 
             return _busClient.PublishAsync(orderingMessage, context =>
             {

@@ -68,8 +68,6 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Ordering
                     });
                 });
 
-            Console.WriteLine("Starting...");
-
             await host.RunConsoleAsync();
         }
     }
