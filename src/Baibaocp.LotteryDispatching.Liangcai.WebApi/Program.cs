@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +15,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.WebApi
     {
         public static void Main(string[] args)
         {
+            ThreadPool.SetMinThreads(100, 200);
             BuildWebHost(args).Run();
         }
 

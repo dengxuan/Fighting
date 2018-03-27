@@ -7,6 +7,7 @@ using Fighting.Security.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryDispatching.Liangcai.WebApi.Middlewares
@@ -37,12 +38,12 @@ namespace Baibaocp.LotteryDispatching.Liangcai.WebApi.Middlewares
         {
             try
             {
-                var xAgent = httpContext.Request.Query["xAgent"].ToString();
-                var xAction = httpContext.Request.Query["xAction"].ToString();
-                var xSign = httpContext.Request.Query["xSign"];
-                var xValue = httpContext.Request.Query["xValue"].ToString();
+                var xAgent = httpContext.Request.Form["xAgent"].ToString();
+                var xAction = httpContext.Request.Form["xAction"].ToString();
+                var xSign = httpContext.Request.Form["xSign"].ToString();
+                var xValue = httpContext.Request.Form["xValue"].ToString();
                 var merchanter = await _lotteryMerchanterApplicationService.FindMerchanter(xAgent);
-                string str = string.Format($"{0}{1}{2}{3}", xAgent, xAction, xValue, merchanter.SecretKey);
+                string str = $"{xAgent}{xAction}{xValue}{merchanter.SecretKey}";
                 if (str.VerifyMd5(xSign))
                 {
                     string[] items = xValue.Split(",");
@@ -50,15 +51,20 @@ namespace Baibaocp.LotteryDispatching.Liangcai.WebApi.Middlewares
                     {
                         string[] values = item.Split("_");
                         var order = await _orderingApplicationService.FindOrderAsync(values[0]);
-                        if(order.Status == 2000)
+                        if (order.Status < 4000)
                         {
                             LotteryTicketingTypes lotteryTicketingType = values[1] == "1" ? LotteryTicketingTypes.Success : LotteryTicketingTypes.Failure;
+                            _logger.LogTrace($"{order.Id} Ticketed: {lotteryTicketingType}");
                             await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Ticketed.{xAgent}", new NoticeMessage<LotteryTicketed>(long.Parse(values[0]), xAgent, new LotteryTicketed
                             {
                                 LvpMerchanerId = order.LdpVenderId,
                                 LvpOrderId = order.LvpOrderId,
                                 TicketingType = lotteryTicketingType,
                             }));
+                        }
+                        else
+                        {
+                            _logger.LogWarning($"{order.Id} {order.Status}");
                         }
                     }
                     await httpContext.Response.WriteAsync("1");

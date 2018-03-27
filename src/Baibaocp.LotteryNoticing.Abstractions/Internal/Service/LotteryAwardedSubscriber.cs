@@ -37,7 +37,7 @@ namespace Baibaocp.LotteryNotifier.Internal.Services
             {
                 try
                 {
-                    _logger.LogTrace("Received ordering LvpOrderId:{0} LvpVenderId:{1}", message.LdpOrderId, message.LdpMerchanerId);
+                    _logger.LogInformation("Received awarded LdpOrderId:{0} LdpVenderId:{1}", message.LdpOrderId, message.LdpMerchanerId);
                     var result = await _dispatcher.DispatchAsync(message.Content);
                     if (result == true)
                     {
