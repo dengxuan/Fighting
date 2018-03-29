@@ -15,7 +15,7 @@ using System.Transactions;
 
 namespace Baibaocp.LotteryTrading.TradeLogging.Subscribers
 {
-    public class LotteryAwardingMessageSubscriber : BackgroundService
+    internal class LotteryAwardingMessageSubscriber : BackgroundService
     {
         private readonly IBusClient _busClient;
         private readonly IServiceProvider _iocResolver;
@@ -42,8 +42,9 @@ namespace Baibaocp.LotteryTrading.TradeLogging.Subscribers
                         ILotteryMerchanterApplicationService lotteryMerchanterApplicationService = _iocResolver.GetRequiredService<ILotteryMerchanterApplicationService>();
                         using (TransactionScope transaction = new TransactionScope())
                         {
-                            await lotteryMerchanterApplicationService.Rewarding(order.LdpVenderId, order.Id, order.LotteryId, order.InvestAmount);
+                            await lotteryMerchanterApplicationService.Rewarding(message.LdpMerchanerId, message.LdpOrderId, order.LotteryId, order.InvestAmount);
                             await lotteryMerchanterApplicationService.Rewarding(order.LvpVenderId, order.LvpOrderId, order.LotteryId, order.InvestAmount);
+                            transaction.Complete();
                         }
                     }
                     return new Ack();
@@ -66,13 +67,13 @@ namespace Baibaocp.LotteryTrading.TradeLogging.Subscribers
                     });
                     configuration.FromDeclaredQueue(queue =>
                     {
-                        queue.WithName("LotteryOrdering.Tickets")
+                        queue.WithName("LotteryTrading.TradeLogging.Awards")
                              .WithAutoDelete(false)
                              .WithDurability(true);
                     });
                     configuration.Consume(consume =>
                     {
-                        consume.WithRoutingKey("LotteryOrdering.Ticketed.#");
+                        consume.WithRoutingKey("LotteryOrdering.Awarded.#");
                     });
                 });
             }, stoppingToken);

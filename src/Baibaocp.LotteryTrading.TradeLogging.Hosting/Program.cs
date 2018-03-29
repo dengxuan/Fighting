@@ -16,6 +16,7 @@ using RawRabbit.Instantiation;
 using RawRabbit.Configuration;
 using Microsoft.Extensions.Logging;
 using RawRabbit.DependencyInjection.ServiceCollection;
+using Baibaocp.LotteryTrading.TradeLogging.DependencyInjection;
 
 namespace Baibaocp.LotteryTrading.TradeLogging.Hosting
 {
@@ -62,6 +63,8 @@ namespace Baibaocp.LotteryTrading.TradeLogging.Hosting
                                 optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
                             });
                         });
+
+                        fightBuilder.ConfigureTradeLogging();
                     });
                     services.AddRawRabbit(new RawRabbitOptions
                     {

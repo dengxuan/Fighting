@@ -15,7 +15,7 @@ using System.Transactions;
 
 namespace Baibaocp.LotteryTrading.TradeLogging.Subscribers
 {
-    public class LotteryTicketingMessageSubscriber : BackgroundService
+    internal class LotteryTicketingMessageSubscriber : BackgroundService
     {
         private readonly IBusClient _busClient;
         private readonly IServiceProvider _iocResolver;
@@ -41,11 +41,12 @@ namespace Baibaocp.LotteryTrading.TradeLogging.Subscribers
                         ILotteryMerchanterApplicationService lotteryMerchanterApplicationService = _iocResolver.GetRequiredService<ILotteryMerchanterApplicationService>();
                         using(TransactionScope transaction = new TransactionScope())
                         {
-                            await lotteryMerchanterApplicationService.Ticketing(order.LdpVenderId, order.Id, order.LotteryId, order.InvestAmount);
+                            await lotteryMerchanterApplicationService.Ticketing(message.LdpMerchanerId, order.Id, order.LotteryId, order.InvestAmount);
                             await lotteryMerchanterApplicationService.Ticketing(order.LvpVenderId, order.LvpOrderId, order.LotteryId, order.InvestAmount);
+                            transaction.Complete();
                         }
                     }
-                    _logger.LogTrace("Received ticketing message: {1} {0}", message.LdpMerchanerId, message.LdpOrderId);
+                    _logger.LogInformation("Received ticketing message: {1} {0}", message.LdpMerchanerId, message.LdpOrderId);
                     return new Ack();
                 }
                 catch (Exception ex)
@@ -66,7 +67,7 @@ namespace Baibaocp.LotteryTrading.TradeLogging.Subscribers
                     });
                     configuration.FromDeclaredQueue(queue =>
                     {
-                        queue.WithName("LotteryOrdering.Tickets")
+                        queue.WithName("LotteryTrading.TradeLogging.Tickets")
                              .WithAutoDelete(false)
                              .WithDurability(true);
                     });
