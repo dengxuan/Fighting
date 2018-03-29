@@ -1,10 +1,8 @@
-﻿using Baibaocp.LotteryNotifier.MessageServices.Messages;
+﻿using Baibaocp.ApplicationServices.Abstractions;
+using Baibaocp.LotteryNotifier.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
-using Baibaocp.LotteryOrdering.Scheduling;
-using Baibaocp.LotteryOrdering.Scheduling.Abstractions;
 using Fighting.Hosting;
-using Fighting.Scheduling.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
@@ -13,22 +11,21 @@ using RawRabbit.Configuration.Exchange;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 
-namespace Baibaocp.LotteryOrdering.MessageServices
+namespace Baibaocp.LotteryTrading.TradeLogging.Subscribers
 {
     public class LotteryTicketingMessageSubscriber : BackgroundService
     {
         private readonly IBusClient _busClient;
         private readonly IServiceProvider _iocResolver;
-        private readonly ISchedulerManager _schedulerManager;
-        private readonly ILogger<LotteryOrderingMessageSubscriber> _logger;
+        private readonly ILogger<LotteryTicketingMessageSubscriber> _logger;
 
-        public LotteryTicketingMessageSubscriber(IBusClient busClient, ISchedulerManager schedulerManager, IServiceProvider iocResolver, ILogger<LotteryOrderingMessageSubscriber> logger)
+        public LotteryTicketingMessageSubscriber(IBusClient busClient, IServiceProvider iocResolver, ILogger<LotteryTicketingMessageSubscriber> logger)
         {
             _logger = logger;
             _busClient = busClient;
             _iocResolver = iocResolver;
-            _schedulerManager = schedulerManager;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -37,21 +34,16 @@ namespace Baibaocp.LotteryOrdering.MessageServices
             {
                 try
                 {
-                    IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
                     if (message.Content.TicketingType == LotteryTicketingTypes.Success)
                     {
-                        var order = await orderingApplicationService.TicketedAsync(message.LdpOrderId, message.LdpMerchanerId, message.Content.TicketedNumber, message.Content.TicketedTime, message.Content.TicketedOdds);
-                        await _schedulerManager.EnqueueAsync<ILotteryAwardingScheduler, AwardingScheduleArgs>(new AwardingScheduleArgs
+                        IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
+                        var order = await orderingApplicationService.FindOrderAsync(message.LdpOrderId);
+                        ILotteryMerchanterApplicationService lotteryMerchanterApplicationService = _iocResolver.GetRequiredService<ILotteryMerchanterApplicationService>();
+                        using(TransactionScope transaction = new TransactionScope())
                         {
-                            LdpOrderId = message.LdpOrderId,
-                            LdpMerchanerId = message.LdpMerchanerId,
-                            LvpOrderId = message.Content.LvpOrderId,
-                            LvpMerchanerId = message.Content.LvpMerchanerId
-                        }, delay: order.ExpectedBonusTime - DateTime.Now);
-                    }
-                    else
-                    {
-                        await orderingApplicationService.RejectedAsync(message.LdpOrderId);
+                            await lotteryMerchanterApplicationService.Ticketing(order.LdpVenderId, order.Id, order.LotteryId, order.InvestAmount);
+                            await lotteryMerchanterApplicationService.Ticketing(order.LvpVenderId, order.LvpOrderId, order.LotteryId, order.InvestAmount);
+                        }
                     }
                     _logger.LogTrace("Received ticketing message: {1} {0}", message.LdpMerchanerId, message.LdpOrderId);
                     return new Ack();

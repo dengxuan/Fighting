@@ -1,7 +1,6 @@
 ﻿using Baibaocp.ApplicationServices.Abstractions;
 using Baibaocp.LotteryNotifier.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
-using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Fighting.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,16 +11,17 @@ using RawRabbit.Configuration.Exchange;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 
-namespace Baibaocp.LotteryOrdering.MessageServices
+namespace Baibaocp.LotteryTrading.TradeLogging.Subscribers
 {
     public class LotteryAwardingMessageSubscriber : BackgroundService
     {
         private readonly IBusClient _busClient;
         private readonly IServiceProvider _iocResolver;
-        private readonly ILogger<LotteryOrderingMessageSubscriber> _logger;
+        private readonly ILogger<LotteryAwardingMessageSubscriber> _logger;
 
-        public LotteryAwardingMessageSubscriber(IBusClient busClient, IServiceProvider iocResolver, ILogger<LotteryOrderingMessageSubscriber> logger)
+        public LotteryAwardingMessageSubscriber(IBusClient busClient, IServiceProvider iocResolver, ILogger<LotteryAwardingMessageSubscriber> logger)
         {
             _logger = logger;
             _busClient = busClient;
@@ -34,23 +34,24 @@ namespace Baibaocp.LotteryOrdering.MessageServices
             {
                 try
                 {
-                    _logger.LogInformation("Received awarding message: {0} {1}", message.LdpOrderId, message.LdpMerchanerId);
-                    IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
+                    _logger.LogTrace("Received awarding message: {0} {1} {2}", message.LdpOrderId, message.LdpMerchanerId, message.Content.AwatdingType);
                     if (message.Content.AwatdingType == LotteryAwardingTypes.Winning)
                     {
-                        await orderingApplicationService.WinningAsync(message.LdpOrderId, message.Content.BonusAmount, message.Content.AftertaxBonusAmount);
-                    }
-                    else
-                    {
-                        await orderingApplicationService.LoseingAsync(message.LdpOrderId);
+                        IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
+                        var order = await orderingApplicationService.FindOrderAsync(message.LdpOrderId);
+                        ILotteryMerchanterApplicationService lotteryMerchanterApplicationService = _iocResolver.GetRequiredService<ILotteryMerchanterApplicationService>();
+                        using (TransactionScope transaction = new TransactionScope())
+                        {
+                            await lotteryMerchanterApplicationService.Rewarding(order.LdpVenderId, order.Id, order.LotteryId, order.InvestAmount);
+                            await lotteryMerchanterApplicationService.Rewarding(order.LvpVenderId, order.LvpOrderId, order.LotteryId, order.InvestAmount);
+                        }
                     }
                     return new Ack();
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogInformation(ex, "Received awarding message: {0} {1}", message.LdpOrderId, message.LdpMerchanerId);
+                    _logger.LogTrace(ex, "Received awarding message: {0} {1} {2}", message.LdpOrderId, message.LdpMerchanerId, message.Content.AwatdingType);
                 }
-
                 return new Nack();
             }, context =>
             {
@@ -65,13 +66,13 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                     });
                     configuration.FromDeclaredQueue(queue =>
                     {
-                        queue.WithName("LotteryOrdering.Awards")
+                        queue.WithName("LotteryOrdering.Tickets")
                              .WithAutoDelete(false)
                              .WithDurability(true);
                     });
                     configuration.Consume(consume =>
                     {
-                        consume.WithRoutingKey("LotteryOrdering.Awarded.#");
+                        consume.WithRoutingKey("LotteryOrdering.Ticketed.#");
                     });
                 });
             }, stoppingToken);

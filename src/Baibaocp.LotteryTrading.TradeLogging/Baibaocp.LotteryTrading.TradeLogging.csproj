@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Baibaocp.ApplicationServices.Abstractions\Baibaocp.ApplicationServices.Abstractions.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryNoticing.MessageServices.Abstractions\Baibaocp.LotteryNoticing.MessageServices.Abstractions.csproj" />
+    <ProjectReference Include="..\Baibaocp.LotteryOrdering.ApplicationServices.Abstractions\Baibaocp.LotteryOrdering.ApplicationServices.Abstractions.csproj" />
+    <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
+  </ItemGroup>
+
+</Project>
