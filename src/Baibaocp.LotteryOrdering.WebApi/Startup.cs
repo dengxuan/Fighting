@@ -1,16 +1,14 @@
-﻿using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
-using Baibaocp.LotteryOrdering.EntityFrameworkCore;
-using Fighting.ApplicationServices.DependencyInjection;
+﻿using Baibaocp.LotteryOrdering.MessageServices.DependencyInjection;
 using Fighting.DependencyInjection;
-using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
+using Fighting.MessageServices.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Orleans;
-using Orleans.Runtime.Configuration;
+using RawRabbit.Configuration;
+using RawRabbit.DependencyInjection.ServiceCollection;
+using RawRabbit.Instantiation;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
@@ -49,36 +47,15 @@ namespace Baibaocp.LotteryOrdering.WebApi
 
             services.AddFighting(fightBuilder =>
             {
-                fightBuilder.ConfigureCacheing(cacheBuilder =>
+                fightBuilder.ConfigureMessageServices(messageServiceBuilder =>
                 {
-                    cacheBuilder.UseRedisCache(options =>
-                    {
-                        options.ConnectionString = Configuration.GetConnectionString("Hangfire.Redis");
-                    });
+                    messageServiceBuilder.UseLotteryOrderingMessagePublisher();
                 });
+            });
 
-                fightBuilder.ConfigureStorage(storageBuilder =>
-                {
-                    storageBuilder.UseEntityFrameworkCore<LotteryOrderingDbContext>(optionsBuilder =>
-                    {
-                        optionsBuilder.UseMySql(Configuration.GetConnectionString("Fighting.Storage"));
-                    });
-                });
-                fightBuilder.ConfigureApplicationServices(applicationServiceBuilder =>
-                {
-                    applicationServiceBuilder.Services.AddSingleton<IGrainFactory>(sp =>
-                    {
-                        var config = ClientConfiguration.LocalhostSilo();
-                        var client = new ClientBuilder()
-                             .UseConfiguration(config)
-                             .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IOrderingApplicationService).Assembly).WithReferences())
-                             .ConfigureLogging(logging => logging.AddConsole())
-                             .Build();
-
-                        client.Connect().GetAwaiter().GetResult();
-                        return client;
-                    });
-                });
+            services.AddRawRabbit(new RawRabbitOptions
+            {
+                ClientConfiguration = Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>(),
             });
 
             services.AddMvc();

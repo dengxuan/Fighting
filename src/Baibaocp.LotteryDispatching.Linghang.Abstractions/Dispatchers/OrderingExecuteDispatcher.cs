@@ -1,16 +1,11 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
 using Baibaocp.LotteryDispatching.Linghang.Abstractions.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
-using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
-using Baibaocp.LotteryDispatching.Suicai.Abstractions.Extensions;
-using Baibaocp.LotteryOrdering.Linghang.Extensions;
-using Baibaocp.Storaging.Entities.Extensions;
 using Fighting.Json;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Baibaocp.LotteryDispatching.Linghang.Abstractions.Dispatchers
 {

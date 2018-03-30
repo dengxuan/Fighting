@@ -3,6 +3,7 @@ using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Handles;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Baibaocp.LotteryDispatching.Suicai.Abstractions;
+using Baibaocp.Storaging.Entities;
 using Fighting.Extensions;
 using Fighting.Json;
 using Fighting.Storaging;
@@ -17,14 +18,11 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
     public class QueryingExecuteDispatcher : SuicaiLotteryDispatcher<QueryingDispatchMessage>, IQueryingDispatcher
     {
 
-        private readonly StorageOptions _storageOptions;
-
         private readonly ILogger<QueryingExecuteDispatcher> _logger;
 
-        public QueryingExecuteDispatcher(DispatcherConfiguration options, StorageOptions storageOptions, ILogger<QueryingExecuteDispatcher> logger) : base(options, logger, "200009")
+        public QueryingExecuteDispatcher(DispatcherConfiguration options, ILogger<QueryingExecuteDispatcher> logger) : base(options, logger, "200009")
         {
             _logger = logger;
-            _storageOptions = storageOptions;
         }
 
         protected override string BuildRequest(QueryingDispatchMessage executer)
@@ -57,9 +55,49 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
                         }
                         else if (Status.Equals("2"))
                         {
-                            string ticketId = json["tickSn"].ToString();
-                            DateTime tickettime = DateTime.Now;
-                            return new SuccessHandle(ticketId, tickettime, "");
+                            if (executer.QueryingType == QueryingTypes.Awarding)
+                            {
+
+                                string awardStatus = json["awardStatus"].ToString();
+                                if (awardStatus.Equals("0"))
+                                {
+                                    return new WaitingHandle();
+                                }
+                                else if (awardStatus.Equals("1"))
+                                {
+                                    return new LoseingHandle();
+                                }
+                                else if (awardStatus.Equals("2"))
+                                {
+                                    if (executer.LotteryId == (int)LotteryTypes.GxSyxw)
+                                    {
+                                        int bonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100);
+                                        int totalTax = (int)(Convert.ToDecimal(json["totalPrize"]) * 100);
+                                        int aftertaxBonusAmount = bonusAmount - totalTax;
+                                        return new WinningHandle(bonusAmount, aftertaxBonusAmount);
+                                    }
+                                }
+                                else if (Status.Equals("3"))
+                                {
+                                    if (executer.LotteryId != (int)LotteryTypes.GxSyxw)
+                                    {
+                                        int bonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100);
+                                        int totalTax = (int)(Convert.ToDecimal(json["totalPrize"]) * 100);
+                                        int aftertaxBonusAmount = bonusAmount - totalTax;
+                                        return new WinningHandle(bonusAmount, aftertaxBonusAmount);
+                                    }
+                                }
+                                else
+                                {
+                                    return new WaitingHandle();
+                                }
+                            }
+                            else
+                            {
+                                string ticketId = json["tickSn"].ToString();
+                                DateTime tickettime = DateTime.Now;
+                                return new SuccessHandle(ticketId, tickettime, "");
+                            }
                         }
                         else
                         {
