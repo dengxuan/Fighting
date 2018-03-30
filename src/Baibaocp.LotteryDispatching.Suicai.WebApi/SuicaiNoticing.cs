@@ -73,7 +73,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.WebApi
                     rescon.messageId = messageid;
 
                     string s = string.Format("{0}{1}{2}{3}", apicode, reqcon.content, messageid, partnerid);
-                    var merchanter = await _lotteryMerchanterApplicationService.FindMerchanter(partnerid);
+                    var merchanter = await _lotteryMerchanterApplicationService.FindMerchanterAsync(partnerid);
                     string sign = s.hmac_md5(merchanter.SecretKey.Substring(0, 16)).ToLower();
                     if (sign == reqcon.hmac)
                     {

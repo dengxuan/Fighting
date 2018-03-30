@@ -39,12 +39,8 @@ namespace Baibaocp.LotteryTrading.TradeLogging.Subscribers
                         IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
                         var order = await orderingApplicationService.FindOrderAsync(message.LdpOrderId);
                         ILotteryMerchanterApplicationService lotteryMerchanterApplicationService = _iocResolver.GetRequiredService<ILotteryMerchanterApplicationService>();
-                        using(TransactionScope transaction = new TransactionScope())
-                        {
-                            await lotteryMerchanterApplicationService.Ticketing(message.LdpMerchanerId, order.Id, order.LotteryId, order.InvestAmount);
-                            await lotteryMerchanterApplicationService.Ticketing(order.LvpVenderId, order.LvpOrderId, order.LotteryId, order.InvestAmount);
-                            transaction.Complete();
-                        }
+                        await lotteryMerchanterApplicationService.Ticketing(message.LdpMerchanerId, order.Id, order.LotteryId, order.InvestAmount);
+                        await lotteryMerchanterApplicationService.Ticketing(order.LvpVenderId, order.LvpOrderId, order.LotteryId, order.InvestAmount);
                     }
                     _logger.LogInformation("Received ticketing message: {1} {0}", message.LdpMerchanerId, message.LdpOrderId);
                     return new Ack();

@@ -7,12 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Baibaocp.ApplicationServices
 {
     public class LotteryMerchanterApplicationService : ApplicationService, ILotteryMerchanterApplicationService
     {
-        private readonly IIdentityGenerater _identityGenerater;
 
         private readonly MerchanterManager _merchanterManager;
 
@@ -20,31 +20,31 @@ namespace Baibaocp.ApplicationServices
 
         private readonly MerchanterAccountLoggingManager _merchanterAccountLoggingManager;
 
-        public LotteryMerchanterApplicationService(ICacheManager cacheManager, IIdentityGenerater identityGenerater, MerchanterManager merchanterManager, MerchanterAccountLoggingManager merchanterAccountLoggingManager, MerchanterLotteryMappingManager merchanterLotteryMappingManager) : base(cacheManager)
+        public LotteryMerchanterApplicationService(ICacheManager cacheManager, MerchanterManager merchanterManager, MerchanterAccountLoggingManager merchanterAccountLoggingManager, MerchanterLotteryMappingManager merchanterLotteryMappingManager) : base(cacheManager)
         {
-            _identityGenerater = identityGenerater;
             _merchanterManager = merchanterManager;
             _merchanterAccountLoggingManager = merchanterAccountLoggingManager;
             _merchanterLotteryMappingManager = merchanterLotteryMappingManager;
         }
 
-        public async Task<Merchanter> FindMerchanter(string merchanterId)
+        public async Task<Merchanter> FindMerchanterAsync(string merchanterId)
         {
             ICache cacher = CacheManager.GetCache("LotteryMerchanters");
-            return await cacher.GetAsync(merchanterId, (key) =>
+            return await cacher.Get(merchanterId, async (key) =>
             {
-                return _merchanterManager.Merchanters.FirstOrDefault(predicate => predicate.Id == merchanterId);
+                var merchanter = await _merchanterManager.FindMerchanterAsync(merchanterId);
+                return merchanter;
             });
         }
 
-        public async Task<string> FindLdpMerchanterId(string lvpMerchanterId, int lotteryId)
+        public async Task<string> FindLdpMerchanterIdAsync(string lvpMerchanterId, int lotteryId)
         {
             ICache cacher = CacheManager.GetCache("MerchanterLotteryMappings");
             IList<MerchanterLotteryMapping> merchanterLotteryMappings = await cacher.GetAsync($"{lvpMerchanterId}-{lotteryId}", (key) =>
             {
                 return _merchanterLotteryMappingManager.FindLdpMerchanterId(lvpMerchanterId, lotteryId);
             });
-            if(merchanterLotteryMappings.Count == 0)
+            if (merchanterLotteryMappings.Count == 0)
             {
                 return null;
             }
@@ -55,54 +55,37 @@ namespace Baibaocp.ApplicationServices
 
         public async Task Recharging(string merchanterId, string orderId, int amount)
         {
-            Merchanter merchanter = _merchanterManager.Merchanters.Where(predicate => predicate.Id == merchanterId).First();
-            await _merchanterManager.IncreaseBalance(merchanter, amount);
-            var merchanterAccountLogging = new MerchanterAccountLogging
+            var isContains = await _merchanterAccountLoggingManager.IsContainsAsync(merchanterId, orderId);
+            if (isContains == false)
             {
-                Id = _identityGenerater.Generate(),
-                MerchanterId = merchanterId,
-                OrderId = orderId,
-                OperationTypes = 1000,
-                Amount = amount,
-                Balance = merchanter.Balance
-            };
-            await _merchanterAccountLoggingManager.CreateAccountLogging(merchanterAccountLogging);
+                Merchanter merchanter = await _merchanterManager.FindMerchanterAsync(merchanterId);
+                await _merchanterManager.AddBalanceAsync(merchanter, amount);
+                await _merchanterAccountLoggingManager.CreateAsync(merchanterId, orderId, amount, merchanter.Balance, 1000);
+            }
         }
 
         public async Task Rewarding(string merchanterId, string orderId, int lotteryId, int amount)
         {
-            Merchanter merchanter = _merchanterManager.Merchanters.Where(predicate => predicate.Id == merchanterId).First();
-            await _merchanterManager.IncreaseAwardedAmount(merchanter, amount);
-            await _merchanterManager.IncreaseBalance(merchanter, amount);
-            var merchanterAccountLogging = new MerchanterAccountLogging
+            var isContains = await _merchanterAccountLoggingManager.IsContainsAsync(merchanterId, orderId);
+            if (isContains == false)
             {
-                Id = _identityGenerater.Generate(),
-                MerchanterId = merchanterId,
-                OrderId = orderId,
-                OperationTypes = 4000,
-                LotteryId = lotteryId,
-                Amount = amount,
-                Balance = merchanter.Balance
-            };
-            await _merchanterAccountLoggingManager.CreateAccountLogging(merchanterAccountLogging);
+                Merchanter merchanter = await _merchanterManager.FindMerchanterAsync(merchanterId);
+                await _merchanterManager.AddBalanceAsync(merchanter, amount);
+                await _merchanterManager.SubTotalAwardedAmount(merchanter, amount);
+                await _merchanterAccountLoggingManager.CreateAsync(merchanterId, orderId, amount, merchanter.Balance, 4000, lotteryId);
+            }
         }
 
         public async Task Ticketing(string merchanterId, string orderId, int lotteryId, int amount)
         {
-            Merchanter merchanter = _merchanterManager.Merchanters.Where(predicate => predicate.Id == merchanterId).First();
-            await _merchanterManager.DecreaseBalance(merchanter, amount);
-            await _merchanterManager.IncreaseTicketedAmount(merchanter, amount);
-            var merchanterAccountLogging = new MerchanterAccountLogging
+            var isContains = await _merchanterAccountLoggingManager.IsContainsAsync(merchanterId, orderId);
+            if (isContains == false)
             {
-                Id = _identityGenerater.Generate(),
-                MerchanterId = merchanterId,
-                OrderId = orderId,
-                OperationTypes = 3000,
-                LotteryId = lotteryId,
-                Amount = amount,
-                Balance = merchanter.Balance
-            };
-            await _merchanterAccountLoggingManager.CreateAccountLogging(merchanterAccountLogging);
+                Merchanter merchanter = await _merchanterManager.FindMerchanterAsync(merchanterId);
+                await _merchanterManager.SubBalanceAsync(merchanter, amount);
+                await _merchanterManager.AddTotalTicketedAmount(merchanter, amount);
+                await _merchanterAccountLoggingManager.CreateAsync(merchanterId, orderId, amount, merchanter.Balance, 3000, lotteryId);
+            }
         }
     }
 }
