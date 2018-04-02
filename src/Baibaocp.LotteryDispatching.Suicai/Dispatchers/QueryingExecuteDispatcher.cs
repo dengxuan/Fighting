@@ -30,6 +30,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
             OrderTicket Ticket = new OrderTicket();
             Ticket.orderList = new List<Ticket>();
             Ticket tc = new Ticket() { orderId = executer.LdpOrderId.ToString() };
+            Ticket.orderList.Add(tc);
             return JsonExtensions.ToJsonString(Ticket);
         }
 
