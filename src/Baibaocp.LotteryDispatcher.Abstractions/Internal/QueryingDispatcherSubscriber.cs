@@ -124,7 +124,7 @@ namespace Baibaocp.LotteryDispatching.Internal
                     });
                     configuration.Consume(consume =>
                     {
-                        consume.WithRoutingKey($"LotteryDispatching.Querying.#");
+                        consume.WithRoutingKey($"LotteryDispatching.Querying.{_dispatcherConfiguration.MerchanterId}");
                     });
                 });
             }, stoppingToken);
