@@ -33,17 +33,16 @@ namespace Baibaocp.LotteryCalculating
 
         private readonly IServiceProvider _iocResolver;
 
-        private readonly IOrderingApplicationService _orderingApplicationService;
 
-        public LotteryCalculatorFactory(IServiceProvider iocResolver, IOrderingApplicationService orderingApplicationService)
+        public LotteryCalculatorFactory(IServiceProvider iocResolver)
         {
             _iocResolver = iocResolver;
-            _orderingApplicationService = orderingApplicationService;
         }
 
         public async Task<ILotteryCalculator> GetLotteryCalculatorAsync(string orderId)
         {
-            var lotteryMerchanteOrder = await _orderingApplicationService.FindOrderAsync(orderId);
+            IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
+            var lotteryMerchanteOrder = await orderingApplicationService.FindOrderAsync(orderId);
 
             ObjectFactory objectFactory = _objectFactories.GetOrAdd(lotteryMerchanteOrder.LotteryId, (lotteryId) =>
             {
