@@ -12,94 +12,90 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryCalculating.Calculators
 {
-    public class SyxwCalculator : LotteryCalculator
+    public class SyxwCalculator : LottoLotteryCalculator
     {
-
-        private readonly ILotteryPhaseApplicationService _LotteryPhaseApplicationService;
-        public SyxwCalculator(ILotteryPhaseApplicationService LotteryPhaseApplicationService, LotteryMerchanteOrder lotteryMerchanteOrder) : base(lotteryMerchanteOrder)
+        public SyxwCalculator(IServiceProvider iocResolver, LotteryMerchanteOrder lotteryMerchanteOrder) : base(iocResolver, lotteryMerchanteOrder)
         {
-            _LotteryPhaseApplicationService = LotteryPhaseApplicationService;
         }
+
         public override async Task<Handle> CalculateAsync()
         {
             int level = 0;
-            LotteryPhase lotteryPhase = await _LotteryPhaseApplicationService.FindLotteryPhase(LotteryMerchanteOrder.LotteryId, (int)LotteryMerchanteOrder.IssueNumber);
-            string DrawNumber = lotteryPhase.DrawNumber;
-            if (DrawNumber != "")
+            string drawNumber = await FindDrawNumberAsync(LotteryMerchanteOrder.LotteryId, LotteryMerchanteOrder.IssueNumber.Value);
+            if (string.IsNullOrEmpty(drawNumber))
             {
-                switch (LotteryMerchanteOrder.LotteryPlayId)
-                {
-                    case (int)PlayTypes.Syxw_FrontTowFixedPositionSingle:
-                        level = FrontMultiple(LotteryMerchanteOrder.InvestCode, DrawNumber, 2);
-                        break;
-                    case (int)PlayTypes.Syxw_FrontTowAnyPositionSingle:
-                        level = AnyMultiple(LotteryMerchanteOrder.InvestCode, DrawNumber, 2);
-                        break;
-                    case (int)PlayTypes.Syxw_FrontTowAnyPositionFixedUnset:
-                        level = FrontAnyFixedUnset(LotteryMerchanteOrder.InvestCode, DrawNumber, 2);
-                        break;
-                    case (int)PlayTypes.Syxw_FrontThreeFixedPositionSingle:
-                        level = FrontMultiple(LotteryMerchanteOrder.InvestCode, DrawNumber, 3);
-                        break;
-                    case (int)PlayTypes.Syxw_FrontThreeAnyPositionSingle:
-                        level = AnyMultiple(LotteryMerchanteOrder.InvestCode, DrawNumber, 3);
-                        break;
-                    case (int)PlayTypes.Syxw_FrontThreeAnyPositionFixedUnset:
-                        level = FrontAnyFixedUnset(LotteryMerchanteOrder.InvestCode, DrawNumber, 3);
-                        break;
-                    case (int)PlayTypes.Syxw_FrontOneSingle:
-                        level = FrontMultiple(LotteryMerchanteOrder.InvestCode, DrawNumber, 1);
-                        break;
-                    case (int)PlayTypes.Syxw_AnyTowSingle:
-                        level = Multiple(LotteryMerchanteOrder.InvestCode, DrawNumber, 2);
-                        break;
-                    case (int)PlayTypes.Syxw_AnyTowFixedUnset:
-                        level = FixedUnset(LotteryMerchanteOrder.InvestCode, DrawNumber, 2);
-                        break;
-                    case (int)PlayTypes.Syxw_AnyThreeSingle:
-                        level = Multiple(LotteryMerchanteOrder.InvestCode, DrawNumber, 3);
-                        break;
-                    case (int)PlayTypes.Syxw_AnyThreeFixedUnset:
-                        level = FixedUnset(LotteryMerchanteOrder.InvestCode, DrawNumber, 3);
-                        break;
-                    case (int)PlayTypes.Syxw_AnySixSingle:
-                        level = Multiple(LotteryMerchanteOrder.InvestCode, DrawNumber, 6);
-                        break;
-                    case (int)PlayTypes.Syxw_AnySixFixedUnset:
-                        level = FixedUnset(LotteryMerchanteOrder.InvestCode, DrawNumber, 6);
-                        break;
-                    case (int)PlayTypes.Syxw_AnySevenSingle:
-                        level = Multiple(LotteryMerchanteOrder.InvestCode, DrawNumber, 7);
-                        break;
-                    case (int)PlayTypes.Syxw_AnySevenFixedUnset:
-                        level = FixedUnset(LotteryMerchanteOrder.InvestCode, DrawNumber, 7);
-                        break;
-                    case (int)PlayTypes.Syxw_AnyFourSingle:
-                        level = Multiple(LotteryMerchanteOrder.InvestCode, DrawNumber, 4);
-                        break;
-                    case (int)PlayTypes.Syxw_AnyFourFixedUnset:
-                        level = FixedUnset(LotteryMerchanteOrder.InvestCode, DrawNumber, 4);
-                        break;
-                    case (int)PlayTypes.Syxw_AnyFiveSingle:
-                        level = Multiple(LotteryMerchanteOrder.InvestCode, DrawNumber, 5);
-                        break;
-                    case (int)PlayTypes.Syxw_AnyFiveFixedUnset:
-                        level = FixedUnset(LotteryMerchanteOrder.InvestCode, DrawNumber, 5);
-                        break;
-                    case (int)PlayTypes.Syxw_AnyEightSingle:
-                        level = Single(LotteryMerchanteOrder.InvestCode, DrawNumber, 8);
-                        break;
-                }
-                if (level > 0)
-                {
-                    return Handle.Winner;
-                }
-                else {
-                    return Handle.Losing;
-                }
-            }
-            else {
                 return Handle.Waiting;
+            }
+            switch (LotteryMerchanteOrder.LotteryPlayId)
+            {
+                case (int)PlayTypes.Syxw_FrontTowFixedPositionSingle:
+                    level = FrontMultiple(LotteryMerchanteOrder.InvestCode, drawNumber, 2);
+                    break;
+                case (int)PlayTypes.Syxw_FrontTowAnyPositionSingle:
+                    level = AnyMultiple(LotteryMerchanteOrder.InvestCode, drawNumber, 2);
+                    break;
+                case (int)PlayTypes.Syxw_FrontTowAnyPositionFixedUnset:
+                    level = FrontAnyFixedUnset(LotteryMerchanteOrder.InvestCode, drawNumber, 2);
+                    break;
+                case (int)PlayTypes.Syxw_FrontThreeFixedPositionSingle:
+                    level = FrontMultiple(LotteryMerchanteOrder.InvestCode, drawNumber, 3);
+                    break;
+                case (int)PlayTypes.Syxw_FrontThreeAnyPositionSingle:
+                    level = AnyMultiple(LotteryMerchanteOrder.InvestCode, drawNumber, 3);
+                    break;
+                case (int)PlayTypes.Syxw_FrontThreeAnyPositionFixedUnset:
+                    level = FrontAnyFixedUnset(LotteryMerchanteOrder.InvestCode, drawNumber, 3);
+                    break;
+                case (int)PlayTypes.Syxw_FrontOneSingle:
+                    level = FrontMultiple(LotteryMerchanteOrder.InvestCode, drawNumber, 1);
+                    break;
+                case (int)PlayTypes.Syxw_AnyTowSingle:
+                    level = Multiple(LotteryMerchanteOrder.InvestCode, drawNumber, 2);
+                    break;
+                case (int)PlayTypes.Syxw_AnyTowFixedUnset:
+                    level = FixedUnset(LotteryMerchanteOrder.InvestCode, drawNumber, 2);
+                    break;
+                case (int)PlayTypes.Syxw_AnyThreeSingle:
+                    level = Multiple(LotteryMerchanteOrder.InvestCode, drawNumber, 3);
+                    break;
+                case (int)PlayTypes.Syxw_AnyThreeFixedUnset:
+                    level = FixedUnset(LotteryMerchanteOrder.InvestCode, drawNumber, 3);
+                    break;
+                case (int)PlayTypes.Syxw_AnySixSingle:
+                    level = Multiple(LotteryMerchanteOrder.InvestCode, drawNumber, 6);
+                    break;
+                case (int)PlayTypes.Syxw_AnySixFixedUnset:
+                    level = FixedUnset(LotteryMerchanteOrder.InvestCode, drawNumber, 6);
+                    break;
+                case (int)PlayTypes.Syxw_AnySevenSingle:
+                    level = Multiple(LotteryMerchanteOrder.InvestCode, drawNumber, 7);
+                    break;
+                case (int)PlayTypes.Syxw_AnySevenFixedUnset:
+                    level = FixedUnset(LotteryMerchanteOrder.InvestCode, drawNumber, 7);
+                    break;
+                case (int)PlayTypes.Syxw_AnyFourSingle:
+                    level = Multiple(LotteryMerchanteOrder.InvestCode, drawNumber, 4);
+                    break;
+                case (int)PlayTypes.Syxw_AnyFourFixedUnset:
+                    level = FixedUnset(LotteryMerchanteOrder.InvestCode, drawNumber, 4);
+                    break;
+                case (int)PlayTypes.Syxw_AnyFiveSingle:
+                    level = Multiple(LotteryMerchanteOrder.InvestCode, drawNumber, 5);
+                    break;
+                case (int)PlayTypes.Syxw_AnyFiveFixedUnset:
+                    level = FixedUnset(LotteryMerchanteOrder.InvestCode, drawNumber, 5);
+                    break;
+                case (int)PlayTypes.Syxw_AnyEightSingle:
+                    level = Single(LotteryMerchanteOrder.InvestCode, drawNumber, 8);
+                    break;
+            }
+            if (level > 0)
+            {
+                return Handle.Winner;
+            }
+            else
+            {
+                return Handle.Losing;
             }
         }
 

@@ -131,7 +131,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryCalculating
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.Liangcai.WebApi", "src\Baibaocp.LotteryDispatching.Liangcai.WebApi\Baibaocp.LotteryDispatching.Liangcai.WebApi.csproj", "{3AA8B42A-FE55-423D-B87C-2C163A01F5E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryDispatching.Suicai.WebApi", "src\Baibaocp.LotteryDispatching.Suicai.WebApi\Baibaocp.LotteryDispatching.Suicai.WebApi.csproj", "{444DF6D6-BAA7-4D3F-A9EF-E3CFCF5D30CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.Suicai.WebApi", "src\Baibaocp.LotteryDispatching.Suicai.WebApi\Baibaocp.LotteryDispatching.Suicai.WebApi.csproj", "{444DF6D6-BAA7-4D3F-A9EF-E3CFCF5D30CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryTrading.TradeLogging", "src\Baibaocp.LotteryTrading.TradeLogging\Baibaocp.LotteryTrading.TradeLogging.csproj", "{870B63F6-23E2-4479-B821-D315DD8A8F6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryTrading.TradeLogging.Hosting", "src\Baibaocp.LotteryTrading.TradeLogging.Hosting\Baibaocp.LotteryTrading.TradeLogging.Hosting.csproj", "{CAD0CF3F-9934-4DC5-8F4B-F2563919DC3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -363,6 +367,14 @@ Global
 		{444DF6D6-BAA7-4D3F-A9EF-E3CFCF5D30CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{444DF6D6-BAA7-4D3F-A9EF-E3CFCF5D30CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{444DF6D6-BAA7-4D3F-A9EF-E3CFCF5D30CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{870B63F6-23E2-4479-B821-D315DD8A8F6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{870B63F6-23E2-4479-B821-D315DD8A8F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{870B63F6-23E2-4479-B821-D315DD8A8F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{870B63F6-23E2-4479-B821-D315DD8A8F6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAD0CF3F-9934-4DC5-8F4B-F2563919DC3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAD0CF3F-9934-4DC5-8F4B-F2563919DC3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAD0CF3F-9934-4DC5-8F4B-F2563919DC3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAD0CF3F-9934-4DC5-8F4B-F2563919DC3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -402,6 +414,8 @@ Global
 		{1884EF9A-6CFB-4EE2-ABC0-6D6FDCE9C98F} = {19A5D24E-D8FA-43AE-841B-D1F6FDFCB475}
 		{3AA8B42A-FE55-423D-B87C-2C163A01F5E2} = {03618F33-C0F4-436D-BA3C-A14EC3894F1F}
 		{444DF6D6-BAA7-4D3F-A9EF-E3CFCF5D30CF} = {077F5E93-E83F-447B-9F4E-A1C2F3CCEA39}
+		{870B63F6-23E2-4479-B821-D315DD8A8F6A} = {AE3C234A-ADA3-4990-B661-C50F493028A3}
+		{CAD0CF3F-9934-4DC5-8F4B-F2563919DC3C} = {AE3C234A-ADA3-4990-B661-C50F493028A3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B9F693E7-6A4E-4EEC-8474-82209B8E4094}

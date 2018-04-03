@@ -11,85 +11,80 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryCalculating.Calculators
 {
-    public class KsCalculator : LotteryCalculator
+    public class KsCalculator : NumericLotteryCalculator
     {
-
-        private readonly ILotteryPhaseApplicationService _LotteryPhaseApplicationService;
-        public KsCalculator(ILotteryPhaseApplicationService LotteryPhaseApplicationService, LotteryMerchanteOrder lotteryMerchanteOrder) : base(lotteryMerchanteOrder)
+        public KsCalculator(IServiceProvider iocResolver, LotteryMerchanteOrder lotteryMerchanteOrder) : base(iocResolver, lotteryMerchanteOrder)
         {
-            _LotteryPhaseApplicationService = LotteryPhaseApplicationService;
         }
+
         public override async Task<Handle> CalculateAsync()
         {
             decimal BonusMoney = 0;
-            LotteryPhase lotteryPhase = await _LotteryPhaseApplicationService.FindLotteryPhase(LotteryMerchanteOrder.LotteryId, (int)LotteryMerchanteOrder.IssueNumber);
-            string DrawNumber = lotteryPhase.DrawNumber;
-            if (DrawNumber != "")
+            string drawNumber = await FindDrawNumberAsync(LotteryMerchanteOrder.LotteryId, (int)LotteryMerchanteOrder.IssueNumber);
+            if (string.IsNullOrEmpty(drawNumber))
             {
-                List<string> drawedNumbers = DrawNumber.Split(',').ToList();
-                switch (LotteryMerchanteOrder.LotteryPlayId)
-                {
-
-                    case (int)PlayTypes.Ks_SumValue:
-                        {
-                            List<string> choseNumbers = LotteryMerchanteOrder.InvestCode.Split(',').ToList();
-                            BonusMoney = this.SumValue(choseNumbers, drawedNumbers);
-                        }
-                        break;
-                    case (int)PlayTypes.Ks_ThreeDiffSingle:
-                        {
-                            List<string> choseNumbers = LotteryMerchanteOrder.InvestCode.Split(',').ToList();
-                            BonusMoney = this.ThreeDiffSingle(choseNumbers, drawedNumbers);
-                        }
-                        break;
-                    case (int)PlayTypes.Ks_ThreeSameAll:
-                        {
-                            List<string> choseNumbers = LotteryMerchanteOrder.InvestCode.Split(',').ToList();
-                            BonusMoney = this.ThreeSameAll(choseNumbers, drawedNumbers);
-                        }
-                        break;
-                    case (int)PlayTypes.Ks_ThreeSameSingle:
-                        {
-                            List<string> choseNumbers = LotteryMerchanteOrder.InvestCode.Split(',').ToList();
-                            BonusMoney = this.ThreeSameSingle(choseNumbers, drawedNumbers);
-                        }
-                        break;
-                    case (int)PlayTypes.Ks_ThreeSeriesAll:
-                        {
-                            List<string> choseNumbers = LotteryMerchanteOrder.InvestCode.Split(',').ToList();
-                            BonusMoney = this.ThreeLinkAll(choseNumbers, drawedNumbers);
-                        }
-                        break;
-                    case (int)PlayTypes.Ks_TowDiffSingle:
-                        {
-                            List<string> choseNumbers = LotteryMerchanteOrder.InvestCode.Split(',').ToList();
-                            BonusMoney = this.TowDiffSingle(choseNumbers, drawedNumbers);
-                        }
-                        break;
-                    case (int)PlayTypes.Ks_TowSameAll:
-                        {
-                            List<string> choseNumbers = LotteryMerchanteOrder.InvestCode.Split(',').ToList();
-                            BonusMoney = this.TowSameAll(choseNumbers, drawedNumbers);
-                        }
-                        break;
-                    case (int)PlayTypes.Ks_TowSameSingle:
-                        {
-                            List<string> choseNumbers = LotteryMerchanteOrder.InvestCode.Split(',').ToList();
-                            BonusMoney = this.TowSameSingle(choseNumbers, drawedNumbers);
-                        }
-                        break;
-                }
-                if (BonusMoney > 0)
-                {
-                    return Handle.Winner;
-                }
-                else
-                {
-                    return Handle.Losing;
-                }
-            }
-            else {
                 return Handle.Waiting;
+            }
+            List<string> drawedNumbers = drawNumber.Split(',').ToList();
+            switch (LotteryMerchanteOrder.LotteryPlayId)
+            {
+
+                case (int)PlayTypes.Ks_SumValue:
+                    {
+                        List<string> choseNumbers = LotteryMerchanteOrder.InvestCode.Split(',').ToList();
+                        BonusMoney = this.SumValue(choseNumbers, drawedNumbers);
+                    }
+                    break;
+                case (int)PlayTypes.Ks_ThreeDiffSingle:
+                    {
+                        List<string> choseNumbers = LotteryMerchanteOrder.InvestCode.Split(',').ToList();
+                        BonusMoney = this.ThreeDiffSingle(choseNumbers, drawedNumbers);
+                    }
+                    break;
+                case (int)PlayTypes.Ks_ThreeSameAll:
+                    {
+                        List<string> choseNumbers = LotteryMerchanteOrder.InvestCode.Split(',').ToList();
+                        BonusMoney = this.ThreeSameAll(choseNumbers, drawedNumbers);
+                    }
+                    break;
+                case (int)PlayTypes.Ks_ThreeSameSingle:
+                    {
+                        List<string> choseNumbers = LotteryMerchanteOrder.InvestCode.Split(',').ToList();
+                        BonusMoney = this.ThreeSameSingle(choseNumbers, drawedNumbers);
+                    }
+                    break;
+                case (int)PlayTypes.Ks_ThreeSeriesAll:
+                    {
+                        List<string> choseNumbers = LotteryMerchanteOrder.InvestCode.Split(',').ToList();
+                        BonusMoney = this.ThreeLinkAll(choseNumbers, drawedNumbers);
+                    }
+                    break;
+                case (int)PlayTypes.Ks_TowDiffSingle:
+                    {
+                        List<string> choseNumbers = LotteryMerchanteOrder.InvestCode.Split(',').ToList();
+                        BonusMoney = this.TowDiffSingle(choseNumbers, drawedNumbers);
+                    }
+                    break;
+                case (int)PlayTypes.Ks_TowSameAll:
+                    {
+                        List<string> choseNumbers = LotteryMerchanteOrder.InvestCode.Split(',').ToList();
+                        BonusMoney = this.TowSameAll(choseNumbers, drawedNumbers);
+                    }
+                    break;
+                case (int)PlayTypes.Ks_TowSameSingle:
+                    {
+                        List<string> choseNumbers = LotteryMerchanteOrder.InvestCode.Split(',').ToList();
+                        BonusMoney = this.TowSameSingle(choseNumbers, drawedNumbers);
+                    }
+                    break;
+            }
+            if (BonusMoney > 0)
+            {
+                return Handle.Winner;
+            }
+            else
+            {
+                return Handle.Losing;
             }
         }
 

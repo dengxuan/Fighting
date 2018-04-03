@@ -60,7 +60,7 @@ namespace Baibaocp.LotteryDispatching.Internal
                                     return new Nack();
                                 }
                                 _logger.LogInformation($"Ordering Rejected: {message.LdpMerchanerId}-{message.LvpOrder.LvpOrderId}-{message.LdpOrderId}");
-                                await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Noticing.Ticketed.{message.LdpMerchanerId}", new NoticeMessage<LotteryTicketed>(message.LdpOrderId, message.LdpMerchanerId, new LotteryTicketed
+                                await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Ticketed.{message.LdpMerchanerId}", new NoticeMessage<LotteryTicketed>(message.LdpOrderId, message.LdpMerchanerId, new LotteryTicketed
                                 {
                                     LvpOrderId = message.LvpOrder.LvpOrderId,
                                     LvpMerchanerId = message.LvpOrder.LvpVenderId,
@@ -94,7 +94,7 @@ namespace Baibaocp.LotteryDispatching.Internal
                     });
                     configuration.Consume(consume =>
                     {
-                        consume.WithRoutingKey($"LotteryDispatching.Ordering.#");
+                        consume.WithRoutingKey($"LotteryDispatching.Ordering.{_dispatcherConfiguration.MerchanterId}");
                     });
                 });
             }, stoppingToken);

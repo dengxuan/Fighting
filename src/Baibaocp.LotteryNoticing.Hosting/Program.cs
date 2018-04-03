@@ -24,18 +24,13 @@ namespace Baibaocp.LotteryNotifier.Hongdan
                 })
                 .ConfigureLogging((hostContext, loggerBuilder) =>
                 {
-                    if (hostContext.HostingEnvironment.IsDevelopment())
-                    {
-                        loggerBuilder.AddConsole();
-                        loggerBuilder.AddDebug();
-                        loggerBuilder.SetMinimumLevel(LogLevel.Trace);
-                    }
+                    loggerBuilder.AddConsole();
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddFighting(fightBuilder =>
                     {
-                        fightBuilder.ConfigureMessageServices(messageServiceBuilder => 
+                        fightBuilder.ConfigureMessageServices(messageServiceBuilder =>
                         {
                             messageServiceBuilder.UseLotteryNoticingMessagePublisher();
                         });

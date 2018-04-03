@@ -11,7 +11,7 @@ namespace Baibaocp.ApplicationServices.Abstractions
         /// </summary>
         /// <param name="merchanterId"></param>
         /// <returns></returns>
-        Task<Merchanter> FindMerchanter(string merchanterId);
+        Task<Merchanter> FindMerchanterAsync(string merchanterId);
 
         /// <summary>
         /// 充值
@@ -47,6 +47,6 @@ namespace Baibaocp.ApplicationServices.Abstractions
         /// <param name="lvpMerchanterId">投注渠道商编号</param>
         /// <param name="lotteryId">彩种编号</param>
         /// <returns></returns>
-        Task<string> FindLdpMerchanterId(string lvpMerchanterId, int lotteryId);
+        Task<string> FindLdpMerchanterIdAsync(string lvpMerchanterId, int lotteryId);
     }
 }

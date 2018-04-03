@@ -77,7 +77,7 @@ namespace Baibaocp.LotteryOrdering.Hosting
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogWarning(ex, ex.Message);
+                    _logger.LogError(ex, ex.Message);
 
                     var nextTryTime = schedule.CalculateNextTryTime();
                     if (nextTryTime.HasValue)
@@ -94,7 +94,7 @@ namespace Baibaocp.LotteryOrdering.Hosting
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, ex.ToString());
+                _logger.LogError(ex, ex.ToString());
 
                 schedule.IsAbandoned = true;
 
@@ -110,7 +110,7 @@ namespace Baibaocp.LotteryOrdering.Hosting
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, ex.ToString());
+                _logger.LogError(ex, ex.ToString());
             }
         }
     }

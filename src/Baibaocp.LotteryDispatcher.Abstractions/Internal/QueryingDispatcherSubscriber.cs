@@ -55,7 +55,7 @@ namespace Baibaocp.LotteryDispatching.Internal
                                     LvpOrderId = message.LvpOrderId,
                                     TicketingType = LotteryTicketingTypes.Success,
                                     TicketedNumber = success.TicketedNumber,
-                                    TicketedTime =success.TicketedTime,
+                                    TicketedTime = success.TicketedTime,
                                     TicketedOdds = success.TicketedOdds,
                                 }));
                                 return new Ack();
@@ -73,10 +73,24 @@ namespace Baibaocp.LotteryDispatching.Internal
                             }
                         case WinningHandle winning:
                             {
+                                await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Awarded.{message.LdpMerchanerId}", new NoticeMessage<LotteryAwarded>(message.LdpOrderId, message.LdpMerchanerId, new LotteryAwarded
+                                {
+                                    AftertaxBonusAmount = winning.AftertaxBonusAmount,
+                                    AwatdingType = LotteryAwardingTypes.Winning,
+                                    BonusAmount = winning.BonusAmount,
+                                    LvpMerchanerId = message.LvpMerchanerId,
+                                    LvpOrderId = message.LvpOrderId
+                                }));
                                 return new Ack();
                             }
                         case LoseingHandle loseing:
                             {
+                                await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Awarded.{message.LdpMerchanerId}", new NoticeMessage<LotteryAwarded>(message.LdpOrderId, message.LdpMerchanerId, new LotteryAwarded
+                                {
+                                    AwatdingType = LotteryAwardingTypes.Loseing,
+                                    LvpMerchanerId = message.LvpMerchanerId,
+                                    LvpOrderId = message.LvpOrderId
+                                }));
                                 return new Ack();
                             }
                         case WaitingHandle waiting:
@@ -110,7 +124,7 @@ namespace Baibaocp.LotteryDispatching.Internal
                     });
                     configuration.Consume(consume =>
                     {
-                        consume.WithRoutingKey($"LotteryDispatching.Querying.#");
+                        consume.WithRoutingKey($"LotteryDispatching.Querying.{_dispatcherConfiguration.MerchanterId}");
                     });
                 });
             }, stoppingToken);

@@ -1,24 +1,23 @@
-﻿using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
-using Baibaocp.LotteryOrdering.Core.Entities.Merchantes;
-using Fighting.ApplicationServices.Abstractions;
+﻿using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
+using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryOrdering.WebApi.Controllers
 {
     /// <inheritdoc/>
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class OrdersController : Controller
     {
-        private readonly IOrderingApplicationService _orderingApplicationService;
+        private readonly ILotteryOrderingMessageService _lotteryOrderingMessageService;
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="orderingApplicationService"></param>
-        public ValuesController(IOrderingApplicationService orderingApplicationService)
+        /// <param name="lotteryOrderingMessageService"></param>
+        public OrdersController(ILotteryOrderingMessageService lotteryOrderingMessageService)
         {
-            _orderingApplicationService = orderingApplicationService;
+            _lotteryOrderingMessageService = lotteryOrderingMessageService;
         }
 
         /// <summary>
@@ -32,24 +31,13 @@ namespace Baibaocp.LotteryOrdering.WebApi.Controllers
         }
 
         /// <summary>
-        ///  GET api/values/5
+        ///  { "lvpOrderId": "100009152237734312134", "lvpVenderId": "100800345", "lvpUserId": 10000, "lotteryId": 10122, "lotteryPlayId": 10061053,  "issueNumber": 18033047,  "investCode": "01,02,03,04,05",  "investType": false,  "investCount": 1,  "investTimes": 1,  "investAmount": 200 }
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet("{id}")]
-        public async Task<LotteryMerchanteOrder> Get(string id)
-        {
-            var order = await _orderingApplicationService.FindOrderAsync(id);
-            return order;
-        }
-
-        /// <summary>
-        ///  POST api/values
-        /// </summary>
-        /// <param name="value"></param>
+        /// <param name="message"></param>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async void Post([FromBody] LvpOrderMessage message)
         {
+            await _lotteryOrderingMessageService.PublishAsync(message);
         }
 
         /// <summary>

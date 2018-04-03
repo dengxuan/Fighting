@@ -1,25 +1,28 @@
 ﻿using Baibaocp.ApplicationServices.Abstractions;
 using Baibaocp.LotteryOrdering.Core.Entities.Merchantes;
-using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
-using System.Collections;
+using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryCalculating.Abstractions
 {
+    /// <summary>
+    /// 竞技型彩票
+    /// </summary>
     public abstract class SprotsLotteryCalculator : LotteryCalculator
     {
-        private readonly ILotterySportsMatchApplicationService _sportsMatchApplicationService;
 
         private readonly IDictionary<int, (int home, int guest)?> _results = new Dictionary<int, (int home, int guest)?>();
 
-        public SprotsLotteryCalculator(ILotterySportsMatchApplicationService sportsMatchApplicationService, LotteryMerchanteOrder lotteryMerchanteOrder) : base(lotteryMerchanteOrder)
+        public SprotsLotteryCalculator(IServiceProvider iocResolver, LotteryMerchanteOrder lotteryMerchanteOrder) : base(iocResolver, lotteryMerchanteOrder)
         {
-            _sportsMatchApplicationService = sportsMatchApplicationService;
         }
 
         protected async Task<SportsMatchResult> GetMatchResultAsync(long matchId)
         {
-            var lotterySportsMatch = await _sportsMatchApplicationService.FindMatchAsync(matchId);
+            ILotterySportsMatchApplicationService sportsMatchApplicationService = IocResolver.GetRequiredService<ILotterySportsMatchApplicationService>();
+            var lotterySportsMatch = await sportsMatchApplicationService.FindMatchAsync(matchId);
             if (string.IsNullOrEmpty(lotterySportsMatch.HalfScore) || string.IsNullOrEmpty(lotterySportsMatch.Score))
             {
                 return null;

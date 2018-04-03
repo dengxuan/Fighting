@@ -11,71 +11,67 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryCalculating.Calculators
 {
-    public class SdPlsCalculator : LotteryCalculator
+    public class SdPlsCalculator : NumericLotteryCalculator
     {
-
-        private readonly ILotteryPhaseApplicationService _LotteryPhaseApplicationService;
-        public SdPlsCalculator(ILotteryPhaseApplicationService LotteryPhaseApplicationService, LotteryMerchanteOrder lotteryMerchanteOrder) : base(lotteryMerchanteOrder)
+        public SdPlsCalculator(IServiceProvider iocResolver, LotteryMerchanteOrder lotteryMerchanteOrder) : base(iocResolver, lotteryMerchanteOrder)
         {
-            _LotteryPhaseApplicationService = LotteryPhaseApplicationService;
         }
+
         public override async Task<Handle> CalculateAsync()
         {
             int level = 0;
-            LotteryPhase lotteryPhase = await _LotteryPhaseApplicationService.FindLotteryPhase(LotteryMerchanteOrder.LotteryId, (int)LotteryMerchanteOrder.IssueNumber);
-            string DrawNumber = lotteryPhase.DrawNumber;
-            if (DrawNumber != "")
+            string drawNumber = await FindDrawNumberAsync(LotteryMerchanteOrder.LotteryId, LotteryMerchanteOrder.IssueNumber.Value);
+            if (string.IsNullOrEmpty(drawNumber))
             {
-                switch (LotteryMerchanteOrder.LotteryPlayId)
-                {
-                    case (int)PlayTypes.Pls_AntThreeFixedUnset:
-                        level = this.AnyThreeFixed(LotteryMerchanteOrder.InvestCode, DrawNumber);
-                        break;
-                    case (int)PlayTypes.Pls_AnySixFixedUnset:
-                        level = this.AnySixFixed(LotteryMerchanteOrder.InvestCode, DrawNumber);
-                        break;
-                    case (int)PlayTypes.Pls_AnySixMultiple:
-                    case (int)PlayTypes.Pls_AnySixSingle:
-                    case (int)PlayTypes.Sd_AnySixMultiple:
-                    case (int)PlayTypes.Sd_AnySixSingle:
-                        level = this.AnySixSdPls(LotteryMerchanteOrder.InvestCode, DrawNumber);
-                        break;
-                    case (int)PlayTypes.Pls_AnySixSum:
-                    case (int)PlayTypes.Pls_AnyThreeSum:
-                    case (int)PlayTypes.Pls_FrontSum:
-                        level = this.SumSdPLs(LotteryMerchanteOrder.InvestCode, DrawNumber);
-                        break;
-                    case (int)PlayTypes.Pls_AnyThreeMultiple:
-                    case (int)PlayTypes.Pls_AnyThreeSingle:
-                    case (int)PlayTypes.Sd_AnyThreeMultiple:
-                    case (int)PlayTypes.Sd_AnyThreeSingle:
-                        level = this.AnyThreeSdPls(LotteryMerchanteOrder.InvestCode, DrawNumber);
-                        break;
-                    case (int)PlayTypes.Pls_FrontCombin:
-                        level = this.FrontCombin(LotteryMerchanteOrder.InvestCode, DrawNumber);
-                        break;
-                    case (int)PlayTypes.Pls_FrontCombinFixedUnset:
-                        level = this.FrontCombinFixed(LotteryMerchanteOrder.InvestCode, DrawNumber);
-                        break;
-                    case (int)PlayTypes.Pls_FrontMultiple:
-                    case (int)PlayTypes.Pls_FrontSingle:
-                    case (int)PlayTypes.Sd_FrontMultiple:
-                    case (int)PlayTypes.Sd_FrontSingle:
-                    case (int)PlayTypes.Plw_FrontMultiple:
-                    case (int)PlayTypes.Plw_FrontSingle:
-                        level = this.FrontSdPls(LotteryMerchanteOrder.InvestCode, DrawNumber);
-                        break;
-                }
-                if (level > 0)
-                {
-                    return Handle.Winner;
-                }
-                else {
-                    return Handle.Losing;
-                }
-            }
-            else {
                 return Handle.Waiting;
+            }
+            switch (LotteryMerchanteOrder.LotteryPlayId)
+            {
+                case (int)PlayTypes.Pls_AntThreeFixedUnset:
+                    level = this.AnyThreeFixed(LotteryMerchanteOrder.InvestCode, drawNumber);
+                    break;
+                case (int)PlayTypes.Pls_AnySixFixedUnset:
+                    level = this.AnySixFixed(LotteryMerchanteOrder.InvestCode, drawNumber);
+                    break;
+                case (int)PlayTypes.Pls_AnySixMultiple:
+                case (int)PlayTypes.Pls_AnySixSingle:
+                case (int)PlayTypes.Sd_AnySixMultiple:
+                case (int)PlayTypes.Sd_AnySixSingle:
+                    level = this.AnySixSdPls(LotteryMerchanteOrder.InvestCode, drawNumber);
+                    break;
+                case (int)PlayTypes.Pls_AnySixSum:
+                case (int)PlayTypes.Pls_AnyThreeSum:
+                case (int)PlayTypes.Pls_FrontSum:
+                    level = this.SumSdPLs(LotteryMerchanteOrder.InvestCode, drawNumber);
+                    break;
+                case (int)PlayTypes.Pls_AnyThreeMultiple:
+                case (int)PlayTypes.Pls_AnyThreeSingle:
+                case (int)PlayTypes.Sd_AnyThreeMultiple:
+                case (int)PlayTypes.Sd_AnyThreeSingle:
+                    level = this.AnyThreeSdPls(LotteryMerchanteOrder.InvestCode, drawNumber);
+                    break;
+                case (int)PlayTypes.Pls_FrontCombin:
+                    level = this.FrontCombin(LotteryMerchanteOrder.InvestCode, drawNumber);
+                    break;
+                case (int)PlayTypes.Pls_FrontCombinFixedUnset:
+                    level = this.FrontCombinFixed(LotteryMerchanteOrder.InvestCode, drawNumber);
+                    break;
+                case (int)PlayTypes.Pls_FrontMultiple:
+                case (int)PlayTypes.Pls_FrontSingle:
+                case (int)PlayTypes.Sd_FrontMultiple:
+                case (int)PlayTypes.Sd_FrontSingle:
+                case (int)PlayTypes.Plw_FrontMultiple:
+                case (int)PlayTypes.Plw_FrontSingle:
+                    level = this.FrontSdPls(LotteryMerchanteOrder.InvestCode, drawNumber);
+                    break;
+            }
+            if (level > 0)
+            {
+                return Handle.Winner;
+            }
+            else
+            {
+                return Handle.Losing;
             }
         }
 

@@ -34,18 +34,21 @@ namespace Baibaocp.LotteryOrdering.MessageServices
             {
                 try
                 {
-                    _logger.LogInformation("Received ticketing message: {1} {0}", message.LdpMerchanerId, message.LdpOrderId);
+                    _logger.LogInformation("Received awarding message: {0} {1}", message.LdpOrderId, message.LdpMerchanerId);
                     IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
-                    ILotteryMerchanterApplicationService lotteryMerchanterApplicationService = _iocResolver.GetRequiredService<ILotteryMerchanterApplicationService>();
-
-                    var order = await orderingApplicationService.WinningAsync(message.LdpOrderId, message.Content.BonusAmount, message.Content.AftertaxBonusAmount);
-                    await lotteryMerchanterApplicationService.Rewarding(order.Id, order.LdpVenderId, order.LotteryId, order.InvestAmount);
-                    await lotteryMerchanterApplicationService.Rewarding(order.LvpOrderId, order.LvpVenderId, order.LotteryId, order.InvestAmount);
+                    if (message.Content.AwatdingType == LotteryAwardingTypes.Winning)
+                    {
+                        await orderingApplicationService.WinningAsync(message.LdpOrderId, message.Content.BonusAmount, message.Content.AftertaxBonusAmount);
+                    }
+                    else
+                    {
+                        await orderingApplicationService.LoseingAsync(message.LdpOrderId);
+                    }
                     return new Ack();
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Received ticketing message: {1} {0}", message.LdpMerchanerId, message.LdpOrderId);
+                    _logger.LogInformation(ex, "Received awarding message: {0} {1}", message.LdpOrderId, message.LdpMerchanerId);
                 }
 
                 return new Nack();

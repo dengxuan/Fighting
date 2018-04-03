@@ -126,9 +126,11 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
             return await _orderingReoository.UpdateAsync(order);
         }
 
-        public Task<LotteryMerchanteOrder> LoseingAsync(string orderId)
+        public async Task<LotteryMerchanteOrder> LoseingAsync(string orderId)
         {
-            throw new NotImplementedException();
+            var order = await _orderingReoository.FirstOrDefaultAsync(orderId);
+            order.Status = (int)OrderStatus.TicketLosing;
+            return await _orderingReoository.UpdateAsync(order);
         }
     }
 }

@@ -42,7 +42,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.WebApi.Middlewares
                 var xAction = httpContext.Request.Form["xAction"].ToString();
                 var xSign = httpContext.Request.Form["xSign"].ToString();
                 var xValue = httpContext.Request.Form["xValue"].ToString();
-                var merchanter = await _lotteryMerchanterApplicationService.FindMerchanter(xAgent);
+                var merchanter = await _lotteryMerchanterApplicationService.FindMerchanterAsync(xAgent);
                 string str = $"{xAgent}{xAction}{xValue}{merchanter.SecretKey}";
                 if (str.VerifyMd5(xSign))
                 {

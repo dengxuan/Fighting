@@ -1,5 +1,4 @@
-﻿using Baibaocp.ApplicationServices.Abstractions;
-using Baibaocp.LotteryNotifier.MessageServices.Messages;
+﻿using Baibaocp.LotteryNotifier.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.Scheduling;
@@ -41,10 +40,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                     IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
                     if (message.Content.TicketingType == LotteryTicketingTypes.Success)
                     {
-                        ILotteryMerchanterApplicationService lotteryMerchanterApplicationService = _iocResolver.GetRequiredService<ILotteryMerchanterApplicationService>();
                         var order = await orderingApplicationService.TicketedAsync(message.LdpOrderId, message.LdpMerchanerId, message.Content.TicketedNumber, message.Content.TicketedTime, message.Content.TicketedOdds);
-                        await lotteryMerchanterApplicationService.Ticketing(order.LdpVenderId, order.Id, order.LotteryId, order.InvestAmount);
-                        await lotteryMerchanterApplicationService.Ticketing(order.LvpVenderId, order.LvpOrderId, order.LotteryId, order.InvestAmount);
                         await _schedulerManager.EnqueueAsync<ILotteryAwardingScheduler, AwardingScheduleArgs>(new AwardingScheduleArgs
                         {
                             LdpOrderId = message.LdpOrderId,

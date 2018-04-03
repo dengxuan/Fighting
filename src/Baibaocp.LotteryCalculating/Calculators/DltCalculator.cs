@@ -4,6 +4,7 @@ using Baibaocp.LotteryOrdering.Core.Entities.Merchantes;
 using Baibaocp.Storaging.Entities;
 using Baibaocp.Storaging.Entities.Lotteries;
 using Fighting.Math;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,42 +13,46 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryCalculating.Calculators
 {
-    public class DltCalculator : LotteryCalculator
+    public class DltCalculator : LottoLotteryCalculator
     {
-        private readonly ILotteryPhaseApplicationService _LotteryPhaseApplicationService;
-        public DltCalculator(ILotteryPhaseApplicationService LotteryPhaseApplicationService, LotteryMerchanteOrder lotteryMerchanteOrder) : base(lotteryMerchanteOrder)
+        public DltCalculator(IServiceProvider iocResolver, LotteryMerchanteOrder lotteryMerchanteOrder) : base(iocResolver, lotteryMerchanteOrder)
         {
-            _LotteryPhaseApplicationService = LotteryPhaseApplicationService;
         }
+
         public override async Task<Handle> CalculateAsync()
         {
             int level = 0;
-            LotteryPhase lotteryPhase = await _LotteryPhaseApplicationService.FindLotteryPhase(LotteryMerchanteOrder.LotteryId, (int)LotteryMerchanteOrder.IssueNumber);
-            string DrawNumber = lotteryPhase.DrawNumber;
-            if (DrawNumber != "")
+            string drawNumber = await FindDrawNumberAsync(LotteryMerchanteOrder.LotteryId, (int)LotteryMerchanteOrder.IssueNumber);
+            if (string.IsNullOrEmpty(drawNumber))
             {
-                if (LotteryMerchanteOrder.LotteryPlayId == (int)PlayTypes.Dlt_Single)
-                {
-                    level = SingleDlt(LotteryMerchanteOrder.InvestCode, DrawNumber);
-                }
-                if (LotteryMerchanteOrder.LotteryPlayId == (int)PlayTypes.Dlt_Multiple)
-                {
-                    level = CompoundDlt(LotteryMerchanteOrder.InvestCode, DrawNumber);
-                }
-                if (LotteryMerchanteOrder.LotteryPlayId == (int)PlayTypes.Dlt_FixedUnset)
-                {
-                    level = BraveryTowDlt(LotteryMerchanteOrder.InvestCode, DrawNumber);
-                }
-                if (level > 0)
-                {
-                    return Handle.Waiting;
-                }
-                else {
-                    return Handle.Losing;
-                }
-            }
-            else {
                 return Handle.Waiting;
+            }
+            switch (LotteryMerchanteOrder.LotteryPlayId)
+            {
+                case (int)PlayTypes.Dlt_Single:
+                    {
+                        level = SingleDlt(LotteryMerchanteOrder.InvestCode, drawNumber);
+                        break;
+                    }
+                case (int)PlayTypes.Dlt_Multiple:
+                    {
+
+                        level = CompoundDlt(LotteryMerchanteOrder.InvestCode, drawNumber);
+                        break;
+                    }
+                case (int)PlayTypes.Dlt_FixedUnset:
+                    {
+                        level = BraveryTowDlt(LotteryMerchanteOrder.InvestCode, drawNumber);
+                        break;
+                    }
+            }
+            if (level > 0)
+            {
+                return Handle.Winner;
+            }
+            else
+            {
+                return Handle.Losing;
             }
         }
 

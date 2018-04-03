@@ -18,6 +18,8 @@ using System.Security.Cryptography;
 using Newtonsoft.Json.Linq;
 using Fighting.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
+using Fighting.Json;
 
 namespace Baibaocp.LotteryDispatching.Suicai.WebApi
 {
@@ -48,10 +50,10 @@ namespace Baibaocp.LotteryDispatching.Suicai.WebApi
         /// <returns></returns>
         public async Task Invoke(HttpContext httpContext)
         {
+            ResContent rescon = new ResContent();
             try
             {
                 var result = string.Empty;
-                
                 using (var reader = new StreamReader(httpContext.Request.Body, Encoding.UTF8))
                 {
                     result = await reader.ReadToEndAsync();
@@ -61,7 +63,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.WebApi
                     string messageid = reqcon.messageId;
                     string hmac = reqcon.hmac;
 
-                    ResContent rescon = new ResContent();
+                    
                     rescon.version = "1.0";
                     rescon.content = string.Empty;
                     rescon.partnerId = partnerid;
@@ -71,7 +73,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.WebApi
                     rescon.messageId = messageid;
 
                     string s = string.Format("{0}{1}{2}{3}", apicode, reqcon.content, messageid, partnerid);
-                    var merchanter = await _lotteryMerchanterApplicationService.FindMerchanter(partnerid);
+                    var merchanter = await _lotteryMerchanterApplicationService.FindMerchanterAsync(partnerid);
                     string sign = s.hmac_md5(merchanter.SecretKey.Substring(0, 16)).ToLower();
                     if (sign == reqcon.hmac)
                     {
@@ -79,6 +81,13 @@ namespace Baibaocp.LotteryDispatching.Suicai.WebApi
                         if (apicode == "300002")
                         {
                             if (await TicketNoticing(CipherText))
+                            {
+                                rescon.resCode = "0";
+                            }
+                        }
+                        if (apicode == "300003")
+                        {
+                            if (await AwardNoticing(CipherText))
                             {
                                 rescon.resCode = "0";
                             }
@@ -93,9 +102,16 @@ namespace Baibaocp.LotteryDispatching.Suicai.WebApi
             {
                 _logger.LogError(ex.Message);
             }
-            await httpContext.Response.WriteAsync("0");
+            string json = JsonExtensions.ToJsonString(rescon);
+            //HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            await httpContext.Response.WriteAsync(json);
         }
 
+        /// <summary>
+        /// 出票通知
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
         private async Task<bool> TicketNoticing(string result)
         {
             JObject jarr = JObject.Parse(result);
@@ -118,7 +134,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.WebApi
                             string ticketId = json["tickSn"].ToString();
                             DateTime tickettime = DateTime.Now;
                             LotteryTicketingTypes lotteryTicketingType = LotteryTicketingTypes.Success;
-                            await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Ticketed.{order.LdpVenderId}", new NoticeMessage<LotteryTicketed>(long.Parse(orderid), order.LdpVenderId, new LotteryTicketed
+                            await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Ticketed.{order.LdpVenderId}", new NoticeMessage<LotteryTicketed>(orderid, order.LdpVenderId, new LotteryTicketed
                             {
                                 LvpMerchanerId = order.LdpVenderId,
                                 LvpOrderId = order.LvpOrderId,
@@ -129,7 +145,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.WebApi
                         else
                         {
                             LotteryTicketingTypes lotteryTicketingType = LotteryTicketingTypes.Success;
-                            await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Ticketed.{order.LdpVenderId}", new NoticeMessage<LotteryTicketed>(long.Parse(orderid), order.LdpVenderId, new LotteryTicketed
+                            await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Ticketed.{order.LdpVenderId}", new NoticeMessage<LotteryTicketed>(orderid, order.LdpVenderId, new LotteryTicketed
                             {
                                 LvpMerchanerId = order.LdpVenderId,
                                 LvpOrderId = order.LvpOrderId,
@@ -143,7 +159,11 @@ namespace Baibaocp.LotteryDispatching.Suicai.WebApi
             return false;
         }
 
-
+        /// <summary>
+        /// 返奖通知
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
         private async Task<bool> AwardNoticing(string result)
         {
             JObject jarr = JObject.Parse(result);
@@ -154,34 +174,21 @@ namespace Baibaocp.LotteryDispatching.Suicai.WebApi
                     string Status = json["status"].ToString();
                     string orderid = json["orderId"].ToString();
                     var order = await _orderingApplicationService.FindOrderAsync(orderid);
-                    if (order.Status == 2000)
+                    if (order.Status == 4000)
                     {
-
-                        if (Status.IsIn("0", "1"))
+                        if (Status.IsIn("2","3"))
                         {
-                            return false;
-                        }
-                        else if (Status.Equals("2"))
-                        {
-                            string ticketId = json["tickSn"].ToString();
-                            DateTime tickettime = DateTime.Now;
-                            LotteryTicketingTypes lotteryTicketingType = LotteryTicketingTypes.Success;
-                            await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Ticketed.{order.LdpVenderId}", new NoticeMessage<LotteryTicketed>(long.Parse(orderid), order.LdpVenderId, new LotteryTicketed
+                            int bonusamount = int.Parse(json["totalPrize"].ToString()) * 100;
+                            int tax = int.Parse(json["tax"].ToString()) * 100;
+                            int aftertaxbonusamount = bonusamount - tax;
+                            LotteryAwardingTypes lotteryAwardingType = LotteryAwardingTypes.Winning;
+                            await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Awarded.{order.LdpVenderId}", new NoticeMessage<LotteryAwarded>(orderid, order.LdpVenderId, new LotteryAwarded
                             {
                                 LvpMerchanerId = order.LdpVenderId,
                                 LvpOrderId = order.LvpOrderId,
-                                TicketingType = lotteryTicketingType,
-                            }));
-                            return true;
-                        }
-                        else
-                        {
-                            LotteryTicketingTypes lotteryTicketingType = LotteryTicketingTypes.Success;
-                            await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Ticketed.{order.LdpVenderId}", new NoticeMessage<LotteryTicketed>(long.Parse(orderid), order.LdpVenderId, new LotteryTicketed
-                            {
-                                LvpMerchanerId = order.LdpVenderId,
-                                LvpOrderId = order.LvpOrderId,
-                                TicketingType = lotteryTicketingType,
+                                BonusAmount = bonusamount,
+                                AftertaxBonusAmount = aftertaxbonusamount,
+                                AwatdingType = lotteryAwardingType,
                             }));
                             return true;
                         }
@@ -190,6 +197,5 @@ namespace Baibaocp.LotteryDispatching.Suicai.WebApi
             }
             return false;
         }
-
     }
 }

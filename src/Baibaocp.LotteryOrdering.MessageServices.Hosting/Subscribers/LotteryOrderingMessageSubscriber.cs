@@ -42,7 +42,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 {
                     ILotteryMerchanterApplicationService lotteryMerchanterApplicationService = _iocResolver.GetRequiredService<ILotteryMerchanterApplicationService>();
                     /* 此处必须保证投注渠道已经开通相应的彩种和出票渠道*/
-                    string ldpVenderId = await lotteryMerchanterApplicationService.FindLdpMerchanterId(message.LvpVenderId, message.LotteryId);
+                    string ldpVenderId = await lotteryMerchanterApplicationService.FindLdpMerchanterIdAsync(message.LvpVenderId, message.LotteryId);
                     if (string.IsNullOrEmpty(ldpVenderId))
                     {
                         _logger.LogError("当前投注渠道{0}不支持该彩种{1}", message.LvpVenderId, message.LotteryId);

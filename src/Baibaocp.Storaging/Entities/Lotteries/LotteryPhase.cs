@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Baibaocp.Storaging.Entities.Lotteries
 {
-    [Table("BbcpPhases")]
+    [Table("BbcpIssues")]
     public class LotteryPhase : Entity
     {
         /// <summary>

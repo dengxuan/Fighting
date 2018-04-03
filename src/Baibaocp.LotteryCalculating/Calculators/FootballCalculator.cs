@@ -13,7 +13,7 @@ namespace Baibaocp.LotteryCalculating.Calculators
     {
         const string GAME_CANCLE = "-1";
 
-        public FootballCalculator(ILotterySportsMatchApplicationService sportsMatchApplicationService, LotteryMerchanteOrder lotteryMerchanteOrder) : base(sportsMatchApplicationService, lotteryMerchanteOrder)
+        public FootballCalculator(IServiceProvider iocResolver, LotteryMerchanteOrder lotteryMerchanteOrder) : base(iocResolver, lotteryMerchanteOrder)
         {
         }
 
@@ -83,7 +83,7 @@ namespace Baibaocp.LotteryCalculating.Calculators
         {
             int index = investMatch.IndexOf('|');
             string codes = investMatch.Substring(index + 1);
-            return codes.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+            return codes.Split(new string[] { "#" }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         public override async Task<Handle> CalculateAsync()
