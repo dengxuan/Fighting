@@ -1,8 +1,6 @@
-﻿using Fighting.Extensions.Threading;
-using Fighting.Hosting;
-using Fighting.Scheduling.Abstractions;
-using Fighting.Threading.Works;
+﻿using Fighting.Scheduling.Abstractions;
 using Fighting.Timing;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;

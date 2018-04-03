@@ -5,10 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.1.0-preview1-final" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Baibaocp.ApplicationServices.Abstractions\Baibaocp.ApplicationServices.Abstractions.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryNoticing.MessageServices.Abstractions\Baibaocp.LotteryNoticing.MessageServices.Abstractions.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.ApplicationServices.Abstractions\Baibaocp.LotteryOrdering.ApplicationServices.Abstractions.csproj" />
-    <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,11 +2,10 @@
 using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
 using Baibaocp.LotteryOrdering.Core.Entities.Merchantes;
-using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Fighting.Abstractions;
-using Fighting.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
 using RawRabbit.Common;

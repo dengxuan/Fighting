@@ -1,7 +1,7 @@
 ﻿using Baibaocp.LotteryNotifier.Abstractions;
 using Baibaocp.LotteryNotifier.MessageServices.Abstractions;
 using Baibaocp.LotteryNotifier.MessageServices.Messages;
-using Fighting.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RawRabbit;
 using RawRabbit.Common;

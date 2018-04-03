@@ -1,22 +1,19 @@
-﻿using Fighting.Hosting;
-using System;
-using System.Threading.Tasks;
-using Fighting.DependencyInjection;
-using Fighting.MessageServices.DependencyInjection;
-using Fighting.ApplicationServices.DependencyInjection;
-using Baibaocp.ApplicationServices;
-using Baibaocp.ApplicationServices.DependencyInjection;
+﻿using Baibaocp.ApplicationServices.DependencyInjection;
 using Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using Baibaocp.LotteryOrdering.EntityFrameworkCore;
+using Baibaocp.LotteryTrading.TradeLogging.DependencyInjection;
 using Baibaocp.Storaging.EntityFrameworkCore;
+using Fighting.ApplicationServices.DependencyInjection;
+using Fighting.DependencyInjection;
 using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using RawRabbit.Instantiation;
-using RawRabbit.Configuration;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
-using Baibaocp.LotteryTrading.TradeLogging.DependencyInjection;
+using RawRabbit.Instantiation;
+using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryTrading.TradeLogging.Hosting
 {

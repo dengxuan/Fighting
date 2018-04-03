@@ -3,14 +3,13 @@ using Baibaocp.LotteryDispatching.DependencyInjection;
 using Baibaocp.LotteryDispatching.MessageServices.DependencyInjection;
 using Baibaocp.LotteryNotifier.MessageServices.DependencyInjection;
 using Fighting.DependencyInjection;
-using Fighting.Hosting;
 using Fighting.MessageServices.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
-using System;
 using System.Text;
 using System.Threading.Tasks;
 

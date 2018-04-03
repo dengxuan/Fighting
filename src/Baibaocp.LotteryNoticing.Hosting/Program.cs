@@ -1,9 +1,9 @@
 ﻿using Baibaocp.LotteryNotifier.DependencyInjection;
 using Baibaocp.LotteryNotifier.MessageServices.DependencyInjection;
 using Fighting.DependencyInjection;
-using Fighting.Hosting;
 using Fighting.MessageServices.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;

@@ -6,7 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.1.0-preview1-final" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Fighting.Storaging.Abstractions\Fighting.Storaging.Abstractions.csproj" />
     <ProjectReference Include="..\Fighting\Fighting.csproj" />
   </ItemGroup>

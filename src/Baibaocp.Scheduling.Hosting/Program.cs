@@ -1,16 +1,13 @@
-﻿using Fighting.Hosting;
+﻿using Fighting.DependencyInjection;
+using Fighting.Scheduling;
+using Fighting.Scheduling.DependencyInjection;
+using Fighting.Scheduling.Mysql.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
-using Fighting.DependencyInjection;
-using Fighting.Scheduling.DependencyInjection;
 using System.Threading.Tasks;
-using Fighting.Scheduling.Abstractions;
-using Baibaocp.Scheduling.Abstractions;
-using Fighting.Scheduling.Mysql.DependencyInjection;
-using Fighting.Scheduling;
 
 namespace Baibaocp.Scheduling.Hosting
 {
