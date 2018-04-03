@@ -13,7 +13,7 @@ namespace Baibaocp.LotteryCalculating.Calculators
     {
         const string GAME_CANCLE = "-1";
 
-        public FootballCalculator(ILotterySportsMatchApplicationService sportsMatchApplicationService, LotteryMerchanteOrder lotteryMerchanteOrder) : base(sportsMatchApplicationService, lotteryMerchanteOrder)
+        public FootballCalculator(IServiceProvider iocResolver, LotteryMerchanteOrder lotteryMerchanteOrder) : base(iocResolver, lotteryMerchanteOrder)
         {
         }
 

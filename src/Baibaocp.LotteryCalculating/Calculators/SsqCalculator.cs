@@ -12,44 +12,33 @@ using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryCalculating.Calculators
 {
-    public class SsqCalculator : LotteryCalculator
+    public class SsqCalculator : LottoLotteryCalculator
     {
-
-        private readonly ILotteryPhaseApplicationService _LotteryPhaseApplicationService;
-        public SsqCalculator(ILotteryPhaseApplicationService LotteryPhaseApplicationService, LotteryMerchanteOrder lotteryMerchanteOrder) : base(lotteryMerchanteOrder)
+        public SsqCalculator(IServiceProvider iocResolver, LotteryMerchanteOrder lotteryMerchanteOrder) : base(iocResolver, lotteryMerchanteOrder)
         {
-            _LotteryPhaseApplicationService = LotteryPhaseApplicationService;
         }
+
         public override async Task<Handle> CalculateAsync()
         {
             int level = 0;
-            LotteryPhase lotteryPhase = await _LotteryPhaseApplicationService.FindLotteryPhase(LotteryMerchanteOrder.LotteryId, (int)LotteryMerchanteOrder.IssueNumber);
-            string DrawNumber = lotteryPhase.DrawNumber;
+            string DrawNumber = await FindDrawNumberAsync(LotteryMerchanteOrder.LotteryId, LotteryMerchanteOrder.IssueNumber.Value);
             if (DrawNumber != "")
             {
-                if (LotteryMerchanteOrder.LotteryPlayId == (int)PlayTypes.Ssq_Single)
-                {
-                    level = SingleSsq(LotteryMerchanteOrder.InvestCode, DrawNumber);
-                }
-                if (LotteryMerchanteOrder.LotteryPlayId == (int)PlayTypes.Ssq_Multiple)
-                {
-                    level = CompoundSsq(LotteryMerchanteOrder.InvestCode, DrawNumber);
-                }
-                if (LotteryMerchanteOrder.LotteryPlayId == (int)PlayTypes.Ssq_FixedUnset)
-                {
-                    level = BraveryTowSsq(LotteryMerchanteOrder.InvestCode, DrawNumber);
-                }
-                if (level > 0)
-                {
-                    return Handle.Winner;
-                }
-                else
-                {
-                    return Handle.Losing;
-                }
-            }
-            else {
                 return Handle.Waiting;
+            }
+            switch (LotteryMerchanteOrder.LotteryPlayId)
+            {
+                case (int)PlayTypes.Ssq_Single: level = SingleSsq(LotteryMerchanteOrder.InvestCode, DrawNumber); break;
+                case (int)PlayTypes.Ssq_Multiple: CompoundSsq(LotteryMerchanteOrder.InvestCode, DrawNumber); break;
+                case (int)PlayTypes.Ssq_FixedUnset: BraveryTowSsq(LotteryMerchanteOrder.InvestCode, DrawNumber); break;
+            }
+            if (level > 0)
+            {
+                return Handle.Winner;
+            }
+            else
+            {
+                return Handle.Losing;
             }
         }
 
