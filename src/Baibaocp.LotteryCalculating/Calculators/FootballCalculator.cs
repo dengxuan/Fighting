@@ -83,7 +83,7 @@ namespace Baibaocp.LotteryCalculating.Calculators
         {
             int index = investMatch.IndexOf('|');
             string codes = investMatch.Substring(index + 1);
-            return codes.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+            return codes.Split(new string[] { "#" }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         public override async Task<Handle> CalculateAsync()
