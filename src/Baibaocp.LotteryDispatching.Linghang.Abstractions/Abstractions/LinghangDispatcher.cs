@@ -5,11 +5,10 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Baibaocp.LotteryDispatching.Linghang.Abstractions.Abstractions
+namespace Baibaocp.LotteryDispatching.Linghang.Abstractions
 {
     public abstract class LinghangDispatcher<TExecuteMessage> where TExecuteMessage : IDispatchMessage
     {

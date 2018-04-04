@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Baibaocp.LotteryDispatching.Linghang.Abstractions
+namespace Baibaocp.LotteryDispatching.Linghang
 {
     public class Content
     {
+        internal string apiCode { get; set; }
+        internal string content { get; set; }
+        internal string messageId { get; set; }
+        internal string resCode { get; set; }
+        internal string resMsg { get; set; }
+
         public Head head { get; set; }
 
         public string body { get; set; }
