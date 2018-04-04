@@ -17,44 +17,6 @@ namespace Baibaocp.LotteryCalculating.Calculators
         {
         }
 
-        private string CalculateGameResult(int lotteryId, sbyte letBallCount, SportsMatchResult matchResult)
-        {
-            if (matchResult.FinalScore.Home == -1 && matchResult.FinalScore.Guest == -1)
-            {
-                return GAME_CANCLE;
-            }
-            switch (lotteryId)
-            {
-                case 20201:
-                case 20206:
-                    {
-                        int homeScore = matchResult.FinalScore.Home + letBallCount;
-                        int guestScore = matchResult.FinalScore.Guest;
-                        if (homeScore > guestScore)
-                        {
-                            return "3";
-                        }
-                        else if (homeScore == guestScore)
-                        {
-                            return "1";
-                        }
-                        else
-                        {
-                            return "0";
-                        }
-                    }
-                case 20202:
-                    {
-                        string home = matchResult.FinalScore.Home.ToString();
-                        string guest = matchResult.FinalScore.Guest.ToString();
-                        return string.Join("", matchResult.FinalScore.Home > 5 ? "9" : home, matchResult.FinalScore.Guest > 5 ? "9" : guest);
-                    }
-                default:
-                    break;
-            }
-            return null;
-        }
-
         protected string ResolveMatchId(string investMatch)
         {
             int index = investMatch.IndexOfAny(new char[] { '-', '@' });
@@ -102,41 +64,45 @@ namespace Baibaocp.LotteryCalculating.Calculators
                 {
                     return Handle.Waiting;
                 }
-                int lotteryId = LotteryMerchanteOrder.LotteryId == 20205 ? ResolveLotteryId(investMatch).Value : LotteryMerchanteOrder.LotteryId;
-                string result = null;
-                switch (lotteryId)
-                {
-                    case 20201: result = matchResult.FinalScore.VictoryLevels(); break;
-                    case 20202: result = matchResult.FinalScore.ScoreResult(); break;
-                    case 20203: result = matchResult.FinalScore.TotalGoals(); break;
-                    case 20204: result = string.Format("{0}{1}", matchResult.HalfScore.VictoryLevels(), matchResult.FinalScore.VictoryLevels()); break;
-                    case 20206:
-                        {
-                            sbyte letBallCount = ResolveLetBallCount(investMatch);
-                            result = matchResult.FinalScore.VictoryLevels(letBallCount); break;
-                        }
-                }
-                if (result == null)
-                {
-                    return Handle.Waiting;
-                }
-                completedCount = completedCount + 1;
-                if (result == GAME_CANCLE)
+                else if (matchResult.IsCanceled)
                 {
                     winnerOdds.Push(1);
-                    continue;
                 }
-                string[] investCodes = ResolveInvestCodes(investMatch);
-
-                for (int j = 0; j < investCodes.Length; j++)
+                else
                 {
-                    string[] codeAndOdds = investCodes[j].Split('*');
-                    if (codeAndOdds[0] == result)
+                    int lotteryId = LotteryMerchanteOrder.LotteryId == 20205 ? ResolveLotteryId(investMatch).Value : LotteryMerchanteOrder.LotteryId;
+                    string result = null;
+                    switch (lotteryId)
                     {
-                        winnerOdds.Push(decimal.Parse(codeAndOdds[1]));
-                        break;
+                        case 20201: result = matchResult.FinalScore.VictoryLevels(); break;
+                        case 20202: result = matchResult.FinalScore.ScoreResult(); break;
+                        case 20203: result = matchResult.FinalScore.TotalGoals(); break;
+                        case 20204: result = string.Format("{0}{1}", matchResult.HalfScore.VictoryLevels(), matchResult.FinalScore.VictoryLevels()); break;
+                        case 20206:
+                            {
+                                sbyte letBallCount = ResolveLetBallCount(investMatch);
+                                result = matchResult.FinalScore.VictoryLevels(letBallCount);
+                                break;
+                            }
+                    }
+                    if (result == null)
+                    {
+                        return Handle.Waiting;
+                    }
+
+                    string[] investCodes = ResolveInvestCodes(investMatch);
+
+                    for (int j = 0; j < investCodes.Length; j++)
+                    {
+                        string[] codeAndOdds = investCodes[j].Split('*');
+                        if (codeAndOdds[0] == result)
+                        {
+                            winnerOdds.Push(decimal.Parse(codeAndOdds[1]));
+                            break;
+                        }
                     }
                 }
+                completedCount = completedCount + 1;
             }
             if (completedCount < minWinnerCount)
             {
