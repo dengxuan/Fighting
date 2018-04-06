@@ -1,6 +1,6 @@
 ﻿namespace Fighting.Storaging
 {
-    public class StorageOptions
+    public class StorageConfiguration
     {
         public string DefaultNameOrConnectionString { get; set; }
     }

@@ -19,7 +19,7 @@ namespace Baibaocp.Storaging.EntityFrameworkCore
             var optionsBuilder = new DbContextOptionsBuilder<ScheduleDbContext>();
             SchedulingConfiguration schedulingOptions = builder.GetSection("SchedulingConfiguration").Get<SchedulingConfiguration>();
             optionsBuilder.UseMySql(schedulingOptions.DefaultConnection);
-            return new ScheduleDbContext(new StorageOptions { }, optionsBuilder.Options);
+            return new ScheduleDbContext(new StorageConfiguration { }, optionsBuilder.Options);
         }
     }
 }

@@ -14,8 +14,8 @@ namespace Fighting.DependencyInjection.Builder
 
         internal void AddStorageServices()
         {
-            Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<StorageOptions>, StorageOptionsSetup>());
-            Services.AddSingleton(sp => sp.GetRequiredService<IOptions<StorageOptions>>().Value);
+            Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<StorageConfiguration>, StorageOptionsSetup>());
+            Services.AddSingleton(sp => sp.GetRequiredService<IOptions<StorageConfiguration>>().Value);
         }
 
         internal void Build()

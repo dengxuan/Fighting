@@ -19,7 +19,7 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
     public class OrderingApplicationService : ApplicationService, IOrderingApplicationService
     {
 
-        private readonly StorageOptions _options;
+        private readonly StorageConfiguration _options;
 
         private readonly IIdentityGenerater _identityGenerater;
 
@@ -32,7 +32,7 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
         private readonly IRepository<LotterySportsMatch, long> _lotterySportsMatchRepository;
 
 
-        public OrderingApplicationService(StorageOptions options, IRepository<LotteryPhase, int> lotteryPhaseRepository, IRepository<LotteryMerchanteOrder, string> orderingReoository, IRepository<LotterySportsMatch, long> lotterySportsMatchRepository, ILogger<OrderingApplicationService> logger, IIdentityGenerater identityGenerater, ICacheManager cacheManager) : base(cacheManager)
+        public OrderingApplicationService(StorageConfiguration options, IRepository<LotteryPhase, int> lotteryPhaseRepository, IRepository<LotteryMerchanteOrder, string> orderingReoository, IRepository<LotterySportsMatch, long> lotterySportsMatchRepository, ILogger<OrderingApplicationService> logger, IIdentityGenerater identityGenerater, ICacheManager cacheManager) : base(cacheManager)
         {
             _options = options;
             _logger = logger;

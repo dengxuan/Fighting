@@ -7,7 +7,7 @@ namespace Fighting.Scheduling.Mysql
 {
     public class ScheduleDbContext : StorageContext
     {
-        public ScheduleDbContext(StorageOptions storageOptions, DbContextOptions<ScheduleDbContext> options) : base(storageOptions, options)
+        public ScheduleDbContext(StorageConfiguration storageOptions, DbContextOptions<ScheduleDbContext> options) : base(storageOptions, options)
         {
         }
 

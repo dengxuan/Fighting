@@ -10,7 +10,7 @@ namespace Baibaocp.Storaging.EntityFrameworkCore
 {
     public class BaibaocpStorageContext : StorageContext
     {
-        public BaibaocpStorageContext(StorageOptions storageOptions, DbContextOptions<BaibaocpStorageContext> options) : base(storageOptions, options)
+        public BaibaocpStorageContext(StorageConfiguration storageOptions, DbContextOptions<BaibaocpStorageContext> options) : base(storageOptions, options)
         {
         }
 

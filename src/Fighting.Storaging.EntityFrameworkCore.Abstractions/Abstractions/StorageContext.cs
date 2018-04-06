@@ -9,12 +9,12 @@ namespace Fighting.Storaging.EntityFrameworkCore.Abstractions
     public abstract class StorageContext : DbContext
     {
 
-        protected StorageOptions StorageOptions { get; }
+        protected StorageConfiguration StorageOptions { get; }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        protected StorageContext(StorageOptions storageOptions, DbContextOptions options) : base(options)
+        protected StorageContext(StorageConfiguration storageOptions, DbContextOptions options) : base(options)
         {
             StorageOptions = storageOptions ?? throw new ArgumentNullException(nameof(storageOptions));
         }

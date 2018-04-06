@@ -3,13 +3,13 @@ using Microsoft.Extensions.Options;
 
 namespace Fighting.DependencyInjection.Builder
 {
-    internal class StorageOptionsSetup : ConfigureOptions<StorageOptions>
+    internal class StorageOptionsSetup : ConfigureOptions<StorageConfiguration>
     {
         public StorageOptionsSetup() : base(ConfigureOptions)
         {
         }
 
-        private static void ConfigureOptions(StorageOptions options)
+        private static void ConfigureOptions(StorageConfiguration options)
         {
         }
     }
