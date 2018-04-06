@@ -4,12 +4,11 @@ using System;
 
 namespace Fighting.Storaging.EntityFrameworkCore.Uow
 {
-    public interface IEntityFrameworkCoreTransactionStrategy
+    public interface ITransactionStrategy
     {
         void InitOptions(UnitOfWorkOptions options);
 
-        DbContext CreateDbContext<TDbContext>(string connectionString, IDbContextResolver dbContextResolver)
-            where TDbContext : DbContext;
+        DbContext CreateDbContext<TDbContext>(string connectionString, IDbContextResolver dbContextResolver) where TDbContext : DbContext;
 
         void Commit();
 

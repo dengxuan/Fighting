@@ -1,6 +1,6 @@
 ﻿using Fighting.DependencyInjection.Builder;
 using Fighting.EntityFrameworkCore.Extensions;
-using Fighting.Storaging.Transactions.Extensions;
+using Fighting.Storaging.Data.Transactions.Extensions;
 using Fighting.Storaging.Uow;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -11,13 +11,13 @@ using System.Transactions;
 namespace Fighting.Storaging.EntityFrameworkCore.Uow
 {
     [TransientDependency]
-    public class DbContextEfCoreTransactionStrategy : IEntityFrameworkCoreTransactionStrategy
+    public class DbContextTransactionStrategy : ITransactionStrategy
     {
         protected UnitOfWorkOptions Options { get; private set; }
 
         protected IDictionary<string, ActiveTransaction> ActiveTransactions { get; }
 
-        public DbContextEfCoreTransactionStrategy()
+        public DbContextTransactionStrategy()
         {
             ActiveTransactions = new Dictionary<string, ActiveTransaction>();
         }
@@ -30,7 +30,7 @@ namespace Fighting.Storaging.EntityFrameworkCore.Uow
         public DbContext CreateDbContext<TDbContext>(string connectionString, IDbContextResolver dbContextResolver) where TDbContext : DbContext
         {
             DbContext dbContext;
-            if (ActiveTransactions.TryGetValue(connectionString,out ActiveTransaction activeTransaction)== false)
+            if (ActiveTransactions.TryGetValue(connectionString, out ActiveTransaction activeTransaction) == false)
             {
                 dbContext = dbContextResolver.Resolve<TDbContext>(connectionString, null);
 
@@ -40,10 +40,7 @@ namespace Fighting.Storaging.EntityFrameworkCore.Uow
             }
             else
             {
-                dbContext = dbContextResolver.Resolve<TDbContext>(
-                    connectionString,
-                    activeTransaction.DbContextTransaction.GetDbTransaction().Connection
-                );
+                dbContext = dbContextResolver.Resolve<TDbContext>(connectionString, activeTransaction.DbContextTransaction.GetDbTransaction().Connection);
 
                 if (dbContext.HasRelationalTransactionManager())
                 {
@@ -87,8 +84,9 @@ namespace Fighting.Storaging.EntityFrameworkCore.Uow
                 foreach (var attendedDbContext in activeTransaction.AttendedDbContexts)
                 {
                     //iocResolver.Release(attendedDbContext);
+                    attendedDbContext.Dispose();
                 }
-
+                activeTransaction.StarterDbContext.Dispose();
                 //iocResolver.Release(activeTransaction.StarterDbContext);
             }
 

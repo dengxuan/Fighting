@@ -1,8 +1,8 @@
 ﻿using Dapper.Contrib.Extensions;
 using Fighting.Storaging.Entities.Abstractions;
 using Fighting.Storaging.Repositories.Abstractions;
-using Fighting.Storaging.Transactions;
-using Fighting.Storaging.Transactions.Abstractions;
+using Fighting.Storaging.Data.Transactions;
+using Fighting.Storaging.Data.Transactions.Abstractions;
 using System;
 using System.Data;
 using System.Linq;

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Fighting.Storaging.Transactions
+namespace Fighting.Storaging.Data.Transactions
 {
     public class ActiveTransactionProviderArgs : Dictionary<string, object>
     {

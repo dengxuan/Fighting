@@ -17,7 +17,7 @@ namespace Fighting.DependencyInjection.Builder
             Services.Scan(scanner =>
             {
                 scanner.FromApplicationDependencies()
-                       .AddClasses(fiter => fiter.WithAttribute<ISingletonDependencyAttribute>())
+                       .AddClasses(fiter => fiter.WithAttribute<SingletonDependencyAttribute>())
                        .UsingRegistrationStrategy(RegistrationStrategy.Skip)
                        .AsImplementedInterfaces()
                        .AsSelf()

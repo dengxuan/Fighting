@@ -71,7 +71,7 @@ namespace Baibaocp.LotteryOrdering.Scheduling.Hosting
                         {
                             storageBuilder.UseEntityFrameworkCore<LotteryOrderingDbContext>(optionsBuilder =>
                             {
-                                optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
+                                //optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
                             });
                             storageBuilder.UseEntityFrameworkCore<BaibaocpStorageContext>(optionsBuilder =>
                             {

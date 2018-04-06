@@ -18,7 +18,7 @@ namespace Fighting.Storaging.EntityFrameworkCore.Uow
 
         private readonly IDbContextResolver _dbContextResolver;
 
-        private readonly IEntityFrameworkCoreTransactionStrategy _transactionStrategy;
+        private readonly ITransactionStrategy _transactionStrategy;
         protected IServiceProvider IocResolver { get; }
 
         protected IDictionary<string, DbContext> ActiveDbContexts { get; }
@@ -31,7 +31,7 @@ namespace Fighting.Storaging.EntityFrameworkCore.Uow
             IConnectionStringResolver connectionStringResolver,
             IDbContextResolver dbContextResolver,
             IUnitOfWorkDefaultOptions defaultOptions,
-            IEntityFrameworkCoreTransactionStrategy transactionStrategy) : base(connectionStringResolver, defaultOptions)
+            ITransactionStrategy transactionStrategy) : base(connectionStringResolver, defaultOptions)
         {
             IocResolver = iocResolver;
             _dbContextResolver = dbContextResolver;

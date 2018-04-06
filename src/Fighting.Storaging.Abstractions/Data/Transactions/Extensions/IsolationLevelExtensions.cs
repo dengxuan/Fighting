@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace Fighting.Storaging.Transactions.Extensions
+namespace Fighting.Storaging.Data.Transactions.Extensions
 {
     public static class IsolationLevelExtensions
     {

@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Fighting.Storaging.Transactions.Abstractions
+namespace Fighting.Storaging.Data.Transactions.Abstractions
 {
     public interface IActiveTransactionProvider
     {
