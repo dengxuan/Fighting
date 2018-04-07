@@ -119,6 +119,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryTrading.Tra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryTrading.TradeLogging.Hosting", "src\Baibaocp.LotteryTrading.TradeLogging.Hosting\Baibaocp.LotteryTrading.TradeLogging.Hosting.csproj", "{CAD0CF3F-9934-4DC5-8F4B-F2563919DC3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fighting.Extensions.Aspects.Abstractions", "src\Fighting.Extensions.Aspects.Abstractions\Fighting.Extensions.Aspects.Abstractions.csproj", "{F4C486E6-4D0E-4713-867D-3E491E064DBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -325,6 +327,10 @@ Global
 		{CAD0CF3F-9934-4DC5-8F4B-F2563919DC3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAD0CF3F-9934-4DC5-8F4B-F2563919DC3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAD0CF3F-9934-4DC5-8F4B-F2563919DC3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4C486E6-4D0E-4713-867D-3E491E064DBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4C486E6-4D0E-4713-867D-3E491E064DBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4C486E6-4D0E-4713-867D-3E491E064DBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4C486E6-4D0E-4713-867D-3E491E064DBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
