@@ -2,6 +2,7 @@
 {
     public class ScoreValue
     {
+
         internal ScoreValue(int home, int guest)
         {
             Home = home;
@@ -62,6 +63,14 @@
 
     public class SportsMatchResult
     {
+        public bool IsCanceled
+        {
+            get
+            {
+                return FinalScore.Home == -1 && FinalScore.Guest == -1;
+            }
+        }
+
         internal SportsMatchResult(string halfScore, string finalScore)
         {
             string[] halfResult = halfScore.Split(':');
