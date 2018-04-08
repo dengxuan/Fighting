@@ -3,7 +3,6 @@ using Fighting.Reflection;
 using Fighting.Storaging.Entities.Abstractions;
 using Fighting.Storaging.EntityFrameworkCore.Abstractions;
 using Fighting.Storaging.EntityFrameworkCore.Repositories;
-using Fighting.Storaging.EntityFrameworkCore.Uow;
 using Fighting.Storaging.Repositories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,12 +15,10 @@ namespace Fighting.Storaging.EntityFrameworkCore.DependencyInjection
 {
     public static class EntityFrameworkCoreStoragingBuilderExtensions
     {
-        public static StorageBuilder UseEntityFrameworkCore<TDbContext>(this StorageBuilder storageBuilder, Action<DbContextOptionsBuilder> optionAction) where TDbContext : StorageContext
+        public static StorageBuilder AddEntityFrameworkCore<TDbContext>(this StorageBuilder storageBuilder, Action<DbContextOptionsBuilder> optionAction) where TDbContext : StorageContext
         {
-            storageBuilder.Services.AddTransient<IDbContextProvider<TDbContext>, UnitOfWorkDbContextProvider<TDbContext>>();
-            storageBuilder.Services.AddDbContext<TDbContext>(ServiceLifetime.Transient, ServiceLifetime.Transient);
-            storageBuilder.Services.AddTransient<ITransactionStrategy, DbContextTransactionStrategy>();
-            storageBuilder.Services.AddTransient<IDbContextResolver, DefaultDbContextResolver>();
+            storageBuilder.Services.AddTransient<IDbContextProvider<TDbContext>, DefaultDbContextProvider<TDbContext>>();
+            storageBuilder.Services.AddDbContext<TDbContext>(optionAction, ServiceLifetime.Transient, ServiceLifetime.Transient);
             RegisterRepository<TDbContext>(storageBuilder.Services);
             return storageBuilder;
         }

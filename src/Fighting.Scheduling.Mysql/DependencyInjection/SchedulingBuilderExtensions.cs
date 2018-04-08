@@ -16,7 +16,7 @@ namespace Fighting.Scheduling.Mysql.DependencyInjection
             schedulingBuilder.Services.TryAddSingleton<IScheduleStore, ScheduleStorage>();
             schedulingBuilder.FightBuilder.ConfigureStorage(setupAction =>
             {
-                setupAction.UseEntityFrameworkCore<ScheduleDbContext>(optionsBuilder =>
+                setupAction.AddEntityFrameworkCore<ScheduleDbContext>(optionsBuilder =>
                 {
                     optionsBuilder.UseMySql(schedulingConfiguration.DefaultConnection);
                 });

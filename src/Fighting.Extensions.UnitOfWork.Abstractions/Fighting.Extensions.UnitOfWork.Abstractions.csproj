@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Fighting.Extensions.UnitOfWork</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fighting.Storaging.Abstractions\Fighting.Storaging.Abstractions.csproj" />
+    <ProjectReference Include="..\Fighting\Fighting.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -48,7 +48,7 @@ namespace Baibaocp.LotteryNotifier
                     byte[] bytes = await responseMessage.Content.ReadAsByteArrayAsync();
                     Handle result = _serializer.Deserialize<Handle>(bytes);
                     _logger.LogInformation("Notice {0} result:{1}", message.LvpOrderId, result);
-                    return result.Ret == 0;
+                    return true;
                 });
             }
             catch (Exception ex)

@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Fighting.Extensions.Aspects.Abstractions\Fighting.Extensions.Aspects.Abstractions.csproj" />
     <ProjectReference Include="..\Fighting.Storaging.Abstractions\Fighting.Storaging.Abstractions.csproj" />
   </ItemGroup>
 

@@ -14,9 +14,9 @@ namespace Fighting.Aspects.Interceptors
     public static class InterceptorChainBuilderExtensions
     {
         private delegate Task InvokeDelegate(object interceptor, InvocationContext context, IServiceProvider serviceProvider);
-        private static MethodInfo _getServiceMethod = typeof(InterceptorChainBuilderExtensions).GetTypeInfo().GetMethod("GetService", BindingFlags.Static | BindingFlags.NonPublic);
+        private static readonly MethodInfo _getServiceMethod = typeof(InterceptorChainBuilderExtensions).GetTypeInfo().GetMethod("GetService", BindingFlags.Static | BindingFlags.NonPublic);
         private static Dictionary<Type, InvokeDelegate> _invokers = new Dictionary<Type, InvokeDelegate>();
-        private static object _syncHelper = new object();
+        private static object _locker = new object();
 
         /// <summary>
         /// Register the interceptor of <typeparamref name="TInterceptor"/> type to specified interceptor chain builder.
@@ -69,7 +69,7 @@ namespace Fighting.Aspects.Interceptors
                 return true;
             }
 
-            lock (_syncHelper)
+            lock (_locker)
             {
                 if (_invokers.TryGetValue(interceptorType, out invoker))
                 {
