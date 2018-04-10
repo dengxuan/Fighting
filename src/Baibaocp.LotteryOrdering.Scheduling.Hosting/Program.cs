@@ -21,7 +21,10 @@ using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
 using System;
+using Fighting.Extensions.UnitOfWork.DependencyInjection;
+using Fighting.Extensions.UnitOfWork.EntityFrameworkCore.DependencyInjection;
 using System.Threading.Tasks;
+using Fighting.Scheduling.Mysql;
 
 namespace Baibaocp.LotteryOrdering.Scheduling.Hosting
 {
@@ -67,6 +70,12 @@ namespace Baibaocp.LotteryOrdering.Scheduling.Hosting
                         {
                             lotteryCaclulatingBuilder.UseLotteryCalculating();
                         });
+
+                        fightBuilder.AddUnitOfWork(unitOfWorkBuilder =>
+                        {
+                            unitOfWorkBuilder.UseEntityFrameworkCore(typeof(LotteryOrderingDbContext), typeof(BaibaocpStorageContext), typeof(ScheduleDbContext));
+                        });
+
                         fightBuilder.ConfigureStorage(storageBuilder =>
                         {
                             storageBuilder.AddEntityFrameworkCore<LotteryOrderingDbContext>(optionsBuilder =>

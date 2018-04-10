@@ -19,7 +19,7 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
     public class OrderingApplicationService : ApplicationService, IOrderingApplicationService
     {
 
-        private readonly StorageConfiguration _options;
+        private readonly StorageOptions _options;
 
         private readonly IIdentityGenerater _identityGenerater;
 
@@ -32,7 +32,7 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
         private readonly IRepository<LotterySportsMatch, long> _lotterySportsMatchRepository;
 
 
-        public OrderingApplicationService(StorageConfiguration options, IRepository<LotteryPhase, int> lotteryPhaseRepository, IRepository<LotteryMerchanteOrder, string> orderingReoository, IRepository<LotterySportsMatch, long> lotterySportsMatchRepository, ILogger<OrderingApplicationService> logger, IIdentityGenerater identityGenerater, ICacheManager cacheManager) : base(cacheManager)
+        public OrderingApplicationService(StorageOptions options, IRepository<LotteryPhase, int> lotteryPhaseRepository, IRepository<LotteryMerchanteOrder, string> orderingReoository, IRepository<LotterySportsMatch, long> lotterySportsMatchRepository, ILogger<OrderingApplicationService> logger, IIdentityGenerater identityGenerater, ICacheManager cacheManager) : base(cacheManager)
         {
             _options = options;
             _logger = logger;
@@ -51,7 +51,7 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
         {
             string id = _identityGenerater.Generate().ToString();
             DateTime expectedBonusTime = DateTime.Now;
-            if (issueNumber.HasValue)
+            if (issueNumber.HasValue && issueNumber != 0)
             {
                 var phaseNumber = await _lotteryPhaseRepository.FirstOrDefaultAsync(predicate => predicate.LotteryId == lotteryId && predicate.IssueNumber == issueNumber);
                 expectedBonusTime = phaseNumber.EndTime;

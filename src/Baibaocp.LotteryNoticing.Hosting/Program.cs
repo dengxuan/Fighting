@@ -9,7 +9,6 @@ using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
 using System.Threading.Tasks;
-
 namespace Baibaocp.LotteryNotifier.Hongdan
 {
     class Program

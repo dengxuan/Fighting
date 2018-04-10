@@ -133,7 +133,11 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                 {
                     return new FailureHandle();
                 }
+#if DEBUG
+                return new WinningHandle(10000, 10000);
+#else
                 return new WaitingHandle();
+#endif
             }
             throw new ArgumentException("No command found");
         }

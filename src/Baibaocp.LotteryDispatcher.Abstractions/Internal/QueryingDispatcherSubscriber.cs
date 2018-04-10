@@ -95,7 +95,6 @@ namespace Baibaocp.LotteryDispatching.Internal
                             }
                         case WaitingHandle waiting:
                             {
-                                await Task.Delay(TimeSpan.FromSeconds(waiting.DelayTime));
                                 return new Nack();
                             }
                     }

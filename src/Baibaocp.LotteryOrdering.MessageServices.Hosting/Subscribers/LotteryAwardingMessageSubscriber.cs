@@ -3,6 +3,7 @@ using Baibaocp.LotteryNotifier.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
+using Fighting.Extensions.UnitOfWork.Abstractions;
 using Fighting.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -36,15 +37,20 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 {
                     _logger.LogInformation("Received awarding message: {0} {1}", message.LdpOrderId, message.LdpMerchanerId);
                     IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
-                    if (message.Content.AwatdingType == LotteryAwardingTypes.Winning)
+                    IUnitOfWorkManager unitOfWorkManager = _iocResolver.GetRequiredService<IUnitOfWorkManager>();
+                    using (var uow = unitOfWorkManager.Begin())
                     {
-                        await orderingApplicationService.WinningAsync(message.LdpOrderId, message.Content.BonusAmount, message.Content.AftertaxBonusAmount);
+                        if (message.Content.AwatdingType == LotteryAwardingTypes.Winning)
+                        {
+                            await orderingApplicationService.WinningAsync(message.LdpOrderId, message.Content.BonusAmount, message.Content.AftertaxBonusAmount);
+                        }
+                        else
+                        {
+                            await orderingApplicationService.LoseingAsync(message.LdpOrderId);
+                        }
+                        uow.Complete();
+                        return new Ack();
                     }
-                    else
-                    {
-                        await orderingApplicationService.LoseingAsync(message.LdpOrderId);
-                    }
-                    return new Ack();
                 }
                 catch (Exception ex)
                 {

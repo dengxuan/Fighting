@@ -5,6 +5,7 @@ using Baibaocp.LotteryOrdering.Core.Entities.Merchantes;
 using Baibaocp.LotteryOrdering.MessageServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Fighting.Abstractions;
+using Fighting.Extensions.UnitOfWork.Abstractions;
 using Fighting.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -41,17 +42,23 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 try
                 {
                     ILotteryMerchanterApplicationService lotteryMerchanterApplicationService = _iocResolver.GetRequiredService<ILotteryMerchanterApplicationService>();
-                    /* 此处必须保证投注渠道已经开通相应的彩种和出票渠道*/
-                    string ldpVenderId = await lotteryMerchanterApplicationService.FindLdpMerchanterIdAsync(message.LvpVenderId, message.LotteryId);
-                    if (string.IsNullOrEmpty(ldpVenderId))
+
+                    IUnitOfWorkManager unitOfWorkManager = _iocResolver.GetRequiredService<IUnitOfWorkManager>();
+                    using (var uow = unitOfWorkManager.Begin())
                     {
-                        _logger.LogError("当前投注渠道{0}不支持该彩种{1}", message.LvpVenderId, message.LotteryId);
-                        return new Nack();
+                        /* 此处必须保证投注渠道已经开通相应的彩种和出票渠道*/
+                        string ldpVenderId = await lotteryMerchanterApplicationService.FindLdpMerchanterIdAsync(message.LvpVenderId, message.LotteryId);
+                        if (string.IsNullOrEmpty(ldpVenderId))
+                        {
+                            _logger.LogError("当前投注渠道{0}不支持该彩种{1}", message.LvpVenderId, message.LotteryId);
+                            return new Nack();
+                        }
+                        IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
+                        LotteryMerchanteOrder lotteryMerchanteOrder = await orderingApplicationService.CreateAsync(message.LvpOrderId, message.LvpUserId, message.LvpVenderId, message.LotteryId, message.LotteryPlayId, message.IssueNumber, message.InvestCode, message.InvestType, message.InvestCount, message.InvestTimes, message.InvestAmount);
+                        await _dispatchOrderingMessageService.PublishAsync(lotteryMerchanteOrder.Id, ldpVenderId, message);
+                        uow.Complete();
+                        return new Ack();
                     }
-                    IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
-                    LotteryMerchanteOrder lotteryMerchanteOrder = await orderingApplicationService.CreateAsync(message.LvpOrderId, message.LvpUserId, message.LvpVenderId, message.LotteryId, message.LotteryPlayId, message.IssueNumber, message.InvestCode, message.InvestType, message.InvestCount, message.InvestTimes, message.InvestAmount);
-                    await _dispatchOrderingMessageService.PublishAsync(lotteryMerchanteOrder.Id, ldpVenderId, message);
-                    return new Ack();
                 }
                 catch (Exception ex)
                 {

@@ -16,7 +16,7 @@ namespace Baibaocp.Storaging.EntityFrameworkCore
                 .Build();
             var optionsBuilder = new DbContextOptionsBuilder<BaibaocpStorageContext>();
             optionsBuilder.UseMySql(builder.GetConnectionString("Fighting.Storage"));
-            return new BaibaocpStorageContext(new StorageConfiguration { }, optionsBuilder.Options);
+            return new BaibaocpStorageContext(new StorageOptions { }, optionsBuilder.Options);
         }
     }
 }

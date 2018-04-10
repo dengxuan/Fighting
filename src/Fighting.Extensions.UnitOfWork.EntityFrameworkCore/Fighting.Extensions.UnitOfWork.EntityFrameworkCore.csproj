@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Castle.Core.AsyncInterceptor" Version="1.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Fighting.Extensions.UnitOfWork.Abstractions\Fighting.Extensions.UnitOfWork.Abstractions.csproj" />
     <ProjectReference Include="..\Fighting.Storaging.EntityFrameworkCore.Abstractions\Fighting.Storaging.EntityFrameworkCore.Abstractions.csproj" />
   </ItemGroup>

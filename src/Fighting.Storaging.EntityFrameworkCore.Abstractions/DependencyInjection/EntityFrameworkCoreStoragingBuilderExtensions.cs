@@ -6,6 +6,7 @@ using Fighting.Storaging.EntityFrameworkCore.Repositories;
 using Fighting.Storaging.Repositories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,10 @@ namespace Fighting.Storaging.EntityFrameworkCore.DependencyInjection
 {
     public static class EntityFrameworkCoreStoragingBuilderExtensions
     {
-        public static StorageBuilder AddEntityFrameworkCore<TDbContext>(this StorageBuilder storageBuilder, Action<DbContextOptionsBuilder> optionAction) where TDbContext : StorageContext
+        public static StorageBuilder AddEntityFrameworkCore<TDbContext>(this StorageBuilder storageBuilder, Action<DbContextOptionsBuilder> optionsAction) where TDbContext : StorageContext
         {
-            storageBuilder.Services.AddTransient<IDbContextProvider<TDbContext>, DefaultDbContextProvider<TDbContext>>();
-            storageBuilder.Services.AddDbContext<TDbContext>(optionAction, ServiceLifetime.Transient, ServiceLifetime.Transient);
+            storageBuilder.Services.TryAddTransient<IDbContextProvider<TDbContext>, DefaultDbContextProvider<TDbContext>>();
+            storageBuilder.Services.AddDbContext<TDbContext>(optionsAction,ServiceLifetime.Transient, ServiceLifetime.Transient);
             RegisterRepository<TDbContext>(storageBuilder.Services);
             return storageBuilder;
         }

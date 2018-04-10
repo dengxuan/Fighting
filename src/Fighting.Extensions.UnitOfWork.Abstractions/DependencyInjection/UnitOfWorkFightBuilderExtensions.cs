@@ -1,15 +1,17 @@
 ﻿using Fighting.DependencyInjection.Builder;
-using Microsoft.Extensions.DependencyInjection;
+using Fighting.Extensions.UnitOfWork.DependencyInjection.Builder;
 using System;
 
-namespace Fighting.Extensions.UnitOfWork.Abstractions.DependencyInjection
+namespace Fighting.Extensions.UnitOfWork.DependencyInjection
 {
     public static class UnitOfWorkFightBuilderExtensions
     {
-        public static StorageBuilder AddUnitOfWork(this StorageBuilder storageBuilder, Action<UnitOfWorkOptions> configure)
+        public static FightBuilder AddUnitOfWork(this FightBuilder fightBuilder, Action<UnitOfWorkBuilder> buildAction)
         {
-            storageBuilder.Services.Configure(configure);
-            return storageBuilder;
+            UnitOfWorkBuilder builder = new UnitOfWorkBuilder(fightBuilder.Services);
+            buildAction?.Invoke(builder);
+            builder.Build();
+            return fightBuilder;
         }
     }
 }

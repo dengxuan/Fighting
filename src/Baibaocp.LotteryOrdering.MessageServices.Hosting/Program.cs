@@ -23,7 +23,7 @@ using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
 using Fighting.Extensions.UnitOfWork.EntityFrameworkCore.DependencyInjection;
-using Fighting.Extensions.UnitOfWork.Abstractions.DependencyInjection;
+using Fighting.Extensions.UnitOfWork.DependencyInjection;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryOrdering.MessageServices
@@ -73,9 +73,13 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                             });
                         });
 
+                        fightBuilder.AddUnitOfWork(unitOfWorkBuilder =>
+                        {
+                            unitOfWorkBuilder.UseEntityFrameworkCore(typeof(LotteryOrderingDbContext), typeof(BaibaocpStorageContext));
+                        });
+
                         fightBuilder.ConfigureStorage(storageBuilder =>
                         {
-                            storageBuilder.AddUnitOfWork(configure=> { });
                             storageBuilder.AddEntityFrameworkCore<LotteryOrderingDbContext>(optionsBuilder =>
                             {
                                 optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));

@@ -32,6 +32,7 @@ namespace Fighting.Storaging.EntityFrameworkCore.Repositories
         public override void Delete(TEntity entity)
         {
             Context.Remove(entity);
+            Context.SaveChanges();
         }
 
         public override void Delete(TPrimaryKey id)
@@ -48,12 +49,14 @@ namespace Fighting.Storaging.EntityFrameworkCore.Repositories
         public override TEntity Insert(TEntity entity)
         {
             Context.Add(entity);
+            Context.SaveChanges();
             return entity;
         }
 
         public override TEntity Update(TEntity entity)
         {
             Context.Update(entity);
+            Context.SaveChanges();
             return entity;
         }
     }

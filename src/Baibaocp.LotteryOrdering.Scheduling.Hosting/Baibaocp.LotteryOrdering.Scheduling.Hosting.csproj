@@ -19,6 +19,7 @@
     <ProjectReference Include="..\Baibaocp.LotteryNoticing.MessageServices.Publisher\Baibaocp.LotteryNoticing.MessageServices.Publisher.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.ApplicationServices\Baibaocp.LotteryOrdering.ApplicationServices.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.Scheduling\Baibaocp.LotteryOrdering.Scheduling.csproj" />
+    <ProjectReference Include="..\Fighting.Extensions.UnitOfWork.EntityFrameworkCore\Fighting.Extensions.UnitOfWork.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
     <ProjectReference Include="..\Fighting.Scheduling.Mysql\Fighting.Scheduling.Mysql.csproj" />
   </ItemGroup>

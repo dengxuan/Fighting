@@ -3,6 +3,7 @@ using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.Scheduling;
 using Baibaocp.LotteryOrdering.Scheduling.Abstractions;
+using Fighting.Extensions.UnitOfWork.Abstractions;
 using Fighting.Hosting;
 using Fighting.Scheduling.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,23 +39,28 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                 try
                 {
                     IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
-                    if (message.Content.TicketingType == LotteryTicketingTypes.Success)
+                    IUnitOfWorkManager unitOfWorkManager = _iocResolver.GetRequiredService<IUnitOfWorkManager>();
+                    using (var uow = unitOfWorkManager.Begin())
                     {
-                        var order = await orderingApplicationService.TicketedAsync(message.LdpOrderId, message.LdpMerchanerId, message.Content.TicketedNumber, message.Content.TicketedTime, message.Content.TicketedOdds);
-                        await _schedulerManager.EnqueueAsync<ILotteryAwardingScheduler, AwardingScheduleArgs>(new AwardingScheduleArgs
+                        if (message.Content.TicketingType == LotteryTicketingTypes.Success)
                         {
-                            LdpOrderId = message.LdpOrderId,
-                            LdpMerchanerId = message.LdpMerchanerId,
-                            LvpOrderId = message.Content.LvpOrderId,
-                            LvpMerchanerId = message.Content.LvpMerchanerId
-                        }, delay: order.ExpectedBonusTime - DateTime.Now);
+                            var order = await orderingApplicationService.TicketedAsync(message.LdpOrderId, message.LdpMerchanerId, message.Content.TicketedNumber, message.Content.TicketedTime, message.Content.TicketedOdds);
+                            await _schedulerManager.EnqueueAsync<ILotteryAwardingScheduler, AwardingScheduleArgs>(new AwardingScheduleArgs
+                            {
+                                LdpOrderId = message.LdpOrderId,
+                                LdpMerchanerId = message.LdpMerchanerId,
+                                LvpOrderId = message.Content.LvpOrderId,
+                                LvpMerchanerId = message.Content.LvpMerchanerId
+                            }, delay: order.ExpectedBonusTime - DateTime.Now);
+                        }
+                        else
+                        {
+                            await orderingApplicationService.RejectedAsync(message.LdpOrderId);
+                        }
+                        _logger.LogTrace("Received ticketing message: {1} {0}", message.LdpMerchanerId, message.LdpOrderId);
+                        uow.Complete();
+                        return new Ack();
                     }
-                    else
-                    {
-                        await orderingApplicationService.RejectedAsync(message.LdpOrderId);
-                    }
-                    _logger.LogTrace("Received ticketing message: {1} {0}", message.LdpMerchanerId, message.LdpOrderId);
-                    return new Ack();
                 }
                 catch (Exception ex)
                 {

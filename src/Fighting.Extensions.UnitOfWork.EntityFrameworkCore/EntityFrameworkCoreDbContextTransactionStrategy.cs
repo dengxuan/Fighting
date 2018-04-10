@@ -29,7 +29,7 @@ namespace Fighting.Extensions.UnitOfWork.EntityFrameworkCore
         public DbContext CreateDbContext<TDbContext>(IDbContextResolver dbContextResolver) where TDbContext : DbContext
         {
             DbContext dbContext;
-            if (ActiveTransactions.TryGetValue(typeof(DbContext), out ActiveTransaction activeTransaction) == false)
+            if (ActiveTransactions.TryGetValue(typeof(TDbContext), out ActiveTransaction activeTransaction) == false)
             {
                 dbContext = dbContextResolver.Resolve<TDbContext>(null);
 
