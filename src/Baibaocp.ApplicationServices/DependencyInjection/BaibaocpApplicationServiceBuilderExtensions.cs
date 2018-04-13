@@ -10,6 +10,7 @@ namespace Baibaocp.ApplicationServices.DependencyInjection
         {
             applicationServiceBuilder.Services.AddSingleton<ILotteryMerchanterApplicationService, LotteryMerchanterApplicationService>();
             applicationServiceBuilder.Services.AddSingleton<ILotterySportsMatchApplicationService, LotterySportsMatchApplicationService>();
+            applicationServiceBuilder.Services.AddSingleton<ILotteryPhaseApplicationService, LotteryIssueApplicationService>();
             return applicationServiceBuilder;
         }
     }
