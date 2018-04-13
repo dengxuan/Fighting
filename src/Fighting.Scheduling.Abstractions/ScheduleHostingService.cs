@@ -1,8 +1,7 @@
-﻿using Fighting.Extensions.Threading;
-using Fighting.Hosting;
+﻿using Fighting.Hosting;
 using Fighting.Scheduling.Abstractions;
-using Fighting.Threading.Works;
 using Fighting.Timing;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -14,26 +13,25 @@ namespace Baibaocp.LotteryOrdering.Hosting
 {
     public class ScheduleHostingService : BackgroundService
     {
-        private readonly IScheduleStore _store;
 
         private readonly IServiceProvider _iocResolver;
 
         private readonly ILogger<ScheduleHostingService> _logger;
 
-        public ScheduleHostingService(IScheduleStore store, IServiceProvider iocResolver, ILogger<ScheduleHostingService> logger)
+        public ScheduleHostingService(IServiceProvider iocResolver, ILogger<ScheduleHostingService> logger)
         {
-            _store = store;
             _iocResolver = iocResolver;
             _logger = logger;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            IScheduleStore store = _iocResolver.GetRequiredService<IScheduleStore>();
             return Task.Run(async () =>
             {
                 while (!stoppingToken.IsCancellationRequested)
                 {
-                    var schedules = await _store.GetWaitingSchedulesAsync(1000);
+                    var schedules = await store.GetWaitingSchedulesAsync(1000);
 
                     foreach (var schedule in schedules)
                     {
@@ -61,7 +59,7 @@ namespace Baibaocp.LotteryOrdering.Hosting
 
                     bool result = await (schedulerExecuteMethod.Invoke(scheduler, new[] { argsObject }) as Task<bool>);
 
-                    if(result == false)
+                    if (result == false)
                     {
                         var nextTryTime = schedule.CalculateNextTryTime();
                         if (nextTryTime.HasValue)
@@ -72,7 +70,8 @@ namespace Baibaocp.LotteryOrdering.Hosting
                     }
                     else
                     {
-                        await _store.DeleteAsync(schedule);
+                        IScheduleStore store = _iocResolver.GetRequiredService<IScheduleStore>();
+                        await store.DeleteAsync(schedule);
                     }
                 }
                 catch (Exception ex)
@@ -106,7 +105,8 @@ namespace Baibaocp.LotteryOrdering.Hosting
         {
             try
             {
-                await _store.UpdateAsync(schedule);
+                IScheduleStore store = _iocResolver.GetRequiredService<IScheduleStore>();
+                await store.UpdateAsync(schedule);
             }
             catch (Exception ex)
             {

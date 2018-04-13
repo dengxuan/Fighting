@@ -55,6 +55,10 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
             {
                 var phaseNumber = await _lotteryPhaseRepository.FirstOrDefaultAsync(predicate => predicate.LotteryId == lotteryId && predicate.IssueNumber == issueNumber);
                 expectedBonusTime = phaseNumber.EndTime;
+                if (issueNumber < 100)
+                {
+                    expectedBonusTime = expectedBonusTime.AddHours(1.5);
+                }
             }
             else
             {

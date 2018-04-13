@@ -126,15 +126,26 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                 {
                     string odds = document.Element("ActionResult").Element("xValue").Value.Split('_')[3];
                     string oddsXml = DeflateDecompress(odds);
-                    IList<(string Id, DateTime? Time, string Odds)> results = ResolveTicketResults(message.LotteryId, oddsXml);
-                    return new SuccessHandle(results[0].Id, results[0].Time, results[0].Odds);
+                    if (message.LotteryId > 20200)
+                    {
+                        IList<(string Id, DateTime? Time, string Odds)> results = ResolveTicketResults(message.LotteryId, oddsXml);
+                        return new SuccessHandle(results[0].Id, results[0].Time, results[0].Odds);
+                    }
+                    return new SuccessHandle(oddsXml, DateTime.Now);
                 }
                 else if (Status.Equals("2003"))
                 {
                     return new FailureHandle();
                 }
 #if DEBUG
-                return new WinningHandle(10000, 10000);
+                if (message.QueryingType == QueryingTypes.Awarding)
+                {
+                    return new WinningHandle(10000, 10000);
+                }
+                else
+                {
+                    return new WaitingHandle();
+                }
 #else
                 return new WaitingHandle();
 #endif
