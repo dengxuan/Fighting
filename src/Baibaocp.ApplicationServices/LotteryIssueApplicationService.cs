@@ -24,7 +24,7 @@ namespace Baibaocp.ApplicationServices
             ICache cache = CacheManager.GetCache("LotteryPhases");
             return cache.GetAsync($"{lotteryId}-{issueNumber}", (key) =>
             {
-                return _lotteryIssueRepository.FirstOrDefault(predicate => predicate.IssueNumber == issueNumber);
+                return _lotteryIssueRepository.FirstOrDefault(predicate => predicate.LotteryId == lotteryId && predicate.IssueNumber == issueNumber);
             });
         }
 

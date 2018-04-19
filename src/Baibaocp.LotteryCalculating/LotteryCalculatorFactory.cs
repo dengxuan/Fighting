@@ -27,10 +27,23 @@ namespace Baibaocp.LotteryCalculating
             { 20204 , typeof(FootballCalculator) },
             { 20205 , typeof(FootballCalculator) },
             { 20206 , typeof(FootballCalculator) },
+
             /*十一选五*/
             { 10122 , typeof(SyxwCalculator) },
+
+            /* 快三*/
+            { 10412, typeof(KsCalculator) },
+
+            /* 3D排三排五 */
+            {31, typeof(SdPlsCalculator) },
+            {30, typeof(SdPlsCalculator) },
+            {40, typeof(SdPlsCalculator) },
+
+            {5,typeof(QxcCalculator) },
+
             /*大乐透*/
             { 2,typeof(DltCalculator)},
+
             /*双色球*/
             { 1,typeof(SsqCalculator)}
         };

@@ -31,7 +31,7 @@ namespace Baibaocp.LotteryOrdering.Hosting
             {
                 while (!stoppingToken.IsCancellationRequested)
                 {
-                    var schedules = await store.GetWaitingSchedulesAsync(1000);
+                    var schedules = await store.GetWaitingSchedulesAsync(100000);
 
                     foreach (var schedule in schedules)
                     {

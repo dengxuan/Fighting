@@ -29,7 +29,7 @@ namespace Baibaocp.Storaging.Entities.Merchants
             return Task.FromResult(isConsains);
         }
 
-        public async Task CreateAsync(string merchanterId, string orderId, int amount, int balance, int operationType, int? lotteryId = null)
+        public async Task CreateAsync(string merchanterId, string orderId, decimal amount, decimal balance, int operationType, int? lotteryId = null)
         {
             MerchanterAccountLogging tradeLogging = new MerchanterAccountLogging
             {

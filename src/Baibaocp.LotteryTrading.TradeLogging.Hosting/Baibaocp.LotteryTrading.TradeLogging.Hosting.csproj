@@ -28,6 +28,7 @@
     <ProjectReference Include="..\Baibaocp.ApplicationServices\Baibaocp.ApplicationServices.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryOrdering.ApplicationServices\Baibaocp.LotteryOrdering.ApplicationServices.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryTrading.TradeLogging\Baibaocp.LotteryTrading.TradeLogging.csproj" />
+    <ProjectReference Include="..\Fighting.Extensions.UnitOfWork.EntityFrameworkCore\Fighting.Extensions.UnitOfWork.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
 </Project>

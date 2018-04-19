@@ -2,6 +2,7 @@
 using Baibaocp.LotteryNotifier.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
+using Fighting.Extensions.UnitOfWork.Abstractions;
 using Fighting.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -36,11 +37,19 @@ namespace Baibaocp.LotteryTrading.TradeLogging.Subscribers
                 {
                     if (message.Content.TicketingType == LotteryTicketingTypes.Success)
                     {
-                        IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
-                        var order = await orderingApplicationService.FindOrderAsync(message.LdpOrderId);
-                        ILotteryMerchanterApplicationService lotteryMerchanterApplicationService = _iocResolver.GetRequiredService<ILotteryMerchanterApplicationService>();
-                        await lotteryMerchanterApplicationService.Ticketing(message.LdpMerchanerId, order.Id, order.LotteryId, order.InvestAmount);
-                        await lotteryMerchanterApplicationService.Ticketing(order.LvpVenderId, order.LvpOrderId, order.LotteryId, order.InvestAmount);
+                        IUnitOfWorkManager unitOfWorkManager = _iocResolver.GetRequiredService<IUnitOfWorkManager>();
+                        using (var uow = unitOfWorkManager.Begin())
+                        {
+                            IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
+                            var order = await orderingApplicationService.FindOrderAsync(message.LdpOrderId);
+                            if (order == null)
+                            {
+                                return new Ack();
+                            }
+                            ILotteryMerchanterApplicationService lotteryMerchanterApplicationService = _iocResolver.GetRequiredService<ILotteryMerchanterApplicationService>();
+                            await lotteryMerchanterApplicationService.Ticketing(message.LdpMerchanerId, order.Id, order.LotteryId, order.InvestAmount);
+                            await lotteryMerchanterApplicationService.Ticketing(order.LvpVenderId, order.LvpOrderId, order.LotteryId, order.InvestAmount);
+                        }
                     }
                     _logger.LogInformation("Received ticketing message: {1} {0}", message.LdpMerchanerId, message.LdpOrderId);
                     return new Ack();

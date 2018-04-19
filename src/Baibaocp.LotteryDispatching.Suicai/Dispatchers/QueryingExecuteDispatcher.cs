@@ -35,12 +35,12 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
         }
 
 
-        public async Task<IQueryingHandle> DispatchAsync(QueryingDispatchMessage executer)
+        public async Task<IQueryingHandle> DispatchAsync(QueryingDispatchMessage message)
         {
             try
             {
                 string content = string.Empty;
-                string rescontent = await Send(executer);
+                string rescontent = await Send(message);
                 bool handle = Verify(rescontent, out content);
                 if (handle)
                 {
@@ -56,41 +56,49 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
                         }
                         else if (Status.Equals("2"))
                         {
-                            if (executer.QueryingType == QueryingTypes.Awarding)
+                            if (message.QueryingType == QueryingTypes.Awarding)
                             {
-
                                 string awardStatus = json["awardStatus"].ToString();
                                 if (awardStatus.Equals("0"))
                                 {
-                                    return new WaitingHandle();
+#if DEBUG
+                                    if (message.QueryingType == QueryingTypes.Awarding)
+                                    {
+                                        return new WinningHandle(10000, 10000);
+                                    }
+                                    else
+                                    {
+                                        return new WaitingHandle();
+                                    }
+#else
+                return new WaitingHandle();
+#endif
                                 }
                                 else if (awardStatus.Equals("1"))
                                 {
                                     return new LoseingHandle();
                                 }
-                                else if (awardStatus.Equals("2"))
+                                else if (awardStatus.Equals("2") || Status.Equals("3"))
                                 {
-                                    if (executer.LotteryId == (int)LotteryTypes.GxSyxw)
-                                    {
-                                        int bonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100);
-                                        int totalTax = (int)(Convert.ToDecimal(json["totalPrize"]) * 100);
-                                        int aftertaxBonusAmount = bonusAmount - totalTax;
-                                        return new WinningHandle(bonusAmount, aftertaxBonusAmount);
-                                    }
-                                }
-                                else if (Status.Equals("3"))
-                                {
-                                    if (executer.LotteryId != (int)LotteryTypes.GxSyxw)
-                                    {
-                                        int bonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100);
-                                        int totalTax = (int)(Convert.ToDecimal(json["totalPrize"]) * 100);
-                                        int aftertaxBonusAmount = bonusAmount - totalTax;
-                                        return new WinningHandle(bonusAmount, aftertaxBonusAmount);
-                                    }
+                                    int bonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100);
+                                    int totalTax = (int)(Convert.ToDecimal(json["totalPrize"]) * 100);
+                                    int aftertaxBonusAmount = bonusAmount - totalTax;
+                                    return new WinningHandle(bonusAmount, aftertaxBonusAmount);
                                 }
                                 else
                                 {
-                                    return new WaitingHandle();
+#if DEBUG
+                                    if (message.QueryingType == QueryingTypes.Awarding)
+                                    {
+                                        return new WinningHandle(10000, 10000);
+                                    }
+                                    else
+                                    {
+                                        return new WaitingHandle();
+                                    }
+#else
+                return new WaitingHandle();
+#endif
                                 }
                             }
                             else
