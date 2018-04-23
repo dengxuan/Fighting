@@ -257,8 +257,8 @@ namespace Baibaocp.LotteryCalculating.Calculators
         {
             string[] codes = code.Split('@');
             string[] draweds = drawedNumber.Split(',');
-            if (codes[0] != drawedNumber.Substring(0, codes[0].Length))
-                return 0;
+            //if (codes[0] != drawedNumber.Substring(0, codes[0].Length))
+            //    return 0;
             List<string> lists = ToSingle(codes[0], codes[1], size);
             string drawed = "";
             for (int i = 0; i < size; i++)
