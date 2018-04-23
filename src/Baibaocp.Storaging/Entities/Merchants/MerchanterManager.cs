@@ -40,6 +40,17 @@ namespace Baibaocp.Storaging.Entities.Merchants
         }
 
         /// <summary>
+        /// 根据商户编号查询商户
+        /// </summary>
+        /// <param name="merchanterId">商户编号</param>
+        /// <returns></returns>
+        public Merchanter FindMerchanter(string merchanterId)
+        {
+            var merchanter = Merchanters.Where(predicate => predicate.Id == merchanterId).FirstOrDefault();
+            return merchanter;
+        }
+
+        /// <summary>
         /// 更新商户
         /// </summary>
         /// <param name="channel"></param>

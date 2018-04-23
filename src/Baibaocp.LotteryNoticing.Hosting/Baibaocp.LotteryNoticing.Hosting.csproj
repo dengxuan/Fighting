@@ -23,8 +23,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Baibaocp.ApplicationServices\Baibaocp.ApplicationServices.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryNoticing.Abstractions\Baibaocp.LotteryNoticing.Abstractions.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryNoticing.MessageServices.Publisher\Baibaocp.LotteryNoticing.MessageServices.Publisher.csproj" />
+    <ProjectReference Include="..\Baibaocp.Storaging.EntityFrameworkCore\Baibaocp.Storaging.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Fighting.Caching.Redis\Fighting.Caching.Redis.csproj" />
+    <ProjectReference Include="..\Fighting.Extensions.UnitOfWork.EntityFrameworkCore\Fighting.Extensions.UnitOfWork.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
   </ItemGroup>
 

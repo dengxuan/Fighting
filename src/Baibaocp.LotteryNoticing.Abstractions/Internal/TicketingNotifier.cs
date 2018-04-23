@@ -1,9 +1,13 @@
-﻿using Baibaocp.LotteryNotifier.Abstractions;
+﻿using Baibaocp.ApplicationServices;
+using Baibaocp.ApplicationServices.Abstractions;
+using Baibaocp.LotteryNotifier.Abstractions;
 using Baibaocp.LotteryNotifier.MessageServices.Messages;
+using Baibaocp.Storaging.Entities.Merchants;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
 using System;
+using System.Collections.Concurrent;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -11,26 +15,25 @@ namespace Baibaocp.LotteryNotifier
 {
     internal class TicketingNotifier : ITicketingNotifier
     {
+
+        private readonly ConcurrentDictionary<string, Merchanter> _lotteryMerchanters = new ConcurrentDictionary<string, Merchanter>();
+
         private readonly ILogger<TicketingNotifier> _logger;
 
         private readonly RetryPolicy<bool> _policy;
-
-        private readonly LotteryNoticeOptions _options;
 
         private readonly HttpClient _client;
 
         private readonly INoticeSerializer _serializer;
 
-        public TicketingNotifier(LotteryNoticeOptions options, INoticeSerializer serializer, ILogger<TicketingNotifier> logger)
+        private readonly ILotteryMerchanterApplicationService _lotteryMerchanterApplicationService;
+
+        public TicketingNotifier(INoticeSerializer serializer, ILotteryMerchanterApplicationService lotteryMerchanterApplicationService, ILogger<TicketingNotifier> logger)
         {
-            _options = options;
             _serializer = serializer;
             _logger = logger;
-
-            _client = new HttpClient
-            {
-                BaseAddress = new Uri(_options.Configuration.TicketedUrl)
-            };
+            _lotteryMerchanterApplicationService = lotteryMerchanterApplicationService;
+            _client = new HttpClient();
 
             _policy = Policy.Handle<Exception>().OrResult(false).WaitAndRetryAsync(2, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
             {
@@ -42,9 +45,17 @@ namespace Baibaocp.LotteryNotifier
         {
             try
             {
+                Merchanter merchanter = _lotteryMerchanters.GetOrAdd(message.LvpMerchanerId, (merchanterId) =>
+                {
+                    return _lotteryMerchanterApplicationService.FindMerchanterAsync(merchanterId).GetAwaiter().GetResult();
+                });
+                if(merchanter.IsNotice == false)
+                {
+                    return true;
+                }
                 return await _policy.ExecuteAsync(async () =>
                 {
-                    HttpResponseMessage responseMessage = (await _client.PostAsync(_options.Configuration.TicketedUrl, new ByteArrayContent(_serializer.Serialize(new { OrderId = message.LvpOrderId, TicketOdds = message.TicketedOdds, Status = (int)message.TicketingType })))).EnsureSuccessStatusCode();
+                    HttpResponseMessage responseMessage = (await _client.PostAsync(merchanter.TicketAddress, new ByteArrayContent(_serializer.Serialize(new { OrderId = message.LvpOrderId, TicketOdds = message.TicketedOdds, Status = (int)message.TicketingType })))).EnsureSuccessStatusCode();
                     byte[] bytes = await responseMessage.Content.ReadAsByteArrayAsync();
                     Handle result = _serializer.Deserialize<Handle>(bytes);
                     _logger.LogInformation("Notice {0} result:{1}", message.LvpOrderId, result);

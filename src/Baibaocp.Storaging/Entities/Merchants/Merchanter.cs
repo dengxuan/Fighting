@@ -44,6 +44,21 @@ namespace Baibaocp.Storaging.Entities.Merchants
         public string SecretKey { get; set; }
 
         /// <summary>
+        /// 是否通知
+        /// </summary>
+        public bool IsNotice { get; set; }
+
+        /// <summary>
+        /// 返奖通知地址
+        /// </summary>
+        public string NoticeAddress { get; set; }
+
+        /// <summary>
+        /// 出票通知地址
+        /// </summary>
+        public string TicketAddress { get; set; }
+
+        /// <summary>
         /// 预存款余额
         /// </summary>
         [Column("RestPreMoney")]

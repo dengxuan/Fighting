@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Baibaocp.ApplicationServices\Baibaocp.ApplicationServices.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryNoticing.MessageServices.Abstractions\Baibaocp.LotteryNoticing.MessageServices.Abstractions.csproj" />
     <ProjectReference Include="..\Baibaocp.Storaging\Baibaocp.Storaging.csproj" />
     <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />

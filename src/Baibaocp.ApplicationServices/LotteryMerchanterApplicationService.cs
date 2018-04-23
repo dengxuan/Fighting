@@ -30,9 +30,9 @@ namespace Baibaocp.ApplicationServices
         public async Task<Merchanter> FindMerchanterAsync(string merchanterId)
         {
             ICache cacher = CacheManager.GetCache("LotteryMerchanters");
-            return await cacher.Get(merchanterId, async (key) =>
+            return await cacher.GetAsync(merchanterId, (key) =>
             {
-                var merchanter = await _merchanterManager.FindMerchanterAsync(merchanterId);
+                var merchanter = _merchanterManager.FindMerchanter(merchanterId);
                 return merchanter;
             });
         }
