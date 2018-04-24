@@ -64,7 +64,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Abstractions
             };
             string json = JsonExtensions.ToJsonString(reqcon);
             HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
-            HttpResponseMessage responseMessage = (await _httpClient.PostAsync("partner", content)).EnsureSuccessStatusCode();
+            HttpResponseMessage responseMessage = (await _httpClient.PostAsync("", content)).EnsureSuccessStatusCode();
             byte[] bytes = await responseMessage.Content.ReadAsByteArrayAsync();
             string msg = Encoding.UTF8.GetString(bytes);
             return msg;

@@ -42,6 +42,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
                 string content = string.Empty;
                 string rescontent = await Send(message);
                 bool handle = Verify(rescontent, out content);
+                _logger.LogInformation(content);
                 if (handle)
                 {
                     JObject jarr = JObject.Parse(content);
@@ -78,10 +79,10 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
                                 {
                                     return new LoseingHandle();
                                 }
-                                else if (awardStatus.Equals("2") || Status.Equals("3"))
+                                else if (awardStatus.Equals("2") || awardStatus.Equals("3"))
                                 {
-                                    int bonusAmount = (int)(Convert.ToDecimal(json["totalPrize"]) * 100);
-                                    int totalTax = (int)(Convert.ToDecimal(json["totalPrize"]) * 100);
+                                    int bonusAmount = (int)(Convert.ToDecimal(json["totalPrize"].ToString()) * 100);
+                                    int totalTax = (int)(Convert.ToDecimal(json["totalTax"].ToString()) * 100);
                                     int aftertaxBonusAmount = bonusAmount - totalTax;
                                     return new WinningHandle(bonusAmount, aftertaxBonusAmount);
                                 }
