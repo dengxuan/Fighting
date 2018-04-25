@@ -42,7 +42,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.Dispatchers
                 string content = string.Empty;
                 string rescontent = await Send(message);
                 bool handle = Verify(rescontent, out content);
-                _logger.LogInformation(content);
+                _logger.LogInformation("Message:{0} Content:{1}", rescontent, content);
                 if (handle)
                 {
                     JObject jarr = JObject.Parse(content);

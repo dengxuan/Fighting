@@ -27,9 +27,9 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
 
         private readonly IRepository<LotteryPhase, int> _lotteryPhaseRepository;
 
-        private readonly IRepository<LotteryMerchanteOrder, string> _orderingReoository;
-
         private readonly IRepository<LotterySportsMatch, long> _lotterySportsMatchRepository;
+
+        private readonly IRepository<LotteryMerchanteOrder, string> _orderingReoository;
 
 
         public OrderingApplicationService(StorageOptions options, IRepository<LotteryPhase, int> lotteryPhaseRepository, IRepository<LotteryMerchanteOrder, string> orderingReoository, IRepository<LotterySportsMatch, long> lotterySportsMatchRepository, ILogger<OrderingApplicationService> logger, IIdentityGenerater identityGenerater, ICacheManager cacheManager) : base(cacheManager)
@@ -47,10 +47,12 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
             return await _orderingReoository.FirstOrDefaultAsync(id);
         }
 
-        public async Task<LotteryMerchanteOrder> CreateAsync(string lvpOrderId, long? lvpUserId, string lvpVenderId, int lotteryId, int lotteryPlayId, int? issueNumber, string investCode, bool investType, short investCount, byte investTimes, int investAmount)
+        public async Task<(LotteryMerchanteOrder order, TimeSpan? delay)> CreateAsync(string lvpOrderId, long? lvpUserId, string lvpVenderId, int lotteryId, int lotteryPlayId, int? issueNumber, string investCode, bool investType, short investCount, byte investTimes, int investAmount)
         {
             string id = _identityGenerater.Generate().ToString();
             DateTime expectedBonusTime = DateTime.Now;
+            DateTime currentTime = DateTime.Now;
+            TimeSpan? delayTime = null;
             if (issueNumber.HasValue && issueNumber != 0)
             {
                 var phaseNumber = await _lotteryPhaseRepository.FirstOrDefaultAsync(predicate => predicate.LotteryId == lotteryId && predicate.IssueNumber == issueNumber);
@@ -58,6 +60,20 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
                 if (lotteryId < 100)
                 {
                     expectedBonusTime = expectedBonusTime.AddHours(1.5);
+
+                    /*低频数字彩票0点到12点不销售*/
+                    if (currentTime.Hour < 9)
+                    {
+                        delayTime = currentTime.Date.AddHours(9) - DateTime.Now;
+                    }
+                }
+                else
+                {
+                    /* 高频彩票当天最后一期截止后的票，第二天开期后投注出票*/
+                    if (phaseNumber.StartTime.Date != phaseNumber.StartSaleTime.Date)
+                    {
+                        delayTime = phaseNumber.StartTime - DateTime.Now;
+                    }
                 }
             }
             else
@@ -75,9 +91,21 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
                     }
                 }
                 expectedBonusTime = expectedBonusTime.AddHours(3);
+                /* 竞彩周日，周一 1点到9点，不销售，其他时间0点到9点不销售*/
+                if (currentTime.Hour < 9)
+                {
+                    if ((currentTime.DayOfWeek == DayOfWeek.Sunday || currentTime.DayOfWeek == DayOfWeek.Monday) && currentTime.Hour > 1)
+                    {
+                        delayTime = currentTime.Date.AddHours(9) - DateTime.Now;
+                    }
+                    else
+                    {
+                        delayTime = currentTime.Date.AddHours(9) - DateTime.Now;
+                    }
+                }
             }
 
-            return await _orderingReoository.InsertAsync(new LotteryMerchanteOrder
+            var order = await _orderingReoository.InsertAsync(new LotteryMerchanteOrder
             {
                 Id = id,
                 LvpOrderId = lvpOrderId,
@@ -96,6 +124,7 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
                 Status = (int)OrderStatus.Succeed,
                 CreationTime = DateTime.Now
             });
+            return (order, delayTime);
         }
 
         public async Task UpdateAsync(LotteryMerchanteOrder order)

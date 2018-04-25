@@ -23,8 +23,8 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices.Abstractions
         /// <param name="investCount">注数</param>
         /// <param name="investTimes">倍数</param>
         /// <param name="investAmount">投注金额</param>
-        /// <returns>订单</returns>
-        Task<LotteryMerchanteOrder> CreateAsync(string lvpOrderId, long? lvpUserId, string lvpVenderId, int lotteryId, int lotteryPlayId, int? issueNumber, string investCode, bool investType, short investCount, byte investTimes, int investAmount);
+        /// <returns>(订单, 计划投注时间)</returns>
+        Task<(LotteryMerchanteOrder order, TimeSpan? delay)> CreateAsync(string lvpOrderId, long? lvpUserId, string lvpVenderId, int lotteryId, int lotteryPlayId, int? issueNumber, string investCode, bool investType, short investCount, byte investTimes, int investAmount);
 
         /// <summary>
         /// 更新订单

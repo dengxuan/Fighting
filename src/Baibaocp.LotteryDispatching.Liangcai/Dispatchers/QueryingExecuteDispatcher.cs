@@ -112,6 +112,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             if (_commands.TryGetValue(message.QueryingType, out string command))
             {
                 string xml = await Send(message, command);
+                _logger.LogInformation(xml);
                 XDocument document = XDocument.Parse(xml);
 
                 string Status = document.Element("ActionResult").Element("xCode").Value;
