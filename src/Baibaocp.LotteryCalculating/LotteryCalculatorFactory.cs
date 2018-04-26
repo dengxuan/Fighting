@@ -32,6 +32,7 @@ namespace Baibaocp.LotteryCalculating
             { 10122 , typeof(SyxwCalculator) },
 
             /* 快三*/
+            { 10411, typeof(KsCalculator) },
             { 10412, typeof(KsCalculator) },
 
             /* 3D排三排五 */

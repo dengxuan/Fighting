@@ -188,7 +188,7 @@ namespace Baibaocp.LotteryDispatching.Suicai.WebApi
                                 LvpOrderId = order.LvpOrderId,
                                 BonusAmount = bonusamount,
                                 AftertaxBonusAmount = aftertaxbonusamount,
-                                AwatdingType = lotteryAwardingType,
+                                AwardingType = lotteryAwardingType,
                             }));
                             return true;
                         }

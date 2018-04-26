@@ -35,8 +35,8 @@ namespace Baibaocp.LotteryTrading.TradeLogging.Subscribers
             {
                 try
                 {
-                    _logger.LogTrace("Received awarding message: {0} {1} {2}", message.LdpOrderId, message.LdpMerchanerId, message.Content.AwatdingType);
-                    if (message.Content.AwatdingType == LotteryAwardingTypes.Winning)
+                    _logger.LogTrace("Received awarding message: {0} {1} {2}", message.LdpOrderId, message.LdpMerchanerId, message.Content.AwardingType);
+                    if (message.Content.AwardingType == LotteryAwardingTypes.Winning)
                     {
                         IUnitOfWorkManager unitOfWorkManager = _iocResolver.GetRequiredService<IUnitOfWorkManager>();
                         using (var uow = unitOfWorkManager.Begin())
@@ -53,7 +53,7 @@ namespace Baibaocp.LotteryTrading.TradeLogging.Subscribers
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogTrace(ex, "Received awarding message: {0} {1} {2}", message.LdpOrderId, message.LdpMerchanerId, message.Content.AwatdingType);
+                    _logger.LogTrace(ex, "Received awarding message: {0} {1} {2}", message.LdpOrderId, message.LdpMerchanerId, message.Content.AwardingType);
                 }
                 return new Nack();
             }, context =>

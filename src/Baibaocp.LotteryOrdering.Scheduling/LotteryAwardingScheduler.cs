@@ -49,7 +49,7 @@ namespace Baibaocp.LotteryOrdering.Scheduling.Abstractions
                             LvpMerchanerId = args.LvpMerchanerId,
                             BonusAmount = 0,
                             AftertaxBonusAmount = 0,
-                            AwatdingType = LotteryAwardingTypes.Loseing,
+                            AwardingType = LotteryAwardingTypes.Loseing,
                         }));
                         return true;
                     case Handle.Waiting: return false;

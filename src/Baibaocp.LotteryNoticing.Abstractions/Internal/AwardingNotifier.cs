@@ -17,7 +17,7 @@ namespace Baibaocp.LotteryNotifier
     {
         private readonly ConcurrentDictionary<string, Merchanter> _lotteryMerchanters = new ConcurrentDictionary<string, Merchanter>();
 
-        private readonly ILogger<TicketingNotifier> _logger;
+        private readonly ILogger<AwardingNotifier> _logger;
 
         private readonly RetryPolicy<bool> _policy;
 
@@ -27,7 +27,7 @@ namespace Baibaocp.LotteryNotifier
 
         private readonly ILotteryMerchanterApplicationService _lotteryMerchanterApplicationService;
 
-        public AwardingNotifier(INoticeSerializer serializer, ILotteryMerchanterApplicationService lotteryMerchanterApplicationService, ILogger<TicketingNotifier> logger)
+        public AwardingNotifier(INoticeSerializer serializer, ILotteryMerchanterApplicationService lotteryMerchanterApplicationService, ILogger<AwardingNotifier> logger)
         {
             _serializer = serializer;
             _logger = logger;
@@ -55,7 +55,7 @@ namespace Baibaocp.LotteryNotifier
 
                 return await _policy.ExecuteAsync(async () =>
                 {
-                    HttpResponseMessage responseMessage = (await _client.PostAsync(merchanter.NoticeAddress, new ByteArrayContent(_serializer.Serialize(new { OrderId = message.LvpOrderId, Amount = message.BonusAmount, Status = (int)message.AwatdingType })))).EnsureSuccessStatusCode();
+                    HttpResponseMessage responseMessage = (await _client.PostAsync(merchanter.NoticeAddress, new ByteArrayContent(_serializer.Serialize(new { OrderId = message.LvpOrderId, Amount = message.BonusAmount, Status = (int)message.AwardingType })))).EnsureSuccessStatusCode();
                     byte[] bytes = await responseMessage.Content.ReadAsByteArrayAsync();
                     Handle result = _serializer.Deserialize<Handle>(bytes);
                     _logger.LogInformation("Notice {0} result:{1}", message.LvpOrderId, result);

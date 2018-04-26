@@ -55,7 +55,7 @@ namespace Baibaocp.ApplicationServices
 
         public async Task Recharging(string merchanterId, string orderId, int amount)
         {
-            var isContains = await _merchanterAccountLoggingManager.IsContainsAsync(merchanterId, orderId);
+            var isContains = await _merchanterAccountLoggingManager.IsContainsAsync(merchanterId, orderId, 1000);
             if (isContains == false)
             {
                 Merchanter merchanter = await _merchanterManager.FindMerchanterAsync(merchanterId);
@@ -66,7 +66,7 @@ namespace Baibaocp.ApplicationServices
 
         public async Task Rewarding(string merchanterId, string orderId, int lotteryId, int amount)
         {
-            var isContains = await _merchanterAccountLoggingManager.IsContainsAsync(merchanterId, orderId);
+            var isContains = await _merchanterAccountLoggingManager.IsContainsAsync(merchanterId, orderId, 4000);
             if (isContains == false)
             {
                 Merchanter merchanter = await _merchanterManager.FindMerchanterAsync(merchanterId);
@@ -78,13 +78,14 @@ namespace Baibaocp.ApplicationServices
 
         public async Task Ticketing(string merchanterId, string orderId, int lotteryId, int amount)
         {
-            var isContains = await _merchanterAccountLoggingManager.IsContainsAsync(merchanterId, orderId);
+            var isContains = await _merchanterAccountLoggingManager.IsContainsAsync(merchanterId, orderId, 3000);
             if (isContains == false)
             {
                 Merchanter merchanter = await _merchanterManager.FindMerchanterAsync(merchanterId);
                 await _merchanterManager.SubBalanceAsync(merchanter, amount);
                 await _merchanterManager.AddTotalTicketedAmount(merchanter, amount);
-                await _merchanterAccountLoggingManager.CreateAsync(merchanterId, orderId, amount, merchanter.Balance, 3000, lotteryId);
+                /* 出票流水计负数 */
+                await _merchanterAccountLoggingManager.CreateAsync(merchanterId, orderId, 0 - amount, merchanter.Balance, 3000, lotteryId);
             }
         }
     }

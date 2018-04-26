@@ -40,7 +40,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                     IUnitOfWorkManager unitOfWorkManager = _iocResolver.GetRequiredService<IUnitOfWorkManager>();
                     using (var uow = unitOfWorkManager.Begin())
                     {
-                        if (message.Content.AwatdingType == LotteryAwardingTypes.Winning)
+                        if (message.Content.AwardingType == LotteryAwardingTypes.Winning)
                         {
                             await orderingApplicationService.WinningAsync(message.LdpOrderId, message.Content.BonusAmount, message.Content.AftertaxBonusAmount);
                         }

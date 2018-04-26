@@ -76,7 +76,7 @@ namespace Baibaocp.LotteryDispatching.Internal
                                 await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Awarded.{message.LdpMerchanerId}", new NoticeMessage<LotteryAwarded>(message.LdpOrderId, message.LdpMerchanerId, new LotteryAwarded
                                 {
                                     AftertaxBonusAmount = winning.AftertaxBonusAmount,
-                                    AwatdingType = LotteryAwardingTypes.Winning,
+                                    AwardingType = LotteryAwardingTypes.Winning,
                                     BonusAmount = winning.BonusAmount,
                                     LvpMerchanerId = message.LvpMerchanerId,
                                     LvpOrderId = message.LvpOrderId
@@ -87,7 +87,7 @@ namespace Baibaocp.LotteryDispatching.Internal
                             {
                                 await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Awarded.{message.LdpMerchanerId}", new NoticeMessage<LotteryAwarded>(message.LdpOrderId, message.LdpMerchanerId, new LotteryAwarded
                                 {
-                                    AwatdingType = LotteryAwardingTypes.Loseing,
+                                    AwardingType = LotteryAwardingTypes.Loseing,
                                     LvpMerchanerId = message.LvpMerchanerId,
                                     LvpOrderId = message.LvpOrderId
                                 }));

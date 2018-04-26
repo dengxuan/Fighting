@@ -36,7 +36,7 @@ namespace Baibaocp.LotteryNotifier.Internal.Services
             {
                 try
                 {
-                    _logger.LogInformation("Received Ticketed LdpOrderId:{0} LvpVenderId:{1}", message.LdpOrderId, message.LdpMerchanerId);
+                    _logger.LogInformation("Received Ticketed LdpOrderId:{0} LdpVenderId:{1} Content:{2}", message.LdpOrderId, message.LdpMerchanerId, message.Content);
                     var result = await _dispatcher.DispatchAsync(message.Content);
                     if (result == true)
                     {

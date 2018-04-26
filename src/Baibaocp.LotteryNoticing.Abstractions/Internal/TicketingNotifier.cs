@@ -49,13 +49,13 @@ namespace Baibaocp.LotteryNotifier
                 {
                     return _lotteryMerchanterApplicationService.FindMerchanterAsync(merchanterId).GetAwaiter().GetResult();
                 });
-                if(merchanter.IsNotice == false)
+                if (merchanter.IsNotice == false)
                 {
                     return true;
                 }
                 return await _policy.ExecuteAsync(async () =>
                 {
-                    HttpResponseMessage responseMessage = (await _client.PostAsync(merchanter.TicketAddress, new ByteArrayContent(_serializer.Serialize(new { OrderId = message.LvpOrderId, TicketOdds = message.TicketedOdds, Status = (int)message.TicketingType })))).EnsureSuccessStatusCode();
+                    HttpResponseMessage responseMessage = (await _client.PostAsync(merchanter.TicketAddress, new ByteArrayContent(_serializer.Serialize(new { OrderId = message.LvpOrderId, TicketOdds = message.TicketedOdds ?? string.Empty, Status = (int)message.TicketingType })))).EnsureSuccessStatusCode();
                     byte[] bytes = await responseMessage.Content.ReadAsByteArrayAsync();
                     Handle result = _serializer.Deserialize<Handle>(bytes);
                     _logger.LogInformation("Notice {0} result:{1}", message.LvpOrderId, result);
