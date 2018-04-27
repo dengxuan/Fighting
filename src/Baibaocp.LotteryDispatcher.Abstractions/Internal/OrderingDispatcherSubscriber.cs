@@ -43,7 +43,7 @@ namespace Baibaocp.LotteryDispatching.Internal
             {
                 try
                 {
-                    _logger.LogTrace("Received ordering message. LdpOrderId:{0} LvpMerchanerId:{1}", message.LdpOrderId, message.LdpMerchanerId);
+                    _logger.LogInformation("Received ordering message. LdpOrderId:{0} LvpMerchanerId:{1}", message.LdpOrderId, message.LdpMerchanerId);
                     var handle = await _orderingDispatcher.DispatchAsync(message);
                     switch (handle)
                     {

@@ -7,9 +7,13 @@ namespace Baibaocp.LotteryOrdering.Scheduling
 {
     public class LotteryOrderingScheduler : ILotteryOrderingScheduler
     {
-        private readonly IServiceProvider _iocResolver;
 
         private readonly IDispatchOrderingMessageService _dispatchOrderingMessageService;
+
+        public LotteryOrderingScheduler(IDispatchOrderingMessageService dispatchQueryingMessageService)
+        {
+            _dispatchOrderingMessageService = dispatchQueryingMessageService;
+        }
 
         public async Task<bool> RunAsync(OrderingScheduleArgs args)
         {

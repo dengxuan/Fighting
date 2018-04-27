@@ -64,15 +64,15 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
                     /*低频数字彩票0点到12点不销售*/
                     if (currentTime.Hour < 9)
                     {
-                        delayTime = currentTime.Date.AddHours(9) - DateTime.Now;
+                        delayTime = currentTime.Date.AddHours(9) - currentTime;
                     }
                 }
                 else
                 {
                     /* 高频彩票当天最后一期截止后的票，第二天开期后投注出票*/
-                    if (phaseNumber.StartTime.Date != phaseNumber.StartSaleTime.Date)
+                    if (phaseNumber.StartTime > currentTime)
                     {
-                        delayTime = phaseNumber.StartTime - DateTime.Now;
+                        delayTime = (phaseNumber.StartTime - currentTime).Add(TimeSpan.FromSeconds(30));
                     }
                 }
             }
@@ -96,11 +96,11 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
                 {
                     if ((currentTime.DayOfWeek == DayOfWeek.Sunday || currentTime.DayOfWeek == DayOfWeek.Monday) && currentTime.Hour > 1)
                     {
-                        delayTime = currentTime.Date.AddHours(9) - DateTime.Now;
+                        delayTime = currentTime.Date.AddHours(9) - currentTime;
                     }
                     else
                     {
-                        delayTime = currentTime.Date.AddHours(9) - DateTime.Now;
+                        delayTime = currentTime.Date.AddHours(9) - currentTime;
                     }
                 }
             }
@@ -155,8 +155,12 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
         public async Task<LotteryMerchanteOrder> RejectedAsync(string orderId)
         {
             var order = await _orderingReoository.FirstOrDefaultAsync(orderId);
-            order.Status = (int)OrderStatus.TicketFailed;
-            return await _orderingReoository.UpdateAsync(order);
+            if(order != null)
+            {
+                order.Status = (int)OrderStatus.TicketFailed;
+                return await _orderingReoository.UpdateAsync(order);
+            }
+            return order;
         }
 
         public async Task<LotteryMerchanteOrder> LoseingAsync(string orderId)
