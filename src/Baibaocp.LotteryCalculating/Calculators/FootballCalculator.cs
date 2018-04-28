@@ -77,7 +77,7 @@ namespace Baibaocp.LotteryCalculating.Calculators
                         case 20201: result = matchResult.FinalScore.VictoryLevels(); break;
                         case 20202: result = matchResult.FinalScore.ScoreResult(); break;
                         case 20203: result = matchResult.FinalScore.TotalGoals(); break;
-                        case 20204: result = string.Format("{0}{1}", matchResult.HalfScore.VictoryLevels(), matchResult.FinalScore.VictoryLevels()); break;
+                        case 20204: result = string.Format("{0}-{1}", matchResult.HalfScore.VictoryLevels(), matchResult.FinalScore.VictoryLevels()); break;
                         case 20206:
                             {
                                 sbyte letBallCount = ResolveLetBallCount(investMatch);

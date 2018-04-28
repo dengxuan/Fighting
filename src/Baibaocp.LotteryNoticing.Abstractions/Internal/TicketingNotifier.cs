@@ -9,6 +9,7 @@ using Polly.Retry;
 using System;
 using System.Collections.Concurrent;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryNotifier
@@ -57,9 +58,9 @@ namespace Baibaocp.LotteryNotifier
                 {
                     HttpResponseMessage responseMessage = (await _client.PostAsync(merchanter.TicketAddress, new ByteArrayContent(_serializer.Serialize(new { OrderId = message.LvpOrderId, TicketOdds = message.TicketedOdds ?? string.Empty, Status = (int)message.TicketingType })))).EnsureSuccessStatusCode();
                     byte[] bytes = await responseMessage.Content.ReadAsByteArrayAsync();
+                    _logger.LogInformation("Notice {0} Response:{1}", message.LvpOrderId, Encoding.UTF8.GetString(bytes));
                     Handle result = _serializer.Deserialize<Handle>(bytes);
-                    _logger.LogInformation("Notice {0} result:{1}", message.LvpOrderId, result);
-                    return true;
+                    return result != null && result.Ret == 0;
                 });
             }
             catch (Exception ex)
