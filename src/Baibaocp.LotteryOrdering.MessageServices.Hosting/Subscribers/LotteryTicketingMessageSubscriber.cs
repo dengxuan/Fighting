@@ -22,9 +22,9 @@ namespace Baibaocp.LotteryOrdering.MessageServices
         private readonly IBusClient _busClient;
         private readonly IServiceProvider _iocResolver;
         private readonly ISchedulerManager _schedulerManager;
-        private readonly ILogger<LotteryOrderingMessageSubscriber> _logger;
+        private readonly ILogger<LotteryTicketingMessageSubscriber> _logger;
 
-        public LotteryTicketingMessageSubscriber(IBusClient busClient, ISchedulerManager schedulerManager, IServiceProvider iocResolver, ILogger<LotteryOrderingMessageSubscriber> logger)
+        public LotteryTicketingMessageSubscriber(IBusClient busClient, ISchedulerManager schedulerManager, IServiceProvider iocResolver, ILogger<LotteryTicketingMessageSubscriber> logger)
         {
             _logger = logger;
             _busClient = busClient;
@@ -38,6 +38,7 @@ namespace Baibaocp.LotteryOrdering.MessageServices
             {
                 try
                 {
+                    _logger.LogInformation("Received ticketing message: {0} {1} Content:{2}", message.LdpMerchanerId, message.LdpOrderId, message.Content);
                     IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
                     IUnitOfWorkManager unitOfWorkManager = _iocResolver.GetRequiredService<IUnitOfWorkManager>();
                     using (var uow = unitOfWorkManager.Begin())
@@ -45,26 +46,28 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                         if (message.Content.TicketingType == LotteryTicketingTypes.Success)
                         {
                             var order = await orderingApplicationService.TicketedAsync(message.LdpOrderId, message.LdpMerchanerId, message.Content.TicketedNumber, message.Content.TicketedTime, message.Content.TicketedOdds);
-                            await _schedulerManager.EnqueueAsync<ILotteryAwardingScheduler, AwardingScheduleArgs>(new AwardingScheduleArgs
+                            if(order != null)
                             {
-                                LdpOrderId = message.LdpOrderId,
-                                LdpMerchanerId = message.LdpMerchanerId,
-                                LvpOrderId = message.Content.LvpOrderId,
-                                LvpMerchanerId = message.Content.LvpMerchanerId
-                            }, delay: order.ExpectedBonusTime - DateTime.Now);
+                                await _schedulerManager.EnqueueAsync<ILotteryAwardingScheduler, AwardingScheduleArgs>(new AwardingScheduleArgs
+                                {
+                                    LdpOrderId = message.LdpOrderId,
+                                    LdpMerchanerId = message.LdpMerchanerId,
+                                    LvpOrderId = message.Content.LvpOrderId,
+                                    LvpMerchanerId = message.Content.LvpMerchanerId
+                                }, delay: order.ExpectedBonusTime - DateTime.Now);
+                            }
                         }
                         else
                         {
                             await orderingApplicationService.RejectedAsync(message.LdpOrderId);
                         }
-                        _logger.LogTrace("Received ticketing message: {1} {0}", message.LdpMerchanerId, message.LdpOrderId);
                         uow.Complete();
                         return new Ack();
                     }
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Received ticketing message: {1} {0}", message.LdpMerchanerId, message.LdpOrderId);
+                    _logger.LogInformation(ex, "Received ticketing message: {0} {1} Content:{2}", message.LdpMerchanerId, message.LdpOrderId, message.Content);
                 }
                 return new Nack();
             }, context =>

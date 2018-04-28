@@ -135,12 +135,16 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
         public async Task<LotteryMerchanteOrder> TicketedAsync(string oderId, string ldpVenderId, string ticketedNumber, DateTime ticketedTime, string ticketOdds = default(string))
         {
             var order = await _orderingReoository.FirstOrDefaultAsync(oderId);
-            order.TicketedNumber = ticketedNumber;
-            order.TicketedTime = ticketedTime;
-            order.TicketedOdds = ticketOdds;
-            order.LdpVenderId = ldpVenderId;
-            order.Status = (int)OrderStatus.TicketDrawing;
-            return await _orderingReoository.UpdateAsync(order);
+            if (order != null)
+            {
+                order.TicketedNumber = ticketedNumber;
+                order.TicketedTime = ticketedTime;
+                order.TicketedOdds = ticketOdds;
+                order.LdpVenderId = ldpVenderId;
+                order.Status = (int)OrderStatus.TicketDrawing;
+                return await _orderingReoository.UpdateAsync(order);
+            }
+            return null;
         }
 
         public async Task<LotteryMerchanteOrder> WinningAsync(string orderId, int amount, int aftertaxBonusAmount)
@@ -155,7 +159,7 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
         public async Task<LotteryMerchanteOrder> RejectedAsync(string orderId)
         {
             var order = await _orderingReoository.FirstOrDefaultAsync(orderId);
-            if(order != null)
+            if (order != null)
             {
                 order.Status = (int)OrderStatus.TicketFailed;
                 return await _orderingReoository.UpdateAsync(order);
