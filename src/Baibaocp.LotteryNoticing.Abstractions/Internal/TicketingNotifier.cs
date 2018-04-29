@@ -54,7 +54,7 @@ namespace Baibaocp.LotteryNotifier
                 {
                     return true;
                 }
-                return await _policy.ExecuteAsync(async () =>
+                await _policy.ExecuteAsync(async () =>
                 {
                     HttpResponseMessage responseMessage = (await _client.PostAsync(merchanter.TicketAddress, new ByteArrayContent(_serializer.Serialize(new { OrderId = message.LvpOrderId, TicketOdds = message.TicketedOdds ?? string.Empty, Status = (int)message.TicketingType })))).EnsureSuccessStatusCode();
                     byte[] bytes = await responseMessage.Content.ReadAsByteArrayAsync();
@@ -67,7 +67,7 @@ namespace Baibaocp.LotteryNotifier
             {
                 _logger.LogError(ex, "Notice error! {0}", message.LvpOrderId);
             }
-            return false;
+            return true;
         }
     }
 }
