@@ -26,11 +26,11 @@ namespace Baibaocp.LotteryOrdering.Hosting
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            IScheduleStore store = _iocResolver.GetRequiredService<IScheduleStore>();
             return Task.Run(async () =>
             {
                 while (!stoppingToken.IsCancellationRequested)
                 {
+                    IScheduleStore store = _iocResolver.GetRequiredService<IScheduleStore>();
                     var schedules = await store.GetWaitingSchedulesAsync(100000);
 
                     foreach (var schedule in schedules)
@@ -46,9 +46,6 @@ namespace Baibaocp.LotteryOrdering.Hosting
         {
             try
             {
-                schedule.TryCount++;
-                schedule.LastTryTime = Clock.Now;
-
                 var scheduleType = Type.GetType(schedule.SchedulerType);
                 var scheduler = _iocResolver.GetService(scheduleType);
                 try
@@ -66,6 +63,8 @@ namespace Baibaocp.LotteryOrdering.Hosting
                         {
                             schedule.NextTryTime = nextTryTime.Value;
                         }
+                        schedule.TryCount++;
+                        schedule.LastTryTime = Clock.Now;
                         await TryUpdate(schedule);
                     }
                     else

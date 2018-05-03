@@ -41,7 +41,7 @@ namespace Baibaocp.LotteryOrdering.Scheduling.Abstractions
             {
                 ILotteryCalculator lotteryCalculator = await _lotteryCalculatorFactory.GetLotteryCalculatorAsync(args.LdpOrderId);
                 Handle handle = await lotteryCalculator.CalculateAsync();
-                _logger.LogTrace("Execute Awarding Scheduler: {0}-{1}-{2}", args.LdpMerchanerId, args.LdpOrderId, handle);
+                _logger.LogInformation("Execute Awarding Scheduler: {0}-{1}-{2}", args.LdpMerchanerId, args.LdpOrderId, handle);
                 uow.Complete();
                 switch (handle)
                 {

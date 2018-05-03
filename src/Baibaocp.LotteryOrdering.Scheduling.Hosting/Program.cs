@@ -103,7 +103,6 @@ namespace Baibaocp.LotteryOrdering.Scheduling.Hosting
                 })
                 .ConfigureLogging(logging =>
                 {
-                    //logging.SetMinimumLevel(LogLevel.Information);
                     logging.AddConsole();
                 }).Build();
             await builder.StartAsync();

@@ -20,7 +20,7 @@ namespace Baibaocp.LotteryOrdering.Scheduling
 
         public async Task<bool> RunAsync(OrderingScheduleArgs args)
         {
-            _logger.LogTrace("Execute Ordering Scheduler: {0}-{1}-{2}", args.LdpMerchanerId, args.LdpOrderId, args.Message);
+            _logger.LogInformation("Execute Ordering Scheduler: {0}-{1}-{2}", args.LdpMerchanerId, args.LdpOrderId, args.Message);
             await _dispatchOrderingMessageService.PublishAsync(args.LdpOrderId, args.LdpMerchanerId, args.Message);
             return true;
         }
