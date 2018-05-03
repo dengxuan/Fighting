@@ -101,7 +101,11 @@ namespace Baibaocp.LotteryOrdering.Scheduling.Hosting
                         ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>(),
                     });
                 })
-                .ConfigureLogging(logging => logging.AddConsole()).Build();
+                .ConfigureLogging(logging =>
+                {
+                    //logging.SetMinimumLevel(LogLevel.Information);
+                    logging.AddConsole();
+                }).Build();
             await builder.StartAsync();
             Console.ReadLine();
         }

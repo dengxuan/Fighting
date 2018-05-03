@@ -69,7 +69,7 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
                 }
                 else
                 {
-                    /* 高频彩票当天最后一期截止后的票，第二天开期后投注出票*/
+                    /* 高频彩票期后30秒开始投注出票*/
                     if (phaseNumber.StartTime > currentTime)
                     {
                         delayTime = (phaseNumber.StartTime - currentTime).Add(TimeSpan.FromSeconds(30));
@@ -144,6 +144,10 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
                 order.Status = (int)OrderStatus.TicketDrawing;
                 return await _orderingReoository.UpdateAsync(order);
             }
+            else
+            {
+                _logger.LogInformation($"出票成功 订单不存在:[{oderId}-{ldpVenderId}-{ticketedNumber}-{ticketOdds}]");
+            }
             return null;
         }
 
@@ -163,6 +167,10 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
             {
                 order.Status = (int)OrderStatus.TicketFailed;
                 return await _orderingReoository.UpdateAsync(order);
+            }
+            else
+            {
+                _logger.LogInformation($"出票失败订单不存在:[{orderId}]");
             }
             return order;
         }

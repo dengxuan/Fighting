@@ -92,7 +92,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                     {
                         rateCount = int.Parse(match.Attribute("rq").Value);
                     }
-                    string odds = match.Value.Replace('=', '*').Replace('|', '#');
+                    string odds = match.Value.Replace('=', '*').Replace('|', '#').Replace("-", "").Replace(":", "");
                     sb.Append($"{id}@{rateCount}|{odds}#^");
                 }
                 string ticketedNumber = bill.Attribute("id").Value;

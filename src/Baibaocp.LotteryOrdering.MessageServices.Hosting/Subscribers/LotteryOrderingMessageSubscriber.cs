@@ -59,8 +59,21 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                         IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
                         (LotteryMerchanteOrder order, TimeSpan? delay) = await orderingApplicationService.CreateAsync(message.LvpOrderId, message.LvpUserId, message.LvpVenderId, message.LotteryId, message.LotteryPlayId, message.IssueNumber, message.InvestCode, message.InvestType, message.InvestCount, message.InvestTimes, message.InvestAmount);
 
-                        await _dispatchOrderingMessageService.PublishAsync(order.Id, ldpVenderId, message);
-
+                        /* 需要延期投注的票加入计划任务，否则直接分票投注*/
+                        if (delay.HasValue)
+                        {
+                            ISchedulerManager schedulerManager = _iocResolver.GetRequiredService<ISchedulerManager>();
+                            await schedulerManager.EnqueueAsync<ILotteryOrderingScheduler, OrderingScheduleArgs>(new OrderingScheduleArgs
+                            {
+                                LdpOrderId = order.Id,
+                                LdpMerchanerId = ldpVenderId,
+                                Message = message
+                            }, SchedulerPriority.High, delay);
+                        }
+                        else
+                        {
+                            await _dispatchOrderingMessageService.PublishAsync(order.Id, ldpVenderId, message);
+                        }
                         uow.Complete();
                         return new Ack();
                     }
