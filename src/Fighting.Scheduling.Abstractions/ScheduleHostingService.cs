@@ -40,6 +40,7 @@ namespace Baibaocp.LotteryOrdering.Hosting
                         {
                             await TryExecuteScheduleAsync(schedule);
                             await store.UpdateAsync(schedule);
+
                         }
                         uow.Complete();
                     }
