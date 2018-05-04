@@ -11,11 +11,6 @@ namespace Fighting.Scheduling.Mysql
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-        }
-
         public DbSet<Schedule> Schedules { get; set; }
     }
 }
