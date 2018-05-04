@@ -14,17 +14,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.1" />
     <PackageReference Include="RawRabbit.DependencyInjection.ServiceCollection" Version="2.0.0-rc5" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Baibaocp.ApplicationServices\Baibaocp.ApplicationServices.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryNoticing.Abstractions\Baibaocp.LotteryNoticing.Abstractions.csproj" />
     <ProjectReference Include="..\Baibaocp.LotteryNoticing.MessageServices.Publisher\Baibaocp.LotteryNoticing.MessageServices.Publisher.csproj" />
+    <ProjectReference Include="..\Baibaocp.Storaging.EntityFrameworkCore\Baibaocp.Storaging.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Fighting.Caching.Redis\Fighting.Caching.Redis.csproj" />
+    <ProjectReference Include="..\Fighting.Extensions.UnitOfWork.EntityFrameworkCore\Fighting.Extensions.UnitOfWork.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
   </ItemGroup>
 

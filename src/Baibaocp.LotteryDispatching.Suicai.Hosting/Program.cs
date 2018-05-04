@@ -27,11 +27,6 @@ namespace Baibaocp.LotteryDispatching.Suicai.Ordering
                 .ConfigureLogging((hostContext, loggerBuilder) =>
                 {
                     loggerBuilder.AddConsole();
-                    if (hostContext.HostingEnvironment.IsDevelopment())
-                    {
-                        loggerBuilder.AddDebug();
-                    }
-                    loggerBuilder.SetMinimumLevel(LogLevel.Trace);
                 })
                 .ConfigureServices((hostContext, services) =>
                 {

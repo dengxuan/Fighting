@@ -15,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LotteryOrdering", "LotteryO
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LotteryNoticing", "LotteryNoticing", "{A5D24445-342F-4173-A314-78D98A5CDC46}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LotteryAwardCalculator", "LotteryAwardCalculator", "{72F33E4E-B236-4880-86E4-4E809C09A892}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryOrdering.Validations", "src\Baibaocp.LotteryOrdering.Validations\Baibaocp.LotteryOrdering.Validations.csproj", "{7539F8E2-D04A-426B-8F4D-8A7DFEEBF5BB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.ApplicationServices.Abstractions", "src\Baibaocp.ApplicationServices.Abstractions\Baibaocp.ApplicationServices.Abstractions.csproj", "{B486841F-72E3-43A3-A990-A25D85973834}"
@@ -37,10 +35,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fighting.Storaging.Dapper",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.ApplicationServices", "src\Baibaocp.ApplicationServices\Baibaocp.ApplicationServices.csproj", "{652152CE-89E3-45AA-B146-E9CB3D02D21D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryAwardCalculator.Abstractions", "src\Baibaocp.LotteryAwardCalculator.Abstractions\Baibaocp.LotteryAwardCalculator.Abstractions.csproj", "{2AA1F01A-6AFB-4A65-8467-E469DF5E39EA}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryAwardCalculator.Hosting", "src\Baibaocp.LotteryAwardCalculator.Hosting\Baibaocp.LotteryAwardCalculator.Hosting.csproj", "{310DF826-C010-4FFC-80C2-872323262CFF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fighting.Storaging.EntityFrameworkCore.Abstractions", "src\Fighting.Storaging.EntityFrameworkCore.Abstractions\Fighting.Storaging.EntityFrameworkCore.Abstractions.csproj", "{7B6BECF2-4AE1-4D6B-8497-E99494E81024}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryOrdering.EntityFrameworkCore", "src\Baibaocp.LotteryOrdering.EntityFrameworkCore\Baibaocp.LotteryOrdering.EntityFrameworkCore.csproj", "{763347D7-9D5F-4656-9FBA-036E50ADA04F}"
@@ -50,12 +44,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.Storaging", "src\Baibaocp.Storaging\Baibaocp.Storaging.csproj", "{5A05B96B-DEB1-4A06-9EAA-6550F251C248}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.Storaging.EntityFrameworkCore", "src\Baibaocp.Storaging.EntityFrameworkCore\Baibaocp.Storaging.EntityFrameworkCore.csproj", "{5EAA0BBD-976C-4952-803C-2EE2B4090BBD}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fighting.Spider", "src\Fighting.Spider\Fighting.Spider.csproj", "{A228236D-B2D8-4952-8259-1C394F39AD07}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fighting.Spider.Abstractions", "src\Fighting.Spider.Abstractions\Fighting.Spider.Abstractions.csproj", "{70C0D352-3EAE-4229-BAAB-0721602E4BD1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fighting.Spider.HtmlAgilityPack.Css", "src\Fighting.Spider.HtmlAgilityPack.Css\Fighting.Spider.HtmlAgilityPack.Css.csproj", "{78DE7A1F-3ACA-46DF-AB81-9DAFD88E9AEE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LotterySpiders", "LotterySpiders", "{87C0C9BE-1159-4D8E-9103-D07E9A769F76}"
 EndProject
@@ -82,12 +70,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryOrdering.Scheduling.Abstractions", "src\Baibaocp.LotteryOrdering.Scheduling.Abstractions\Baibaocp.LotteryOrdering.Scheduling.Abstractions.csproj", "{866D692F-A37B-4489-A4BB-EC90A5F36C0F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Liangcai", "Liangcai", "{03618F33-C0F4-436D-BA3C-A14EC3894F1F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fighting.Orleans.Abstractions", "src\Fighting.Orleans.Abstractions\Fighting.Orleans.Abstractions.csproj", "{7BA4098D-CBEB-46CA-B144-26176505BF60}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fighting.Orleans.ClientCluster", "src\Fighting.Orleans.ClientCluster\Fighting.Orleans.ClientCluster.csproj", "{61CF2894-9695-426E-AC89-152A5048FDCB}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fighting.Orleans.ServerCluster", "src\Fighting.Orleans.ServerCluster\Fighting.Orleans.ServerCluster.csproj", "{C389C2DB-CAF7-47AF-8C08-C91E4463EABF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryOrdering.MessageServices.Hosting", "src\Baibaocp.LotteryOrdering.MessageServices.Hosting\Baibaocp.LotteryOrdering.MessageServices.Hosting.csproj", "{B92DE4CA-9A1C-4D25-85FB-6462D5727C77}"
 EndProject
@@ -133,9 +115,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.Suicai.WebApi", "src\Baibaocp.LotteryDispatching.Suicai.WebApi\Baibaocp.LotteryDispatching.Suicai.WebApi.csproj", "{444DF6D6-BAA7-4D3F-A9EF-E3CFCF5D30CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryTrading.TradeLogging", "src\Baibaocp.LotteryTrading.TradeLogging\Baibaocp.LotteryTrading.TradeLogging.csproj", "{870B63F6-23E2-4479-B821-D315DD8A8F6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryTrading.TradeLogging", "src\Baibaocp.LotteryTrading.TradeLogging\Baibaocp.LotteryTrading.TradeLogging.csproj", "{870B63F6-23E2-4479-B821-D315DD8A8F6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryTrading.TradeLogging.Hosting", "src\Baibaocp.LotteryTrading.TradeLogging.Hosting\Baibaocp.LotteryTrading.TradeLogging.Hosting.csproj", "{CAD0CF3F-9934-4DC5-8F4B-F2563919DC3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryTrading.TradeLogging.Hosting", "src\Baibaocp.LotteryTrading.TradeLogging.Hosting\Baibaocp.LotteryTrading.TradeLogging.Hosting.csproj", "{CAD0CF3F-9934-4DC5-8F4B-F2563919DC3C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fighting.Extensions.UnitOfWork.Abstractions", "src\Fighting.Extensions.UnitOfWork.Abstractions\Fighting.Extensions.UnitOfWork.Abstractions.csproj", "{84379603-1940-43EC-A365-D777539C423C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fighting.Extensions.UnitOfWork.EntityFrameworkCore", "src\Fighting.Extensions.UnitOfWork.EntityFrameworkCore\Fighting.Extensions.UnitOfWork.EntityFrameworkCore.csproj", "{061BD90F-7953-4923-9E23-4B9F4F1A9DE5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Xinba", "Xinba", "{FC3747C4-5227-4280-8569-C4B6A1CA03B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.Xinba", "src\Baibaocp.LotteryDispatching.Xinba\Baibaocp.LotteryDispatching.Xinba.csproj", "{BFE90E58-998A-4AEB-A05D-B21526083FDB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Baibaocp.LotteryDispatching.Xinba.Hosting", "src\Baibaocp.LotteryDispatching.Xinba.Hosting\Baibaocp.LotteryDispatching.Xinba.Hosting.csproj", "{557EFE87-B374-4895-873D-F2647A33F12D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baibaocp.LotteryDispatching.Xinba.WebApi", "src\Baibaocp.LotteryDispatching.Xinba.WebApi\Baibaocp.LotteryDispatching.Xinba.WebApi.csproj", "{BA47E529-6A0E-447C-8C2C-86D1E1416859}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -195,14 +189,6 @@ Global
 		{652152CE-89E3-45AA-B146-E9CB3D02D21D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{652152CE-89E3-45AA-B146-E9CB3D02D21D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{652152CE-89E3-45AA-B146-E9CB3D02D21D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2AA1F01A-6AFB-4A65-8467-E469DF5E39EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AA1F01A-6AFB-4A65-8467-E469DF5E39EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2AA1F01A-6AFB-4A65-8467-E469DF5E39EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2AA1F01A-6AFB-4A65-8467-E469DF5E39EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{310DF826-C010-4FFC-80C2-872323262CFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{310DF826-C010-4FFC-80C2-872323262CFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{310DF826-C010-4FFC-80C2-872323262CFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{310DF826-C010-4FFC-80C2-872323262CFF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7B6BECF2-4AE1-4D6B-8497-E99494E81024}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7B6BECF2-4AE1-4D6B-8497-E99494E81024}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B6BECF2-4AE1-4D6B-8497-E99494E81024}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -223,18 +209,6 @@ Global
 		{5EAA0BBD-976C-4952-803C-2EE2B4090BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EAA0BBD-976C-4952-803C-2EE2B4090BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EAA0BBD-976C-4952-803C-2EE2B4090BBD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A228236D-B2D8-4952-8259-1C394F39AD07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A228236D-B2D8-4952-8259-1C394F39AD07}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A228236D-B2D8-4952-8259-1C394F39AD07}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A228236D-B2D8-4952-8259-1C394F39AD07}.Release|Any CPU.Build.0 = Release|Any CPU
-		{70C0D352-3EAE-4229-BAAB-0721602E4BD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{70C0D352-3EAE-4229-BAAB-0721602E4BD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{70C0D352-3EAE-4229-BAAB-0721602E4BD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{70C0D352-3EAE-4229-BAAB-0721602E4BD1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{78DE7A1F-3ACA-46DF-AB81-9DAFD88E9AEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{78DE7A1F-3ACA-46DF-AB81-9DAFD88E9AEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{78DE7A1F-3ACA-46DF-AB81-9DAFD88E9AEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{78DE7A1F-3ACA-46DF-AB81-9DAFD88E9AEE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DAE2FFF6-99BD-474B-9B05-D62136746550}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DAE2FFF6-99BD-474B-9B05-D62136746550}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAE2FFF6-99BD-474B-9B05-D62136746550}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -279,18 +253,6 @@ Global
 		{866D692F-A37B-4489-A4BB-EC90A5F36C0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{866D692F-A37B-4489-A4BB-EC90A5F36C0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{866D692F-A37B-4489-A4BB-EC90A5F36C0F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7BA4098D-CBEB-46CA-B144-26176505BF60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7BA4098D-CBEB-46CA-B144-26176505BF60}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7BA4098D-CBEB-46CA-B144-26176505BF60}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7BA4098D-CBEB-46CA-B144-26176505BF60}.Release|Any CPU.Build.0 = Release|Any CPU
-		{61CF2894-9695-426E-AC89-152A5048FDCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{61CF2894-9695-426E-AC89-152A5048FDCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{61CF2894-9695-426E-AC89-152A5048FDCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{61CF2894-9695-426E-AC89-152A5048FDCB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C389C2DB-CAF7-47AF-8C08-C91E4463EABF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C389C2DB-CAF7-47AF-8C08-C91E4463EABF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C389C2DB-CAF7-47AF-8C08-C91E4463EABF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C389C2DB-CAF7-47AF-8C08-C91E4463EABF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B92DE4CA-9A1C-4D25-85FB-6462D5727C77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B92DE4CA-9A1C-4D25-85FB-6462D5727C77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B92DE4CA-9A1C-4D25-85FB-6462D5727C77}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -375,6 +337,26 @@ Global
 		{CAD0CF3F-9934-4DC5-8F4B-F2563919DC3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAD0CF3F-9934-4DC5-8F4B-F2563919DC3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAD0CF3F-9934-4DC5-8F4B-F2563919DC3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84379603-1940-43EC-A365-D777539C423C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84379603-1940-43EC-A365-D777539C423C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84379603-1940-43EC-A365-D777539C423C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84379603-1940-43EC-A365-D777539C423C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{061BD90F-7953-4923-9E23-4B9F4F1A9DE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{061BD90F-7953-4923-9E23-4B9F4F1A9DE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{061BD90F-7953-4923-9E23-4B9F4F1A9DE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{061BD90F-7953-4923-9E23-4B9F4F1A9DE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFE90E58-998A-4AEB-A05D-B21526083FDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFE90E58-998A-4AEB-A05D-B21526083FDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFE90E58-998A-4AEB-A05D-B21526083FDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFE90E58-998A-4AEB-A05D-B21526083FDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{557EFE87-B374-4895-873D-F2647A33F12D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{557EFE87-B374-4895-873D-F2647A33F12D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{557EFE87-B374-4895-873D-F2647A33F12D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{557EFE87-B374-4895-873D-F2647A33F12D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA47E529-6A0E-447C-8C2C-86D1E1416859}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA47E529-6A0E-447C-8C2C-86D1E1416859}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA47E529-6A0E-447C-8C2C-86D1E1416859}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA47E529-6A0E-447C-8C2C-86D1E1416859}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -384,8 +366,6 @@ Global
 		{D88E91B4-9F33-4442-9951-3B58B7EAF8C0} = {AE3C234A-ADA3-4990-B661-C50F493028A3}
 		{E59550DE-1D8F-49F1-B0CD-E77DF18D4123} = {AE3C234A-ADA3-4990-B661-C50F493028A3}
 		{7539F8E2-D04A-426B-8F4D-8A7DFEEBF5BB} = {AE3C234A-ADA3-4990-B661-C50F493028A3}
-		{2AA1F01A-6AFB-4A65-8467-E469DF5E39EA} = {72F33E4E-B236-4880-86E4-4E809C09A892}
-		{310DF826-C010-4FFC-80C2-872323262CFF} = {72F33E4E-B236-4880-86E4-4E809C09A892}
 		{763347D7-9D5F-4656-9FBA-036E50ADA04F} = {AE3C234A-ADA3-4990-B661-C50F493028A3}
 		{11BBB184-98A9-4E16-BE77-45632972DB21} = {AE3C234A-ADA3-4990-B661-C50F493028A3}
 		{DAE2FFF6-99BD-474B-9B05-D62136746550} = {87C0C9BE-1159-4D8E-9103-D07E9A769F76}
@@ -416,6 +396,10 @@ Global
 		{444DF6D6-BAA7-4D3F-A9EF-E3CFCF5D30CF} = {077F5E93-E83F-447B-9F4E-A1C2F3CCEA39}
 		{870B63F6-23E2-4479-B821-D315DD8A8F6A} = {AE3C234A-ADA3-4990-B661-C50F493028A3}
 		{CAD0CF3F-9934-4DC5-8F4B-F2563919DC3C} = {AE3C234A-ADA3-4990-B661-C50F493028A3}
+		{FC3747C4-5227-4280-8569-C4B6A1CA03B8} = {6F364ECB-76BE-42E0-96D8-36DD069F95ED}
+		{BFE90E58-998A-4AEB-A05D-B21526083FDB} = {FC3747C4-5227-4280-8569-C4B6A1CA03B8}
+		{557EFE87-B374-4895-873D-F2647A33F12D} = {FC3747C4-5227-4280-8569-C4B6A1CA03B8}
+		{BA47E529-6A0E-447C-8C2C-86D1E1416859} = {FC3747C4-5227-4280-8569-C4B6A1CA03B8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B9F693E7-6A4E-4EEC-8474-82209B8E4094}

@@ -14,7 +14,7 @@ namespace Fighting.Storaging.EntityFrameworkCore.Abstractions
         /// <summary>
         /// Constructor.
         /// </summary>
-        protected StorageContext(StorageOptions storageOptions, DbContextOptions options) : base(options)
+        protected StorageContext(StorageOptions storageOptions, Microsoft.EntityFrameworkCore.DbContextOptions options) : base(options)
         {
             StorageOptions = storageOptions ?? throw new ArgumentNullException(nameof(storageOptions));
         }

@@ -42,7 +42,7 @@ namespace Baibaocp.LotteryDispatching.Internal
             {
                 try
                 {
-                    _logger.LogTrace("Received querying {0} message. LdpOrderId:{1} LdpMerchanerId:{2}", message.QueryingType, message.LdpOrderId, message.LdpMerchanerId);
+                    _logger.LogInformation("Received querying {0} message. LdpOrderId:{1} LdpMerchanerId:{2}", message.QueryingType, message.LdpOrderId, message.LdpMerchanerId);
                     var handle = await _queryingDispatcher.DispatchAsync(message);
                     switch (handle)
                     {
@@ -76,7 +76,7 @@ namespace Baibaocp.LotteryDispatching.Internal
                                 await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Awarded.{message.LdpMerchanerId}", new NoticeMessage<LotteryAwarded>(message.LdpOrderId, message.LdpMerchanerId, new LotteryAwarded
                                 {
                                     AftertaxBonusAmount = winning.AftertaxBonusAmount,
-                                    AwatdingType = LotteryAwardingTypes.Winning,
+                                    AwardingType = LotteryAwardingTypes.Winning,
                                     BonusAmount = winning.BonusAmount,
                                     LvpMerchanerId = message.LvpMerchanerId,
                                     LvpOrderId = message.LvpOrderId
@@ -87,7 +87,7 @@ namespace Baibaocp.LotteryDispatching.Internal
                             {
                                 await _lotteryNoticingMessagePublisher.PublishAsync($"LotteryOrdering.Awarded.{message.LdpMerchanerId}", new NoticeMessage<LotteryAwarded>(message.LdpOrderId, message.LdpMerchanerId, new LotteryAwarded
                                 {
-                                    AwatdingType = LotteryAwardingTypes.Loseing,
+                                    AwardingType = LotteryAwardingTypes.Loseing,
                                     LvpMerchanerId = message.LvpMerchanerId,
                                     LvpOrderId = message.LvpOrderId
                                 }));
@@ -95,7 +95,7 @@ namespace Baibaocp.LotteryDispatching.Internal
                             }
                         case WaitingHandle waiting:
                             {
-                                await Task.Delay(TimeSpan.FromSeconds(waiting.DelayTime));
+                                await Task.Delay(waiting.DelayTime * 1000);
                                 return new Nack();
                             }
                     }

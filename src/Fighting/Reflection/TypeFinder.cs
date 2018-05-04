@@ -1,5 +1,5 @@
 ﻿using Fighting.Abstractions;
-using Fighting.Collection.Extensions;
+using Fighting.Collections.Extensions;
 using Fighting.Reflection.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;

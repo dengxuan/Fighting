@@ -2,6 +2,5 @@
 {
     public class LotteryNoticeOptions
     {
-        public NoticeConfiguration Configuration { get; set; }
     }
 }

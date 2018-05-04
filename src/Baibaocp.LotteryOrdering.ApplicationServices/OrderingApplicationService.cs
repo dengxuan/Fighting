@@ -27,9 +27,9 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
 
         private readonly IRepository<LotteryPhase, int> _lotteryPhaseRepository;
 
-        private readonly IRepository<LotteryMerchanteOrder, string> _orderingReoository;
-
         private readonly IRepository<LotterySportsMatch, long> _lotterySportsMatchRepository;
+
+        private readonly IRepository<LotteryMerchanteOrder, string> _orderingReoository;
 
 
         public OrderingApplicationService(StorageOptions options, IRepository<LotteryPhase, int> lotteryPhaseRepository, IRepository<LotteryMerchanteOrder, string> orderingReoository, IRepository<LotterySportsMatch, long> lotterySportsMatchRepository, ILogger<OrderingApplicationService> logger, IIdentityGenerater identityGenerater, ICacheManager cacheManager) : base(cacheManager)
@@ -47,14 +47,34 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
             return await _orderingReoository.FirstOrDefaultAsync(id);
         }
 
-        public async Task<LotteryMerchanteOrder> CreateAsync(string lvpOrderId, long? lvpUserId, string lvpVenderId, int lotteryId, int lotteryPlayId, int? issueNumber, string investCode, bool investType, short investCount, byte investTimes, int investAmount)
+        public async Task<(LotteryMerchanteOrder order, TimeSpan? delay)> CreateAsync(string lvpOrderId, long? lvpUserId, string lvpVenderId, int lotteryId, int lotteryPlayId, int? issueNumber, string investCode, bool investType, short investCount, byte investTimes, int investAmount)
         {
             string id = _identityGenerater.Generate().ToString();
             DateTime expectedBonusTime = DateTime.Now;
-            if (issueNumber.HasValue)
+            DateTime currentTime = DateTime.Now;
+            TimeSpan? delayTime = null;
+            if (issueNumber.HasValue && issueNumber != 0)
             {
                 var phaseNumber = await _lotteryPhaseRepository.FirstOrDefaultAsync(predicate => predicate.LotteryId == lotteryId && predicate.IssueNumber == issueNumber);
                 expectedBonusTime = phaseNumber.EndTime;
+                if (lotteryId < 100)
+                {
+                    expectedBonusTime = expectedBonusTime.AddHours(1.5);
+
+                    /*低频数字彩票0点到12点不销售*/
+                    if (currentTime.Hour < 9)
+                    {
+                        delayTime = currentTime.Date.AddHours(9) - currentTime;
+                    }
+                }
+                else
+                {
+                    /* 高频彩票期后30秒开始投注出票*/
+                    if (phaseNumber.StartTime > currentTime)
+                    {
+                        delayTime = (phaseNumber.StartTime - currentTime).Add(TimeSpan.FromSeconds(30));
+                    }
+                }
             }
             else
             {
@@ -71,9 +91,21 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
                     }
                 }
                 expectedBonusTime = expectedBonusTime.AddHours(3);
+                /* 竞彩周日，周一 1点到9点，不销售，其他时间0点到9点不销售*/
+                if (currentTime.Hour < 9)
+                {
+                    if ((currentTime.DayOfWeek == DayOfWeek.Sunday || currentTime.DayOfWeek == DayOfWeek.Monday) && currentTime.Hour > 1)
+                    {
+                        delayTime = currentTime.Date.AddHours(9) - currentTime;
+                    }
+                    else
+                    {
+                        delayTime = currentTime.Date.AddHours(9) - currentTime;
+                    }
+                }
             }
 
-            return await _orderingReoository.InsertAsync(new LotteryMerchanteOrder
+            var order = await _orderingReoository.InsertAsync(new LotteryMerchanteOrder
             {
                 Id = id,
                 LvpOrderId = lvpOrderId,
@@ -92,6 +124,7 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
                 Status = (int)OrderStatus.Succeed,
                 CreationTime = DateTime.Now
             });
+            return (order, delayTime);
         }
 
         public async Task UpdateAsync(LotteryMerchanteOrder order)
@@ -102,12 +135,20 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
         public async Task<LotteryMerchanteOrder> TicketedAsync(string oderId, string ldpVenderId, string ticketedNumber, DateTime ticketedTime, string ticketOdds = default(string))
         {
             var order = await _orderingReoository.FirstOrDefaultAsync(oderId);
-            order.TicketedNumber = ticketedNumber;
-            order.TicketedTime = ticketedTime;
-            order.TicketedOdds = ticketOdds;
-            order.LdpVenderId = ldpVenderId;
-            order.Status = (int)OrderStatus.TicketDrawing;
-            return await _orderingReoository.UpdateAsync(order);
+            if (order != null)
+            {
+                order.TicketedNumber = ticketedNumber;
+                order.TicketedTime = ticketedTime;
+                order.TicketedOdds = ticketOdds;
+                order.LdpVenderId = ldpVenderId;
+                order.Status = (int)OrderStatus.TicketDrawing;
+                return await _orderingReoository.UpdateAsync(order);
+            }
+            else
+            {
+                _logger.LogInformation($"出票成功 订单不存在:[{oderId}-{ldpVenderId}-{ticketedNumber}-{ticketOdds}]");
+            }
+            return null;
         }
 
         public async Task<LotteryMerchanteOrder> WinningAsync(string orderId, int amount, int aftertaxBonusAmount)
@@ -122,8 +163,16 @@ namespace Baibaocp.LotteryOrdering.ApplicationServices
         public async Task<LotteryMerchanteOrder> RejectedAsync(string orderId)
         {
             var order = await _orderingReoository.FirstOrDefaultAsync(orderId);
-            order.Status = (int)OrderStatus.TicketFailed;
-            return await _orderingReoository.UpdateAsync(order);
+            if (order != null)
+            {
+                order.Status = (int)OrderStatus.TicketFailed;
+                return await _orderingReoository.UpdateAsync(order);
+            }
+            else
+            {
+                _logger.LogInformation($"出票失败订单不存在:[{orderId}]");
+            }
+            return order;
         }
 
         public async Task<LotteryMerchanteOrder> LoseingAsync(string orderId)

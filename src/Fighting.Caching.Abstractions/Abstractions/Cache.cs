@@ -22,7 +22,8 @@ namespace Fighting.Caching.Abstractions
         protected Cache(string name)
         {
             Name = name;
-            DefaultSlidingExpireTime = TimeSpan.FromHours(1);
+            DefaultSlidingExpireTime = TimeSpan.FromSeconds(30);
+            DefaultAbsoluteExpireTime = TimeSpan.FromSeconds(30);
         }
 
         private object Retrieve(string key, Func<string, object> factory)

@@ -1,22 +1,21 @@
-﻿using Fighting.Hosting;
-using System;
-using System.Threading.Tasks;
-using Fighting.DependencyInjection;
-using Fighting.MessageServices.DependencyInjection;
-using Fighting.ApplicationServices.DependencyInjection;
-using Baibaocp.ApplicationServices;
-using Baibaocp.ApplicationServices.DependencyInjection;
+﻿using Baibaocp.ApplicationServices.DependencyInjection;
 using Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using Baibaocp.LotteryOrdering.EntityFrameworkCore;
+using Baibaocp.LotteryTrading.TradeLogging.DependencyInjection;
 using Baibaocp.Storaging.EntityFrameworkCore;
+using Fighting.ApplicationServices.DependencyInjection;
+using Fighting.DependencyInjection;
+using Fighting.Extensions.UnitOfWork.DependencyInjection;
+using Fighting.Hosting;
 using Fighting.Storaging.EntityFrameworkCore.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using RawRabbit.Instantiation;
-using RawRabbit.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
-using Baibaocp.LotteryTrading.TradeLogging.DependencyInjection;
+using RawRabbit.Instantiation;
+using System.Threading.Tasks;
+using Fighting.Extensions.UnitOfWork.EntityFrameworkCore.DependencyInjection;
 
 namespace Baibaocp.LotteryTrading.TradeLogging.Hosting
 {
@@ -52,13 +51,18 @@ namespace Baibaocp.LotteryTrading.TradeLogging.Hosting
                             });
                         });
 
+                        fightBuilder.AddUnitOfWork(unitOfWorkBuilder =>
+                        {
+                            unitOfWorkBuilder.UseEntityFrameworkCore(typeof(LotteryOrderingDbContext), typeof(BaibaocpStorageContext));
+                        });
+
                         fightBuilder.ConfigureStorage(storageBuilder =>
                         {
-                            storageBuilder.UseEntityFrameworkCore<LotteryOrderingDbContext>(optionsBuilder =>
+                            storageBuilder.AddEntityFrameworkCore<LotteryOrderingDbContext>(optionsBuilder =>
                             {
                                 optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
                             });
-                            storageBuilder.UseEntityFrameworkCore<BaibaocpStorageContext>(optionsBuilder =>
+                            storageBuilder.AddEntityFrameworkCore<BaibaocpStorageContext>(optionsBuilder =>
                             {
                                 optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
                             });

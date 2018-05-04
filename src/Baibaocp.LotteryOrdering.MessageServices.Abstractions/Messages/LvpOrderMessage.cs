@@ -56,5 +56,7 @@
         /// 投注金额
         /// </summary>
         public int InvestAmount { get; set; }
+
+        public override string ToString() => $"[LvpOrderId:{LvpOrderId}, LvpVenderId:{LvpVenderId}, LvpUserId:{LvpUserId}, LotteryId:{LotteryId}, LotteryPlayId:{LotteryPlayId}, IssueNumber:{IssueNumber}, InvestCode:{InvestCode}, InvestType:{InvestType}, InvestCount:{InvestCount}, InvestTimes:{InvestTimes}, InvestAmount:{InvestAmount}]";
     }
 }

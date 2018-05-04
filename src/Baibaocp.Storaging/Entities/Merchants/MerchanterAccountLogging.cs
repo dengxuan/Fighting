@@ -45,11 +45,11 @@ namespace Baibaocp.Storaging.Entities.Merchants
         /// <summary>
         /// 金额
         /// </summary>
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
 
         /// <summary>
         /// 余额
         /// </summary>
-        public int Balance { get; set; }
+        public decimal Balance { get; set; }
     }
 }

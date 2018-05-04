@@ -1,5 +1,5 @@
 ﻿using Baibaocp.LotteryDispatching.Abstractions;
-using Baibaocp.LotteryDispatching.Linghang.Abstractions.Abstractions;
+using Baibaocp.LotteryDispatching.Linghang.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Abstractions;
 using Baibaocp.LotteryDispatching.MessageServices.Messages;
 using Fighting.Json;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace Baibaocp.LotteryDispatching.Linghang.Abstractions.Dispatchers
+namespace Baibaocp.LotteryDispatching.Linghang.Dispatchers
 {
     public class OrderingExecuteDispatcher : LinghangDispatcher<OrderingDispatchMessage>, IOrderingDispatcher
     {
@@ -21,20 +21,7 @@ namespace Baibaocp.LotteryDispatching.Linghang.Abstractions.Dispatchers
 
         protected override string BuildRequest(OrderingDispatchMessage executer)
         {
-            OrderSending ordersend = new OrderSending();
-            ordersend.gameId = executer.LvpOrder.LotteryId.ToSuicaiLottery();
-            ordersend.issue = executer.LvpOrder.IssueNumber.FromIssueNumber(executer.LvpOrder.LotteryId);
-            ordersend.orderList = new List<order>();
-            order order = new order()
-            {
-                orderId = executer.LdpOrderId,
-                timeStamp = ((DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000).ToString(),
-                ticketMoney = (executer.LvpOrder.InvestAmount / 100).ToString(),
-                betCount = "1",
-                betDetail = executer.LvpOrder.InvestCode.ToSuicaicode(executer)
-            };
-            ordersend.orderList.Add(order);
-            return JsonExtensions.ToJsonString(ordersend);
+            throw new NotImplementedException();
         }
 
         public Task<IOrderingHandle> DispatchAsync(OrderingDispatchMessage message)

@@ -12,12 +12,6 @@ namespace Baibaocp.LotteryOrdering.EntityFrameworkCore
         {
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    base.OnConfiguring(optionsBuilder);
-        //    optionsBuilder.UseMySql(StorageOptions.DefaultNameOrConnectionString);
-        //}
-
         public DbSet<LotteryMerchanteOrder> LotteryVenderOrders { get; set; }
     }
 }

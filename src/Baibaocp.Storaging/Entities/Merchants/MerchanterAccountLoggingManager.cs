@@ -21,15 +21,16 @@ namespace Baibaocp.Storaging.Entities.Merchants
             _tradeLoggingRepositiry = tradeLoggingRepositiry;
         }
 
-        public Task<bool> IsContainsAsync(string merchanterId, string orderId)
+        public Task<bool> IsContainsAsync(string merchanterId, string orderId, int operationTypes)
         {
             var isConsains = TradeLoggings.Where(predicate => predicate.MerchanterId == merchanterId)
                                           .Where(predicate => predicate.OrderId == orderId)
+                                          .Where(predicate => predicate.OperationTypes == operationTypes)
                                           .Any();
             return Task.FromResult(isConsains);
         }
 
-        public async Task CreateAsync(string merchanterId, string orderId, int amount, int balance, int operationType, int? lotteryId = null)
+        public async Task CreateAsync(string merchanterId, string orderId, decimal amount, decimal balance, int operationType, int? lotteryId = null)
         {
             MerchanterAccountLogging tradeLogging = new MerchanterAccountLogging
             {

@@ -44,21 +44,36 @@ namespace Baibaocp.Storaging.Entities.Merchants
         public string SecretKey { get; set; }
 
         /// <summary>
+        /// 是否通知
+        /// </summary>
+        public bool IsNotice { get; set; }
+
+        /// <summary>
+        /// 返奖通知地址
+        /// </summary>
+        public string NoticeAddress { get; set; }
+
+        /// <summary>
+        /// 出票通知地址
+        /// </summary>
+        public string TicketAddress { get; set; }
+
+        /// <summary>
         /// 预存款余额
         /// </summary>
         [Column("RestPreMoney")]
-        public int Balance { get; set; }
+        public decimal Balance { get; set; }
 
         /// <summary>
         /// 总出票金额
         /// </summary>
         [Column("OutTicketMoney")]
-        public int TotalTicketedAmount { get; set; }
+        public decimal TotalTicketedAmount { get; set; }
 
         /// <summary>
         /// 总返奖金额
         /// </summary>
         [Column("RewardMoney")]
-        public int TotalAwardedAmount { get; set; }
+        public decimal TotalAwardedAmount { get; set; }
     }
 }

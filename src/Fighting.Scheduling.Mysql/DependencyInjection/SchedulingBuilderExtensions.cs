@@ -13,10 +13,10 @@ namespace Fighting.Scheduling.Mysql.DependencyInjection
     {
         public static SchedulingBuilder UseMysqlStorage(this SchedulingBuilder schedulingBuilder, SchedulingConfiguration schedulingConfiguration)
         {
-            schedulingBuilder.Services.TryAddSingleton<IScheduleStore, ScheduleStorage>();
+            schedulingBuilder.Services.TryAddTransient<IScheduleStore, ScheduleStorage>();
             schedulingBuilder.FightBuilder.ConfigureStorage(setupAction =>
             {
-                setupAction.UseEntityFrameworkCore<ScheduleDbContext>(optionsBuilder =>
+                setupAction.AddEntityFrameworkCore<ScheduleDbContext>(optionsBuilder =>
                 {
                     optionsBuilder.UseMySql(schedulingConfiguration.DefaultConnection);
                 });

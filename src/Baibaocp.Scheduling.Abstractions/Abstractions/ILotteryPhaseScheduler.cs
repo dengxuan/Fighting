@@ -3,7 +3,7 @@ using Fighting.Scheduling.Abstractions;
 
 namespace Baibaocp.Scheduling.Abstractions
 {
-    [ISingletonDependency]
+    [SingletonDependency]
     public interface ILotteryPhaseScheduler : IScheduler<LotteryPhaseSchedulerArgs>
     {
     }

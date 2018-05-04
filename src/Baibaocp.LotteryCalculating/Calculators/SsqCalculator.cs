@@ -22,15 +22,15 @@ namespace Baibaocp.LotteryCalculating.Calculators
         {
             int level = 0;
             string DrawNumber = await FindDrawNumberAsync(LotteryMerchanteOrder.LotteryId, LotteryMerchanteOrder.IssueNumber.Value);
-            if (DrawNumber != "")
+            if (string.IsNullOrEmpty(DrawNumber))
             {
                 return Handle.Waiting;
             }
             switch (LotteryMerchanteOrder.LotteryPlayId)
             {
                 case (int)PlayTypes.Ssq_Single: level = SingleSsq(LotteryMerchanteOrder.InvestCode, DrawNumber); break;
-                case (int)PlayTypes.Ssq_Multiple: CompoundSsq(LotteryMerchanteOrder.InvestCode, DrawNumber); break;
-                case (int)PlayTypes.Ssq_FixedUnset: BraveryTowSsq(LotteryMerchanteOrder.InvestCode, DrawNumber); break;
+                case (int)PlayTypes.Ssq_Multiple: level = CompoundSsq(LotteryMerchanteOrder.InvestCode, DrawNumber); break;
+                case (int)PlayTypes.Ssq_FixedUnset: level = BraveryTowSsq(LotteryMerchanteOrder.InvestCode, DrawNumber); break;
             }
             if (level > 0)
             {

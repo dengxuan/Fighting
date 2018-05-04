@@ -2,6 +2,7 @@
 using Baibaocp.LotteryNotifier.MessageServices.Messages;
 using Baibaocp.LotteryOrdering.ApplicationServices.Abstractions;
 using Baibaocp.LotteryOrdering.MessageServices.Messages;
+using Fighting.Extensions.UnitOfWork.Abstractions;
 using Fighting.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -34,20 +35,25 @@ namespace Baibaocp.LotteryTrading.TradeLogging.Subscribers
             {
                 try
                 {
-                    _logger.LogTrace("Received awarding message: {0} {1} {2}", message.LdpOrderId, message.LdpMerchanerId, message.Content.AwatdingType);
-                    if (message.Content.AwatdingType == LotteryAwardingTypes.Winning)
+                    _logger.LogTrace("Received awarding message: {0} {1} {2}", message.LdpOrderId, message.LdpMerchanerId, message.Content.AwardingType);
+                    if (message.Content.AwardingType == LotteryAwardingTypes.Winning)
                     {
-                        IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
-                        var order = await orderingApplicationService.FindOrderAsync(message.LdpOrderId);
-                        ILotteryMerchanterApplicationService lotteryMerchanterApplicationService = _iocResolver.GetRequiredService<ILotteryMerchanterApplicationService>();
-                        await lotteryMerchanterApplicationService.Rewarding(message.LdpMerchanerId, message.LdpOrderId, order.LotteryId, order.InvestAmount);
-                        await lotteryMerchanterApplicationService.Rewarding(order.LvpVenderId, order.LvpOrderId, order.LotteryId, order.InvestAmount);
+                        IUnitOfWorkManager unitOfWorkManager = _iocResolver.GetRequiredService<IUnitOfWorkManager>();
+                        using (var uow = unitOfWorkManager.Begin())
+                        {
+                            IOrderingApplicationService orderingApplicationService = _iocResolver.GetRequiredService<IOrderingApplicationService>();
+                            var order = await orderingApplicationService.FindOrderAsync(message.LdpOrderId);
+                            ILotteryMerchanterApplicationService lotteryMerchanterApplicationService = _iocResolver.GetRequiredService<ILotteryMerchanterApplicationService>();
+                            await lotteryMerchanterApplicationService.Rewarding(message.LdpMerchanerId, order.Id, order.LotteryId, message.Content.BonusAmount);
+                            await lotteryMerchanterApplicationService.Rewarding(order.LvpVenderId, order.Id, order.LotteryId, message.Content.BonusAmount);
+                            uow.Complete();
+                        }
                     }
                     return new Ack();
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogTrace(ex, "Received awarding message: {0} {1} {2}", message.LdpOrderId, message.LdpMerchanerId, message.Content.AwatdingType);
+                    _logger.LogTrace(ex, "Received awarding message: {0} {1} {2}", message.LdpOrderId, message.LdpMerchanerId, message.Content.AwardingType);
                 }
                 return new Nack();
             }, context =>

@@ -3,7 +3,7 @@ using Baibaocp.LotteryOrdering.MessageServices.Messages;
 
 namespace Baibaocp.LotteryNotifier.MessageServices.Messages
 {
-    public class LotteryTicketed: INoticeContent
+    public class LotteryTicketed : INoticeContent
     {
 
         public string LvpOrderId { get; set; }
@@ -17,5 +17,7 @@ namespace Baibaocp.LotteryNotifier.MessageServices.Messages
         public string TicketedOdds { get; set; }
 
         public LotteryTicketingTypes TicketingType { get; set; }
+
+        public override string ToString() => $"[LvpOrderId:{LvpOrderId}, LvpMerchanerId:{LvpMerchanerId}, TicketedNumber:{TicketedNumber}, TicketedTime:{TicketedTime}, TicketedOdds:{TicketedOdds}, TicketingType:{TicketingType}]";
     }
 }

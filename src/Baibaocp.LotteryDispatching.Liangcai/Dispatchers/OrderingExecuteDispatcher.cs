@@ -50,6 +50,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Dispatchers
             try
             {
                 string xml = await Send(message, "101");
+                _logger.LogInformation(xml);
                 XDocument document = XDocument.Parse(xml);
 
                 string Status = document.Element("ActionResult").Element("xCode").Value;

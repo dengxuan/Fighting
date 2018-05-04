@@ -4,7 +4,6 @@ using Baibaocp.LotteryNotifier.MessageServices.DependencyInjection;
 using Baibaocp.LotteryOrdering.ApplicationServices.DependencyInjection;
 using Baibaocp.LotteryOrdering.EntityFrameworkCore;
 using Baibaocp.LotteryOrdering.MessageServices.DependencyInjection;
-using Baibaocp.LotteryOrdering.MessagesSevices;
 using Baibaocp.LotteryOrdering.Scheduling.DependencyInjection;
 using Baibaocp.Storaging.EntityFrameworkCore;
 using Fighting.ApplicationServices.DependencyInjection;
@@ -23,6 +22,8 @@ using Microsoft.Extensions.Logging;
 using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
+using Fighting.Extensions.UnitOfWork.EntityFrameworkCore.DependencyInjection;
+using Fighting.Extensions.UnitOfWork.DependencyInjection;
 using System.Threading.Tasks;
 
 namespace Baibaocp.LotteryOrdering.MessageServices
@@ -72,13 +73,18 @@ namespace Baibaocp.LotteryOrdering.MessageServices
                             });
                         });
 
+                        fightBuilder.AddUnitOfWork(unitOfWorkBuilder =>
+                        {
+                            unitOfWorkBuilder.UseEntityFrameworkCore(typeof(LotteryOrderingDbContext), typeof(BaibaocpStorageContext));
+                        });
+
                         fightBuilder.ConfigureStorage(storageBuilder =>
                         {
-                            storageBuilder.UseEntityFrameworkCore<LotteryOrderingDbContext>(optionsBuilder =>
+                            storageBuilder.AddEntityFrameworkCore<LotteryOrderingDbContext>(optionsBuilder =>
                             {
                                 optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
                             });
-                            storageBuilder.UseEntityFrameworkCore<BaibaocpStorageContext>(optionsBuilder =>
+                            storageBuilder.AddEntityFrameworkCore<BaibaocpStorageContext>(optionsBuilder =>
                             {
                                 optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
                             });

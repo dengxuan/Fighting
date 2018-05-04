@@ -21,7 +21,10 @@ using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Instantiation;
 using System;
+using Fighting.Extensions.UnitOfWork.DependencyInjection;
+using Fighting.Extensions.UnitOfWork.EntityFrameworkCore.DependencyInjection;
 using System.Threading.Tasks;
+using Fighting.Scheduling.Mysql;
 
 namespace Baibaocp.LotteryOrdering.Scheduling.Hosting
 {
@@ -67,13 +70,19 @@ namespace Baibaocp.LotteryOrdering.Scheduling.Hosting
                         {
                             lotteryCaclulatingBuilder.UseLotteryCalculating();
                         });
+
+                        fightBuilder.AddUnitOfWork(unitOfWorkBuilder =>
+                        {
+                            unitOfWorkBuilder.UseEntityFrameworkCore(typeof(LotteryOrderingDbContext), typeof(BaibaocpStorageContext), typeof(ScheduleDbContext));
+                        });
+
                         fightBuilder.ConfigureStorage(storageBuilder =>
                         {
-                            storageBuilder.UseEntityFrameworkCore<LotteryOrderingDbContext>(optionsBuilder =>
+                            storageBuilder.AddEntityFrameworkCore<LotteryOrderingDbContext>(optionsBuilder =>
                             {
                                 optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
                             });
-                            storageBuilder.UseEntityFrameworkCore<BaibaocpStorageContext>(optionsBuilder =>
+                            storageBuilder.AddEntityFrameworkCore<BaibaocpStorageContext>(optionsBuilder =>
                             {
                                 optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("Baibaocp.Storage"));
                             });
@@ -92,7 +101,10 @@ namespace Baibaocp.LotteryOrdering.Scheduling.Hosting
                         ClientConfiguration = hostContext.Configuration.GetSection("RawRabbitConfiguration").Get<RawRabbitConfiguration>(),
                     });
                 })
-                .ConfigureLogging(logging => logging.AddConsole()).Build();
+                .ConfigureLogging(logging =>
+                {
+                    logging.AddConsole();
+                }).Build();
             await builder.StartAsync();
             Console.ReadLine();
         }

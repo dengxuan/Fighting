@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Baibaocp.LotteryOrdering.Scheduling.Hosting": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "Environment": "Developement"
+      }
+    }
+  }
+}

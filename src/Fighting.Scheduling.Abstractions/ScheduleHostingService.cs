@@ -1,8 +1,8 @@
-﻿using Fighting.Extensions.Threading;
+﻿using Fighting.Extensions.UnitOfWork.Abstractions;
 using Fighting.Hosting;
 using Fighting.Scheduling.Abstractions;
-using Fighting.Threading.Works;
 using Fighting.Timing;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -14,15 +14,13 @@ namespace Baibaocp.LotteryOrdering.Hosting
 {
     public class ScheduleHostingService : BackgroundService
     {
-        private readonly IScheduleStore _store;
 
         private readonly IServiceProvider _iocResolver;
 
         private readonly ILogger<ScheduleHostingService> _logger;
 
-        public ScheduleHostingService(IScheduleStore store, IServiceProvider iocResolver, ILogger<ScheduleHostingService> logger)
+        public ScheduleHostingService(IServiceProvider iocResolver, ILogger<ScheduleHostingService> logger)
         {
-            _store = store;
             _iocResolver = iocResolver;
             _logger = logger;
         }
@@ -33,11 +31,17 @@ namespace Baibaocp.LotteryOrdering.Hosting
             {
                 while (!stoppingToken.IsCancellationRequested)
                 {
-                    var schedules = await _store.GetWaitingSchedulesAsync(1000);
-
-                    foreach (var schedule in schedules)
+                    IScheduleStore store = _iocResolver.GetRequiredService<IScheduleStore>();
+                    IUnitOfWorkManager unitOfWorkManager = _iocResolver.GetRequiredService<IUnitOfWorkManager>();
+                    using (var uow = unitOfWorkManager.Begin())
                     {
-                        await TryExecuteScheduleAsync(schedule);
+                        var schedules = await store.GetWaitingSchedulesAsync(1000);
+                        foreach (var schedule in schedules)
+                        {
+                            await TryExecuteScheduleAsync(schedule);
+                            await store.UpdateAsync(schedule);
+                        }
+                        uow.Complete();
                     }
                     Thread.Sleep(1000);
                 }
@@ -48,9 +52,6 @@ namespace Baibaocp.LotteryOrdering.Hosting
         {
             try
             {
-                schedule.TryCount++;
-                schedule.LastTryTime = Clock.Now;
-
                 var scheduleType = Type.GetType(schedule.SchedulerType);
                 var scheduler = _iocResolver.GetService(scheduleType);
                 try
@@ -61,18 +62,19 @@ namespace Baibaocp.LotteryOrdering.Hosting
 
                     bool result = await (schedulerExecuteMethod.Invoke(scheduler, new[] { argsObject }) as Task<bool>);
 
-                    if(result == false)
+                    if (result == false)
                     {
                         var nextTryTime = schedule.CalculateNextTryTime();
                         if (nextTryTime.HasValue)
                         {
                             schedule.NextTryTime = nextTryTime.Value;
                         }
-                        await TryUpdate(schedule);
+                        schedule.TryCount++;
+                        schedule.LastTryTime = Clock.Now;
                     }
                     else
                     {
-                        await _store.DeleteAsync(schedule);
+                        schedule.IsAbandoned = true;
                     }
                 }
                 catch (Exception ex)
@@ -88,8 +90,6 @@ namespace Baibaocp.LotteryOrdering.Hosting
                     {
                         schedule.IsAbandoned = true;
                     }
-
-                    await TryUpdate(schedule);
                 }
             }
             catch (Exception ex)
@@ -97,20 +97,6 @@ namespace Baibaocp.LotteryOrdering.Hosting
                 _logger.LogError(ex, ex.ToString());
 
                 schedule.IsAbandoned = true;
-
-                await TryUpdate(schedule);
-            }
-        }
-
-        private async Task TryUpdate(Schedule schedule)
-        {
-            try
-            {
-                await _store.UpdateAsync(schedule);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.ToString());
             }
         }
     }

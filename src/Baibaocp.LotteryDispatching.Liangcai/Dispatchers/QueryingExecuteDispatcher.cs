@@ -92,7 +92,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                     {
                         rateCount = int.Parse(match.Attribute("rq").Value);
                     }
-                    string odds = match.Value.Replace('=', '*').Replace('|', '#');
+                    string odds = match.Value.Replace('=', '*').Replace('|', '#').Replace("-", "").Replace(":", "");
                     sb.Append($"{id}@{rateCount}|{odds}#^");
                 }
                 string ticketedNumber = bill.Attribute("id").Value;
@@ -112,6 +112,7 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
             if (_commands.TryGetValue(message.QueryingType, out string command))
             {
                 string xml = await Send(message, command);
+                _logger.LogInformation(xml);
                 XDocument document = XDocument.Parse(xml);
 
                 string Status = document.Element("ActionResult").Element("xCode").Value;
@@ -126,14 +127,29 @@ namespace Baibaocp.LotteryDispatching.Liangcai.Handlers
                 {
                     string odds = document.Element("ActionResult").Element("xValue").Value.Split('_')[3];
                     string oddsXml = DeflateDecompress(odds);
-                    IList<(string Id, DateTime? Time, string Odds)> results = ResolveTicketResults(message.LotteryId, oddsXml);
-                    return new SuccessHandle(results[0].Id, results[0].Time, results[0].Odds);
+                    if (message.LotteryId > 20200)
+                    {
+                        IList<(string Id, DateTime? Time, string Odds)> results = ResolveTicketResults(message.LotteryId, oddsXml);
+                        return new SuccessHandle(results[0].Id, results[0].Time, results[0].Odds);
+                    }
+                    return new SuccessHandle(oddsXml, DateTime.Now);
                 }
                 else if (Status.Equals("2003"))
                 {
                     return new FailureHandle();
                 }
+#if DEBUG
+                if (message.QueryingType == QueryingTypes.Awarding)
+                {
+                    return new WinningHandle(10000, 10000);
+                }
+                else
+                {
+                    return new WaitingHandle();
+                }
+#else
                 return new WaitingHandle();
+#endif
             }
             throw new ArgumentException("No command found");
         }

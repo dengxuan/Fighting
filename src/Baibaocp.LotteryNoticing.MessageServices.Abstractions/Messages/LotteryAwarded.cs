@@ -2,7 +2,7 @@
 
 namespace Baibaocp.LotteryNotifier.MessageServices.Messages
 {
-    public class LotteryAwarded: INoticeContent
+    public class LotteryAwarded : INoticeContent
     {
         public string LvpOrderId { get; set; }
 
@@ -12,6 +12,8 @@ namespace Baibaocp.LotteryNotifier.MessageServices.Messages
 
         public int AftertaxBonusAmount { get; set; }
 
-        public LotteryAwardingTypes AwatdingType { get; set; }
+        public LotteryAwardingTypes AwardingType { get; set; }
+
+        public override string ToString() => $"[LvpOrderId:{LvpOrderId}, LvpMerchanerId:{LvpMerchanerId}, BonusAmount:{BonusAmount}, AftertaxBonusAmount:{AftertaxBonusAmount}, AwardingType:{AwardingType}]";
     }
 }

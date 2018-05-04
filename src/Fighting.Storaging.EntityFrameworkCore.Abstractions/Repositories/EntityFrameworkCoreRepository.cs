@@ -1,7 +1,6 @@
 ﻿using Fighting.Storaging.Entities.Abstractions;
 using Fighting.Storaging.EntityFrameworkCore.Abstractions;
 using Fighting.Storaging.Repositories.Abstractions;
-using System;
 using System.Linq;
 
 namespace Fighting.Storaging.EntityFrameworkCore.Repositories
