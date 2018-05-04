@@ -1,4 +1,5 @@
-﻿using Fighting.Hosting;
+﻿using Fighting.Extensions.UnitOfWork.Abstractions;
+using Fighting.Hosting;
 using Fighting.Scheduling.Abstractions;
 using Fighting.Timing;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,11 +32,16 @@ namespace Baibaocp.LotteryOrdering.Hosting
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     IScheduleStore store = _iocResolver.GetRequiredService<IScheduleStore>();
-                    var schedules = await store.GetWaitingSchedulesAsync(100000);
-
-                    foreach (var schedule in schedules)
+                    IUnitOfWorkManager unitOfWorkManager = _iocResolver.GetRequiredService<IUnitOfWorkManager>();
+                    using (var uow = unitOfWorkManager.Begin())
                     {
-                        await TryExecuteScheduleAsync(schedule);
+                        var schedules = await store.GetWaitingSchedulesAsync(1000);
+                        foreach (var schedule in schedules)
+                        {
+                            await TryExecuteScheduleAsync(schedule);
+                            await store.UpdateAsync(schedule);
+                        }
+                        uow.Complete();
                     }
                     Thread.Sleep(1000);
                 }
@@ -65,12 +71,10 @@ namespace Baibaocp.LotteryOrdering.Hosting
                         }
                         schedule.TryCount++;
                         schedule.LastTryTime = Clock.Now;
-                        await TryUpdate(schedule);
                     }
                     else
                     {
-                        IScheduleStore store = _iocResolver.GetRequiredService<IScheduleStore>();
-                        await store.DeleteAsync(schedule);
+                        schedule.IsAbandoned = true;
                     }
                 }
                 catch (Exception ex)
@@ -86,8 +90,6 @@ namespace Baibaocp.LotteryOrdering.Hosting
                     {
                         schedule.IsAbandoned = true;
                     }
-
-                    await TryUpdate(schedule);
                 }
             }
             catch (Exception ex)
@@ -95,21 +97,6 @@ namespace Baibaocp.LotteryOrdering.Hosting
                 _logger.LogError(ex, ex.ToString());
 
                 schedule.IsAbandoned = true;
-
-                await TryUpdate(schedule);
-            }
-        }
-
-        private async Task TryUpdate(Schedule schedule)
-        {
-            try
-            {
-                IScheduleStore store = _iocResolver.GetRequiredService<IScheduleStore>();
-                await store.UpdateAsync(schedule);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.ToString());
             }
         }
     }

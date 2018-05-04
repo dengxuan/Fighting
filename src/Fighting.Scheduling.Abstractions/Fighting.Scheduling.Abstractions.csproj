@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Fighting.Extensions.UnitOfWork.Abstractions\Fighting.Extensions.UnitOfWork.Abstractions.csproj" />
     <ProjectReference Include="..\Fighting.Hosting\Fighting.Hosting.csproj" />
     <ProjectReference Include="..\Fighting.Storaging.Abstractions\Fighting.Storaging.Abstractions.csproj" />
     <ProjectReference Include="..\Fighting\Fighting.csproj" />

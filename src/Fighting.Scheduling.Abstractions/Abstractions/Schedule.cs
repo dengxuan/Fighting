@@ -102,7 +102,7 @@ namespace Fighting.Scheduling.Abstractions
         /// <returns></returns>
         public virtual DateTime? CalculateNextTryTime()
         {
-            var nextWaitDuration = DefaultFirstWaitDuration * (System.Math.Pow(DefaultWaitFactor, (TryCount - 1) > 5 ? 5 : TryCount));
+            var nextWaitDuration = DefaultFirstWaitDuration * (System.Math.Pow(DefaultWaitFactor, (TryCount - 1) > 3 ? 3 : TryCount));
             var nextTryDate = LastTryTime.HasValue ? LastTryTime.Value.AddSeconds(nextWaitDuration) : Clock.Now.AddSeconds(nextWaitDuration);
 
             if (nextTryDate.Subtract(CreationTime).TotalSeconds > DefaultTimeout)
